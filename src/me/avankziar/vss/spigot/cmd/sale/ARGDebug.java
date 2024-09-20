@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 import me.avankziar.vss.spigot.database.MysqlHandler;
@@ -20,9 +20,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class ARGDebug extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARGDebug(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARGDebug(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;
@@ -92,7 +92,7 @@ public class ARGDebug extends ArgumentModule
 			{
 				player.sendMessage("Please be waiting. Async Process ");
 				ArrayList<SignShop> alss = SignShop.convert(plugin.getMysqlHandler().getFullList(
-						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", SaLE.getPlugin().getServername()));
+						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override
@@ -132,7 +132,7 @@ public class ARGDebug extends ArgumentModule
 			{
 				player.sendMessage("Please be waiting. Async Process ");
 				ArrayList<SignShop> alss = SignShop.convert(plugin.getMysqlHandler().getFullList(
-						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", SaLE.getPlugin().getServername()));
+						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override

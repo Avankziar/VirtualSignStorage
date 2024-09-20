@@ -2,13 +2,13 @@ package me.avankziar.vss.spigot.cmdtree;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public class BaseConstructor
 {
-	public static SaLE getPlugin()
+	public static VSS getPlugin()
 	{
-		return SaLE.getPlugin();
+		return VSS.getPlugin();
 	}
 	
 	private String name;

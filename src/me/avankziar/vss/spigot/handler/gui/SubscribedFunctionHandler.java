@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmd.sale.ARGSubscribed;
 import me.avankziar.vss.spigot.database.MysqlHandler.Type;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
@@ -32,11 +32,11 @@ public class SubscribedFunctionHandler
 	
 	private static void subscribed(Player player, SignShop ssh)
 	{
-		if(!SaLE.getPlugin().getServername().equals(ssh.getServer()))
+		if(!VSS.getPlugin().getServername().equals(ssh.getServer()))
 		{
-			player.sendMessage(ChatApi.tl(SaLE.getPlugin().getYamlHandler().getLang().getString("Cmd.Search.TeleportIsNull")));
+			player.sendMessage(ChatApi.tl(VSS.getPlugin().getYamlHandler().getLang().getString("Cmd.Search.TeleportIsNull")));
 			List<String> list = GuiHandler.getLorePlaceHolder(ssh, player,
-					SaLE.getPlugin().getYamlHandler().getLang().getStringList("Cmd.Subscribed.LocationInfo"), player.getName());
+					VSS.getPlugin().getYamlHandler().getLang().getStringList("Cmd.Subscribed.LocationInfo"), player.getName());
 			list.stream().forEach(x -> player.sendMessage(ChatApi.tl(x)));
 			new BukkitRunnable()
 			{
@@ -45,7 +45,7 @@ public class SubscribedFunctionHandler
 				{
 					player.closeInventory();
 				}
-			}.runTask(SaLE.getPlugin());
+			}.runTask(VSS.getPlugin());
 		} else
 		{
 			new BukkitRunnable()
@@ -56,7 +56,7 @@ public class SubscribedFunctionHandler
 					player.closeInventory();
 					GuiHandler.openShop(ssh, player, SettingsLevel.BASE, false);
 				}
-			}.runTask(SaLE.getPlugin());
+			}.runTask(VSS.getPlugin());
 		}
 	}
 	

@@ -79,10 +79,10 @@ import me.avankziar.vss.spigot.metrics.Metrics;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
 import me.avankziar.vss.spigot.objects.ItemHologram;
 
-public class SaLE extends JavaPlugin
+public class VSS extends JavaPlugin
 {
 	public static Logger log;
-	private static SaLE plugin;
+	private static VSS plugin;
 	public String pluginName = "SaLE";
 	private YamlHandler yamlHandler;
 	private YamlManager yamlManager;
@@ -182,7 +182,7 @@ public class SaLE extends JavaPlugin
 		log.info(pluginName + " is disabled!");
 	}
 
-	public static SaLE getPlugin()
+	public static VSS getPlugin()
 	{
 		return plugin;
 	}
@@ -357,7 +357,7 @@ public class SaLE extends JavaPlugin
 		getCommandMap().register(plugin.getDescription().getName(), command);
 	}
 	 
-	private static PluginCommand getCommand(String name, SaLE plugin) 
+	private static PluginCommand getCommand(String name, VSS plugin) 
 	{
 		PluginCommand command = null;
 	 

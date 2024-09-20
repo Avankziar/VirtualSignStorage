@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
@@ -26,10 +26,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class SaLECommandExecutor implements CommandExecutor
 {
-	private SaLE plugin;
+	private VSS plugin;
 	private static CommandConstructor cc;
 	
-	public SaLECommandExecutor(SaLE plugin, CommandConstructor cc)
+	public SaLECommandExecutor(VSS plugin, CommandConstructor cc)
 	{
 		this.plugin = plugin;
 		SaLECommandExecutor.cc = cc;
@@ -148,7 +148,7 @@ public class SaLECommandExecutor implements CommandExecutor
 			}
 		}
 		sender.spigot().sendMessage(ChatApi.clickEvent(plugin.getYamlHandler().getLang().getString("InputIsWrong"),
-				ClickEvent.Action.RUN_COMMAND, SaLE.infoCommand));
+				ClickEvent.Action.RUN_COMMAND, VSS.infoCommand));
 		return false;
 	}
 	
@@ -176,7 +176,7 @@ public class SaLECommandExecutor implements CommandExecutor
 		{
 			lastpage = true;
 		}
-		pastNextPage(player, page, lastpage, SaLE.infoCommand);
+		pastNextPage(player, page, lastpage, VSS.infoCommand);
 	}
 	
 	private void sendInfo(Player player, BaseConstructor bc)
@@ -241,7 +241,7 @@ public class SaLECommandExecutor implements CommandExecutor
 		if(page!=0)
 		{
 			TextComponent msg2 = ChatApi.tctl(
-					SaLE.getPlugin().getYamlHandler().getLang().getString("Past"));
+					VSS.getPlugin().getYamlHandler().getLang().getString("Past"));
 			String cmd = cmdstring+" "+String.valueOf(j);
 			for(String o : objects)
 			{
@@ -251,7 +251,7 @@ public class SaLECommandExecutor implements CommandExecutor
 			pages.add(msg2);
 		}
 		TextComponent msg1 = ChatApi.tctl(
-				SaLE.getPlugin().getYamlHandler().getLang().getString("Next"));
+				VSS.getPlugin().getYamlHandler().getLang().getString("Next"));
 		String cmd = cmdstring+" "+String.valueOf(i);
 		for(String o : objects)
 		{

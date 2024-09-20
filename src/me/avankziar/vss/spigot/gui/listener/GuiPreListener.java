@@ -16,7 +16,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.gui.GUIApi;
 import me.avankziar.vss.spigot.gui.events.BottomGuiClickEvent;
 import me.avankziar.vss.spigot.gui.events.UpperGuiClickEvent;
@@ -78,7 +78,7 @@ public class GuiPreListener implements Listener
 		event.setResult(Result.DENY);
 		BottomGuiClickEvent gce = new BottomGuiClickEvent(
 				event, 
-				SaLE.getPlugin().pluginName,
+				VSS.getPlugin().pluginName,
 				GUIApi.getGui(uuid));
 		Bukkit.getPluginManager().callEvent(gce);
 	}

@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.objects.ListedType;
 import me.avankziar.vss.spigot.objects.ShopAccessType;
@@ -16,11 +16,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class MessageHandler
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
 	public MessageHandler()
 	{
-		this.plugin = SaLE.getPlugin();
+		this.plugin = VSS.getPlugin();
 	}
 	
 	public void sendMessage(UUID uuid, String msg)

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public class MysqlSetup 
 {
@@ -20,7 +20,7 @@ public class MysqlSetup
 	private boolean isVerifyServerCertificate;
 	private boolean isSSLEnabled;
 	
-	public MysqlSetup(SaLE plugin, boolean adm, String path)
+	public MysqlSetup(VSS plugin, boolean adm, String path)
 	{
 		if(adm)
 		{
@@ -47,15 +47,15 @@ public class MysqlSetup
 	
 	public boolean connectToDatabase() 
 	{
-		SaLE.log.info("Connecting to the database...");
+		VSS.log.info("Connecting to the database...");
 		try
 		{
 			getConnection();
-			SaLE.log.info("Database connection successful!");
+			VSS.log.info("Database connection successful!");
 			return true;
 		} catch(Exception e) 
 		{
-			SaLE.log.log(Level.WARNING, "Could not connect to Database!", e);
+			VSS.log.log(Level.WARNING, "Could not connect to Database!", e);
 			return false;
 		}		
 	}
@@ -104,7 +104,7 @@ public class MysqlSetup
 			query.execute();
 		} catch (SQLException e) 
 		{
-			SaLE.log.log(Level.WARNING, "Could not build data source. Or connection is null", e);
+			VSS.log.log(Level.WARNING, "Could not build data source. Or connection is null", e);
 		}
 		return true;
 	}

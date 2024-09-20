@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.event.ShopPostTransactionEvent;
 import me.avankziar.vss.spigot.handler.Base64Handler;
 import me.avankziar.vss.spigot.objects.ShopLogVar;
@@ -40,36 +40,36 @@ public class ShopPostTransactionListener implements Listener
 		ShopLogVar slv = null;
 		if(isBuy)
 		{
-			if(SaLE.getPlugin().getIFHEco() != null)
+			if(VSS.getPlugin().getIFHEco() != null)
 			{
 				slv = (sub2.containsKey(b64) 
 						? sub2.get(b64).addBuy(iamount, costPerItem) 
 								: new ShopLogVar(ssh.getId(), ssh.getSignShopName(),
-										SaLE.getPlugin().getIFHEco().getAccount(ssh.getAccountId()).getCurrency().getUniqueName(), 
+										VSS.getPlugin().getIFHEco().getAccount(ssh.getAccountId()).getCurrency().getUniqueName(), 
 										iamount, costPerItem, 0, 0));
 			} else
 			{
 				slv = (sub2.containsKey(b64) 
 						? sub2.get(b64).addBuy(iamount, costPerItem) 
 								: new ShopLogVar(ssh.getId(), ssh.getSignShopName(),
-										SaLE.getPlugin().getVaultEco().currencyNamePlural(), 
+										VSS.getPlugin().getVaultEco().currencyNamePlural(), 
 										iamount, costPerItem, 0, 0));
 			}
 		} else 
 		{
-			if(SaLE.getPlugin().getIFHEco() != null)
+			if(VSS.getPlugin().getIFHEco() != null)
 			{
 				slv = (sub2.containsKey(b64) 
 						? sub2.get(b64).addSell(iamount, costPerItem) 
 								: new ShopLogVar(ssh.getId(), ssh.getSignShopName(),
-										SaLE.getPlugin().getIFHEco().getAccount(ssh.getAccountId()).getCurrency().getUniqueName(), 
+										VSS.getPlugin().getIFHEco().getAccount(ssh.getAccountId()).getCurrency().getUniqueName(), 
 										0, 0, iamount, costPerItem));
 			} else
 			{
 				slv = (sub2.containsKey(b64) 
 						? sub2.get(b64).addSell(iamount, costPerItem) 
 								: new ShopLogVar(ssh.getId(), ssh.getSignShopName(),
-										SaLE.getPlugin().getVaultEco().currencyNamePlural(), 
+										VSS.getPlugin().getVaultEco().currencyNamePlural(), 
 										0, 0, iamount, costPerItem));
 			}
 		}

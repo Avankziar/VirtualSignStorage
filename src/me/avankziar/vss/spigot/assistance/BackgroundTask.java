@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.database.MysqlHandler.Type;
 import me.avankziar.vss.spigot.handler.Base64Handler;
@@ -31,9 +31,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class BackgroundTask
 {
-	private static SaLE plugin;
+	private static VSS plugin;
 	
-	public BackgroundTask(SaLE plugin)
+	public BackgroundTask(VSS plugin)
 	{
 		BackgroundTask.plugin = plugin;
 		initBackgroundTask();
@@ -262,7 +262,7 @@ public class BackgroundTask
 			public void run()
 			{
 				ArrayList<SignShop> alss = SignShop.convert(plugin.getMysqlHandler().getFullList(
-						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", SaLE.getPlugin().getServername()));
+						Type.SIGNSHOP, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override
@@ -277,7 +277,7 @@ public class BackgroundTask
 								block = Bukkit.getWorld(ss.getWorld()).getBlockAt(ss.getX(), ss.getY(), ss.getZ());
 							} catch(Exception e)
 							{
-								SaLE.log.warning("World "+ss.getWorld()+" are not to be found on server "+SaLE.getPlugin().getServername()+"!");
+								VSS.log.warning("World "+ss.getWorld()+" are not to be found on server "+VSS.getPlugin().getServername()+"!");
 								continue;
 							}
 							if(!(block.getState() instanceof org.bukkit.block.Sign))
@@ -360,20 +360,20 @@ public class BackgroundTask
 											.replace("%amount%", String.valueOf(bsamo))
 											.replace("%item%", is.getItemMeta().hasDisplayName() 
 													? is.getItemMeta().getDisplayName() 
-													: (SaLE.getPlugin().getEnumTl() != null
-													  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+													: (VSS.getPlugin().getEnumTl() != null
+													  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 													  : is.getType().toString()))
 											.replace("%shop%", shopname)
 											.replace("%format%", plugin.getIFHEco().format(bcostTotal,
-													SaLE.getPlugin().getIFHEco().getCurrency(currency))));
+													VSS.getPlugin().getIFHEco().getCurrency(currency))));
 								} else
 								{
 									hov.add(plugin.getYamlHandler().getLang().getString("ShopLog.MsgTimer.Buy")
 											.replace("%amount%", String.valueOf(bsamo))
 											.replace("%item%", is.getItemMeta().hasDisplayName() 
 													? is.getItemMeta().getDisplayName() 
-													: (SaLE.getPlugin().getEnumTl() != null
-												      ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+													: (VSS.getPlugin().getEnumTl() != null
+												      ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 													  : is.getType().toString()))
 											.replace("%shop%", shopname)
 											.replace("%format%", String.valueOf(bcostTotal)+" "+plugin.getVaultEco().currencyNamePlural()));
@@ -387,20 +387,20 @@ public class BackgroundTask
 											.replace("%amount%", String.valueOf(ssamo))
 											.replace("%item%", is.getItemMeta().hasDisplayName() 
 													? is.getItemMeta().getDisplayName() 
-													: (SaLE.getPlugin().getEnumTl() != null
-													  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+													: (VSS.getPlugin().getEnumTl() != null
+													  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 													  : is.getType().toString()))
 											.replace("%shop%", shopname)
 											.replace("%format%", plugin.getIFHEco().format(scostTotal,
-													SaLE.getPlugin().getIFHEco().getCurrency(currency))));
+													VSS.getPlugin().getIFHEco().getCurrency(currency))));
 								} else
 								{
 									hov.add(plugin.getYamlHandler().getLang().getString("ShopLog.MsgTimer.Sell")
 											.replace("%amount%", String.valueOf(ssamo))
 											.replace("%item%", is.getItemMeta().hasDisplayName() 
 													? is.getItemMeta().getDisplayName() 
-													: (SaLE.getPlugin().getEnumTl() != null
-													  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+													: (VSS.getPlugin().getEnumTl() != null
+													  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 													  : is.getType().toString()))
 											.replace("%shop%", shopname)
 											.replace("%format%", String.valueOf(scostTotal)+" "+plugin.getVaultEco().currencyNamePlural()));
@@ -442,7 +442,7 @@ public class BackgroundTask
 							list.add(tc);
 							ArrayList<ArrayList<BaseComponent>> listInList = new ArrayList<>();
 							listInList.add(list);
-							SaLE.getPlugin().getBctB().sendMessage(shopOwner, listInList);
+							VSS.getPlugin().getBctB().sendMessage(shopOwner, listInList);
 						}
 					}
 					del.add(shopOwner);
@@ -491,8 +491,8 @@ public class BackgroundTask
 						SignShopLog ssl = new SignShopLog(0, shopID, System.currentTimeMillis(),
 								is, is.getItemMeta().hasDisplayName() 
 								? is.getItemMeta().getDisplayName() 
-								: (SaLE.getPlugin().getEnumTl() != null
-								  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+								: (VSS.getPlugin().getEnumTl() != null
+								  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								  : is.getType().toString()),
 							is.getType(), WayType.BUY, bcostTotal, (int) bsamo,
 							client, shopOwner);
@@ -503,8 +503,8 @@ public class BackgroundTask
 						SignShopLog ssl = new SignShopLog(0, shopID, System.currentTimeMillis(),
 								is, is.getItemMeta().hasDisplayName() 
 								? is.getItemMeta().getDisplayName() 
-								: (SaLE.getPlugin().getEnumTl() != null
-								  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+								: (VSS.getPlugin().getEnumTl() != null
+								  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								  : is.getType().toString()),
 							is.getType(), WayType.SELL, scostTotal, (int) ssamo,
 							client, shopOwner);

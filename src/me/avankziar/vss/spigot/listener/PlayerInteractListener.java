@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.GuiHandler;
@@ -29,10 +29,10 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class PlayerInteractListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	private static LinkedHashMap<String, Long> cooldown = new LinkedHashMap<>();
 	
-	public PlayerInteractListener(SaLE plugin)
+	public PlayerInteractListener(VSS plugin)
 	{
 		this.plugin = plugin;
 	}

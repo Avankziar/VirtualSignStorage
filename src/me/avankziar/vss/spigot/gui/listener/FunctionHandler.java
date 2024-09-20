@@ -1,12 +1,12 @@
 package me.avankziar.vss.spigot.gui.listener;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public class FunctionHandler
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public FunctionHandler(SaLE plugin)
+	public FunctionHandler(VSS plugin)
 	{
 		this.plugin = plugin;
 	}

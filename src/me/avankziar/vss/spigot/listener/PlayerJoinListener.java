@@ -6,16 +6,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.objects.PlayerData;
 
 public class PlayerJoinListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public PlayerJoinListener(SaLE plugin)
+	public PlayerJoinListener(VSS plugin)
 	{
 		this.plugin = plugin;
 	}

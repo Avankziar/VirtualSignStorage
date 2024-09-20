@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public interface MysqlHandable
 {
@@ -18,6 +18,6 @@ public interface MysqlHandable
 	
 	default void log(Level level, String log, Exception e)
 	{
-		SaLE.log.log(level, log, e);
+		VSS.log.log(level, log, e);
 	}
 }

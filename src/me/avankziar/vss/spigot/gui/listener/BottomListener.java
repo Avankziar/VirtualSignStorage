@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.GUIApi;
@@ -24,9 +24,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class BottomListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public BottomListener(SaLE plugin)
+	public BottomListener(VSS plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -132,14 +132,14 @@ public class BottomListener implements Listener
 			ssh.setDisplayName(im.getDisplayName());
 		} else
 		{
-			ssh.setDisplayName(SaLE.getPlugin().getEnumTl() != null
-					  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+			ssh.setDisplayName(VSS.getPlugin().getEnumTl() != null
+					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					  : is.getType().toString());
 		}
 		if(plugin.getYamlHandler().getConfig().getBoolean("SignShop.ShopUseMaterialAsShopName"))
 		{
-			ssh.setSignShopName(SaLE.getPlugin().getEnumTl() != null
-					  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+			ssh.setSignShopName(VSS.getPlugin().getEnumTl() != null
+					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					  : is.getType().toString());
 		}
 		plugin.getMysqlHandler().updateData(MysqlHandler.Type.SIGNSHOP, ssh, "`id` = ?", ssh.getId());

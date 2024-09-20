@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 import org.bukkit.Material;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public class MaterialHandler
 {
 	private static HashMap<Material, String> materialLocalization = new HashMap<>();
 	
-	public static void init(SaLE plugin)
+	public static void init(VSS plugin)
 	{
 		for(Material m : Material.values())
 		{
@@ -20,8 +20,8 @@ public class MaterialHandler
 	
 	public static String getMaterial(Material mat, Material sign)
 	{
-		String s = (SaLE.getPlugin().getEnumTl() != null 
-				? SaLE.getPlugin().getEnumTl().getLocalization(mat)
+		String s = (VSS.getPlugin().getEnumTl() != null 
+				? VSS.getPlugin().getEnumTl().getLocalization(mat)
 				: mat.toString());
 		switch(sign)
 		{
@@ -44,7 +44,7 @@ public class MaterialHandler
 		case SPRUCE_WALL_SIGN:
 		case WARPED_SIGN:
 		case WARPED_WALL_SIGN:
-			String c = SaLE.getPlugin().getYamlHandler().getMaterialLang().getString(sign.toString()+"_SignStartColor", "");
+			String c = VSS.getPlugin().getYamlHandler().getMaterialLang().getString(sign.toString()+"_SignStartColor", "");
 			return s != null ? c+s : c+mat.toString();
 		}
 	}
@@ -72,7 +72,7 @@ public class MaterialHandler
 		case SPRUCE_WALL_SIGN:
 		case WARPED_SIGN:
 		case WARPED_WALL_SIGN:
-			String c = SaLE.getPlugin().getYamlHandler().getMaterialLang().getString(sign.toString()+"_SignStartColor", "");
+			String c = VSS.getPlugin().getYamlHandler().getMaterialLang().getString(sign.toString()+"_SignStartColor", "");
 			return c;
 		}
 	}

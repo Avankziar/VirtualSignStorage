@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
@@ -18,9 +18,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class ARGDelete extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARGDelete(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARGDelete(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;

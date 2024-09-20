@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.avankziar</groupId>
 	<artifactId>virtualsignstorage</artifactId>
-	<version>1-8-0</version>
-	<name>ShopALotExtra</name>
+	<version>1-0-0</version>
+	<name>VirtualSignStorage</name>
 	<url>https://github.com/${repository-owner}/${repository-name}.git</url>
     <scm>
         <url>https://github.com/${repository-owner}/${repository-name}.git</url>

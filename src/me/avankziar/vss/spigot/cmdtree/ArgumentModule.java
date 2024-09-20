@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.command.CommandSender;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 
 public abstract class ArgumentModule
 {
@@ -16,7 +16,7 @@ public abstract class ArgumentModule
     public ArgumentModule(ArgumentConstructor argumentConstructor)
     {
        this.argumentConstructor = argumentConstructor;
-       SaLE.getPlugin().getArgumentMap().put(argumentConstructor.getPath(), this);
+       VSS.getPlugin().getArgumentMap().put(argumentConstructor.getPath(), this);
     }
     
     private LinkedHashMap<UUID, Long> cooldown = new LinkedHashMap<>();;

@@ -12,13 +12,13 @@ import java.util.List;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.Language.ISO639_2B;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
 
 public class YamlHandler
 {
-	private SaLE plugin;
+	private VSS plugin;
 	private File config = null;
 	private YamlConfiguration cfg = new YamlConfiguration();
 	
@@ -36,7 +36,7 @@ public class YamlHandler
 	
 	private LinkedHashMap<GuiType, YamlConfiguration> gui = new LinkedHashMap<>();
 
-	public YamlHandler(SaLE plugin)
+	public YamlHandler(VSS plugin)
 	{
 		this.plugin = plugin;
 		loadYamlHandler();
@@ -79,7 +79,7 @@ public class YamlHandler
 			yaml.load(file);
 		} catch (IOException | InvalidConfigurationException e) 
 		{
-			SaLE.log.severe(
+			VSS.log.severe(
 					"Could not load the %file% file! You need to regenerate the %file%! Error: ".replace("%file%", file.getName())
 					+ e.getMessage());
 			e.printStackTrace();
@@ -136,7 +136,7 @@ public class YamlHandler
 		config = new File(plugin.getDataFolder(), "config.yml");
 		if(!config.exists()) 
 		{
-			SaLE.log.info("Create config.yml...");
+			VSS.log.info("Create config.yml...");
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, config.toPath());
@@ -159,7 +159,7 @@ public class YamlHandler
 		
 		if(!commands.exists()) 
 		{
-			SaLE.log.info("Create commands.yml...");
+			VSS.log.info("Create commands.yml...");
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, commands.toPath());
@@ -212,7 +212,7 @@ public class YamlHandler
 		language = new File(directory.getPath(), languageString+".yml");
 		if(!language.exists()) 
 		{
-			SaLE.log.info("Create %lang%.yml...".replace("%lang%", languageString));
+			VSS.log.info("Create %lang%.yml...".replace("%lang%", languageString));
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, language.toPath());
@@ -230,7 +230,7 @@ public class YamlHandler
 		mvelanguage = new File(directory.getPath(), "mve_"+languageString+".yml");
 		if(!mvelanguage.exists()) 
 		{
-			SaLE.log.info("Create mve_%lang%.yml...".replace("%lang%", languageString));
+			VSS.log.info("Create mve_%lang%.yml...".replace("%lang%", languageString));
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, mvelanguage.toPath());
@@ -249,7 +249,7 @@ public class YamlHandler
 		matlanguage = new File(directory.getPath(), languageString+"_material.yml");
 		if(!matlanguage.exists()) 
 		{
-			SaLE.log.info("Create %lang%_material.yml...".replace("%lang%", languageString));
+			VSS.log.info("Create %lang%_material.yml...".replace("%lang%", languageString));
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, matlanguage.toPath());
@@ -293,7 +293,7 @@ public class YamlHandler
 				this.gui.put(g, gui);
 				continue;
 			}
-			SaLE.log.info("Create %lang%.yml...".replace("%lang%", languageString+"_"+g.toString()));
+			VSS.log.info("Create %lang%.yml...".replace("%lang%", languageString+"_"+g.toString()));
 			try(InputStream in = plugin.getResource("default.yml"))
 			{
 				Files.copy(in, gf.toPath());

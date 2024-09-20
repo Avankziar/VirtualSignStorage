@@ -1,9 +1,9 @@
-name: SaLE
-main: main.java.me.avankziar.sale.spigot.SaLE
+name: VSS
+main: me.avankziar.vss.spigot.VSS
 version: 1
 author: Avankziar
 api-version: 1.19
-description: A SignShop Plugin
+description: A SignStorage Plugin
 depend: [InterfaceHub]
 softdepend: [Vault,WorldGuard]
-website: https://www.spigotmc.org/resources/shop-a-lot-extra.106371/
+website: tba

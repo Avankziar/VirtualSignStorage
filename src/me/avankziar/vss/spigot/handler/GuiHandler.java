@@ -44,7 +44,7 @@ import com.mojang.authlib.properties.Property;
 
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.assistance.Utility;
 import me.avankziar.vss.spigot.database.MysqlHandler;
@@ -62,7 +62,7 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class GuiHandler
 {
-	private static SaLE plugin = SaLE.getPlugin();
+	private static VSS plugin = VSS.getPlugin();
 	public static String SIGNSHOP_ID = "signshop_id";
 	public static String PLAYER_UUID = "player_uuid";
 	public static String SEARCH_TELEPORT_OR_LOCATION = "search_teleport_or_location";
@@ -419,8 +419,8 @@ public class GuiHandler
 			String displayname = y.get(i+".Displayname") != null 
 					? y.getString(i+".Displayname") 
 					: (playername != null ? playername 
-					: (SaLE.getPlugin().getEnumTl() != null
-							  ? SaLE.getPlugin().getEnumTl().getLocalization(mat)
+					: (VSS.getPlugin().getEnumTl() != null
+							  ? VSS.getPlugin().getEnumTl().getLocalization(mat)
 							  : is.getType().toString()));
 			displayname = getStringPlaceHolder(ssh, player, displayname, playername);
 			if(is == null)
@@ -486,8 +486,8 @@ public class GuiHandler
 			}
 			String displayname = y.get("Displayname") != null 
 					? y.getString("Displayname") 
-					: (SaLE.getPlugin().getEnumTl() != null
-							  ? SaLE.getPlugin().getEnumTl().getLocalization(searchMat)
+					: (VSS.getPlugin().getEnumTl() != null
+							  ? VSS.getPlugin().getEnumTl().getLocalization(searchMat)
 							  : searchMat.toString());
 			displayname = getStringPlaceHolder(ssh, player, displayname, player.getName());
 			ItemStack is = new ItemStack(Material.PLAYER_HEAD);
@@ -553,8 +553,8 @@ public class GuiHandler
 			}
 			String displayname = y.get("Displayname") != null 
 					? y.getString("Displayname") 
-					: (SaLE.getPlugin().getEnumTl() != null
-							  ? SaLE.getPlugin().getEnumTl().getLocalization(ssh.getMaterial())
+					: (VSS.getPlugin().getEnumTl() != null
+							  ? VSS.getPlugin().getEnumTl().getLocalization(ssh.getMaterial())
 							  : ssh.getMaterial().toString());
 			displayname = getStringPlaceHolder(ssh, player, displayname, player.getName());
 			ItemStack is = new ItemStack(ssh.getMaterial() == null ? Material.WIND_CHARGE : ssh.getMaterial());
@@ -605,8 +605,8 @@ public class GuiHandler
 			}
 			String displayname = y.get(i+".Displayname") != null 
 					? y.getString(i+".Displayname")
-					: (SaLE.getPlugin().getEnumTl() != null
-							  ? SaLE.getPlugin().getEnumTl().getLocalization(mat)
+					: (VSS.getPlugin().getEnumTl() != null
+							  ? VSS.getPlugin().getEnumTl().getLocalization(mat)
 							  : is.getType().toString());
 			if(is == null)
 			{
@@ -857,14 +857,14 @@ public class GuiHandler
 					{
 						list.add(ChatApi.tl(color+
 								(plugin.getEnumTl() != null 
-								? SaLE.getPlugin().getEnumTl().getLocalization(pe.getType())
+								? VSS.getPlugin().getEnumTl().getLocalization(pe.getType())
 								: pe.getType().toString())
 								+" "+GuiHandler.IntegerToRomanNumeral(level)));
 					} else
 					{
 						list.add(ChatApi.tl(color+
 								(plugin.getEnumTl() != null 
-								? SaLE.getPlugin().getEnumTl().getLocalization(pe.getType())
+								? VSS.getPlugin().getEnumTl().getLocalization(pe.getType())
 								: pe.getType())
 								+" "+GuiHandler.IntegerToRomanNumeral(level)+" >> "+TimeHandler.getDateTime(dur, "mm:ss")));
 					}
@@ -886,7 +886,7 @@ public class GuiHandler
 					{
 						list.add(ChatApi.tl(color+
 								(plugin.getEnumTl() != null 
-								? SaLE.getPlugin().getEnumTl().getLocalization(pe.getType())
+								? VSS.getPlugin().getEnumTl().getLocalization(pe.getType())
 								: pe.getType())
 								+" "+GuiHandler.IntegerToRomanNumeral(level)));
 					} else
@@ -955,7 +955,7 @@ public class GuiHandler
 					ItemStack ist = new Base64Handler(e.getKey()).fromBase64();
 					list.add(ChatApi.tl("&7"+
 							(plugin.getEnumTl() != null 
-							? SaLE.getPlugin().getEnumTl().getLocalization(ist.getType())
+							? VSS.getPlugin().getEnumTl().getLocalization(ist.getType())
 							: ist.getType().toString())+ " x"+e.getValue()));
 				}
 			}
@@ -976,7 +976,7 @@ public class GuiHandler
 			{
 				list.add(ChatApi.tl(y.getString("GuiHandler.InfoLore.BookMeta.Generation") 
 						+ (plugin.getEnumTl() != null 
-						? SaLE.getPlugin().getEnumTl().getLocalization(bm.getGeneration())
+						? VSS.getPlugin().getEnumTl().getLocalization(bm.getGeneration())
 						: bm.getGeneration().toString())));
 			}
 		}
@@ -996,7 +996,7 @@ public class GuiHandler
 				{
 					list.add(ChatApi.tl(y.getString("GuiHandler.InfoLore.SpawnEggMeta") 
 							+ (plugin.getEnumTl() != null 
-							? SaLE.getPlugin().getEnumTl().getLocalization(sem.getSpawnedEntity().getEntityType())
+							? VSS.getPlugin().getEnumTl().getLocalization(sem.getSpawnedEntity().getEntityType())
 							: sem.getSpawnedEntity().getEntityType().toString())));
 				}				
 			} catch(Exception e)
@@ -1026,7 +1026,7 @@ public class GuiHandler
 			TropicalFishBucketMeta tfbm = (TropicalFishBucketMeta) im;
 			list.add(ChatApi.tl(y.getString("GuiHandler.InfoLore.TropicalFishBucketMeta") 
 					+ (plugin.getEnumTl() != null 
-					? SaLE.getPlugin().getEnumTl().getLocalization(tfbm.getBodyColor(), tfbm.getPattern(), tfbm.getPatternColor())
+					? VSS.getPlugin().getEnumTl().getLocalization(tfbm.getBodyColor(), tfbm.getPattern(), tfbm.getPatternColor())
 					: tfbm.getBodyColor().toString()+"_"+tfbm.getPattern().toString()+"_"+tfbm.getPatternColor().toString())));
 		}
 		return list;
@@ -2506,7 +2506,7 @@ public class GuiHandler
 		case ZOMBIE_VILLAGER_SPAWN_EGG:
 		case ZOMBIFIED_PIGLIN_SPAWN_EGG:
 			s = (plugin.getEnumTl() != null 
-				? SaLE.getPlugin().getEnumTl().getLocalization(mat)
+				? VSS.getPlugin().getEnumTl().getLocalization(mat)
 				: mat.toString()); break;
 		}
 		return s;

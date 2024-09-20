@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.avankziar.ifh.spigot.position.ServerLocation;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.handler.MessageHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
@@ -16,9 +16,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class SignShopProvider implements me.avankziar.ifh.spigot.shop.SignShop
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public SignShopProvider(SaLE plugin)
+	public SignShopProvider(VSS plugin)
 	{
 		this.plugin = plugin;
 	}

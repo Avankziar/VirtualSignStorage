@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.objects.ClientDailyLog;
 import me.avankziar.vss.spigot.objects.ClientLog;
 import me.avankziar.vss.spigot.objects.PlayerData;
@@ -95,9 +95,9 @@ public class MysqlHandler
 		deletes = 0;
 	}
 	
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public MysqlHandler(SaLE plugin) 
+	public MysqlHandler(VSS plugin) 
 	{
 		this.plugin = plugin;
 	}

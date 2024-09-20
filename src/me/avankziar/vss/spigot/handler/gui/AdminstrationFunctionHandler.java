@@ -24,7 +24,7 @@ import me.avankziar.ifh.general.economy.currency.CurrencyType;
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.ifh.spigot.economy.currency.EconomyCurrency;
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.assistance.Utility;
@@ -46,7 +46,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class AdminstrationFunctionHandler
 {
-	private static SaLE plugin = SaLE.getPlugin();
+	private static VSS plugin = VSS.getPlugin();
 	
 	public static void doClickFunktion(GuiType guiType, ClickFunctionType cft, Player player, SignShop ssh,
 			Inventory openInv, SettingsLevel settingsLevel, UUID otheruuid)
@@ -516,7 +516,7 @@ public class AdminstrationFunctionHandler
 		final String displayname = is.getItemMeta().hasDisplayName() 
 				? is.getItemMeta().getDisplayName() : 
 					(plugin.getEnumTl() != null 
-					? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+					? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					: is.getType().toString());
 		final long amount = ssh.getItemStorageCurrent();
 		Block bl = null;

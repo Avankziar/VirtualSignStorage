@@ -13,7 +13,7 @@ import me.avankziar.ifh.general.economy.account.AccountCategory;
 import me.avankziar.ifh.general.economy.currency.CurrencyType;
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.database.MysqlHandler.Type;
@@ -27,9 +27,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class SignChangeListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public SignChangeListener(SaLE plugin)
+	public SignChangeListener(VSS plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -69,7 +69,7 @@ public class SignChangeListener implements Listener
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoPermission")));
 			return;
 		}
-		if(SaLE.getWorldGuard())
+		if(VSS.getWorldGuard())
 		{
 			if(!WorldGuardHook.canCreateShop(player, event.getBlock().getLocation()))
 			{

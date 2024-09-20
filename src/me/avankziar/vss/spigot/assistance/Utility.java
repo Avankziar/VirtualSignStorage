@@ -6,15 +6,15 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.objects.PlayerData;
 
 public class Utility
 {
-	private static SaLE plugin;
+	private static VSS plugin;
 	
-	public Utility(SaLE plugin)
+	public Utility(VSS plugin)
 	{
 		Utility.plugin = plugin;
 	}

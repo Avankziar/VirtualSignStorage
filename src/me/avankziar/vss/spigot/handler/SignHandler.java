@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.handler.gui.ShopFunctionHandler;
 import me.avankziar.vss.spigot.objects.ListedType;
@@ -27,7 +27,7 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class SignHandler
 {
-	private static SaLE plugin = SaLE.getPlugin();
+	private static VSS plugin = VSS.getPlugin();
 	public static ArrayList<String> bypassToggle = new ArrayList<>();
 	public static ArrayList<String> breakToggle = new ArrayList<>();
 	

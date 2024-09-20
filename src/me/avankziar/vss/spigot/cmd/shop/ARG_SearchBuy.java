@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
@@ -23,9 +23,9 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class ARG_SearchBuy extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARG_SearchBuy(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARG_SearchBuy(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.assistance.Utility;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
@@ -25,9 +25,9 @@ import me.avankziar.vss.spigot.objects.SubscribedShop;
 
 public class ARGSubscribed extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARGSubscribed(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARGSubscribed(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;
@@ -250,7 +250,7 @@ public class ARGSubscribed extends ArgumentModule
 	public static ArrayList<SignShop> getSubscribed(String sql, String where, int page)
 	{
 		String orderby = " ORDER BY `id` ASC LIMIT "+(page*45)+", 44";
-		SaLE.getPlugin().getLogger().info("SQL: "+sql+where+orderby);
-		return SignShop.convert(SaLE.getPlugin().getMysqlHandler().getSQL(Type.SIGNSHOP, sql+where+orderby));
+		VSS.getPlugin().getLogger().info("SQL: "+sql+where+orderby);
+		return SignShop.convert(VSS.getPlugin().getMysqlHandler().getSQL(Type.SIGNSHOP, sql+where+orderby));
 	}
 }

@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.events.UpperGuiClickEvent;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
@@ -25,10 +25,10 @@ import me.avankziar.vss.spigot.objects.SignShop;
 
 public class UpperListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	private long dur = 1000;
 	
-	public UpperListener(SaLE plugin)
+	public UpperListener(VSS plugin)
 	{
 		this.plugin = plugin;
 		dur = plugin.getYamlHandler().getConfig().getLong("SignShop.Gui.ClickCooldown", 1000L);

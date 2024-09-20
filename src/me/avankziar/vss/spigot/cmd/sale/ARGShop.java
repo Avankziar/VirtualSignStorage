@@ -5,15 +5,15 @@ import java.io.IOException;
 import org.bukkit.command.CommandSender;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 
 public class ARGShop extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARGShop(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARGShop(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;

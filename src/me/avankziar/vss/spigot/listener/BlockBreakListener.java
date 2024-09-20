@@ -16,16 +16,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
 import me.avankziar.vss.spigot.objects.SignShop;
 
 public class BlockBreakListener implements Listener
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public BlockBreakListener(SaLE plugin)
+	public BlockBreakListener(VSS plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -68,7 +68,7 @@ public class BlockBreakListener implements Listener
 					final String displayname = is.getItemMeta().hasDisplayName() 
 							? is.getItemMeta().getDisplayName() : 
 								(plugin.getEnumTl() != null 
-								? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+								? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								: is.getType().toString());
 					final long amount = ssh.getItemStorageCurrent();
 					plugin.getMysqlHandler().deleteData(MysqlHandler.Type.SIGNSHOP,

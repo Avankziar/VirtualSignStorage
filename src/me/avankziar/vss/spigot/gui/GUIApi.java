@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.events.ClickFunction;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
@@ -56,7 +56,7 @@ public class GUIApi
 	private Inventory inventory;
 	private String pluginName;
 	private String inventoryIdentifier;
-	private static JavaPlugin plugin = SaLE.getPlugin();
+	private static JavaPlugin plugin = VSS.getPlugin();
 	private SettingsLevel settingsLevel;
 	
 	public GUIApi(String pluginName, String inventoryIdentifier, InventoryHolder owner, int row, String title, SettingsLevel settingsLevel)
@@ -377,7 +377,7 @@ public class GUIApi
 	public static SignShop getGuiSSH(UUID uuid)
 	{
 		int sshID = playerInGuiSSHID.get(uuid);
-		return (SignShop) SaLE.getPlugin().getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+		return (SignShop) VSS.getPlugin().getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
 	}
 	
 	public static SettingsLevel getSettingsLevel(UUID uuid)

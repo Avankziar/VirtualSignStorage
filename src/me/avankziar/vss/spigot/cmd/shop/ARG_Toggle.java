@@ -6,16 +6,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 import me.avankziar.vss.spigot.handler.SignHandler;
 
 public class ARG_Toggle extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARG_Toggle(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARG_Toggle(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;

@@ -28,7 +28,7 @@ import me.avankziar.ifh.general.economy.action.OrdererType;
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.ifh.spigot.economy.currency.EconomyCurrency;
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.database.MysqlHandler.Type;
@@ -55,7 +55,7 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class ShopFunctionHandler
 {
-	private static SaLE plugin = SaLE.getPlugin();
+	private static VSS plugin = VSS.getPlugin();
 	private static List<Enchantment> enchs = Registry.ENCHANTMENT.stream().collect(Collectors.toList());
 	@SuppressWarnings("deprecation")
 	private static PotionEffectType[] poefty = PotionEffectType.values();
@@ -308,7 +308,7 @@ public class ShopFunctionHandler
 				.replace("%item%", ssh.getItemStack().getItemMeta().hasDisplayName() 
 						? ssh.getItemStack().getItemMeta().getDisplayName() 
 						: (plugin.getEnumTl() != null 
-						  ? SaLE.getPlugin().getEnumTl().getLocalization(ssh.getItemStack().getType())
+						  ? VSS.getPlugin().getEnumTl().getLocalization(ssh.getItemStack().getType())
 						  : ssh.getItemStack().getType().toString()))
 				.replace("%shop%", ssh.getSignShopName());
 		if(plugin.getIFHEco() != null)
@@ -616,7 +616,7 @@ public class ShopFunctionHandler
 				.replace("%item%", ssh.getItemStack().getItemMeta().hasDisplayName() 
 						? ssh.getItemStack().getItemMeta().getDisplayName() 
 						: (plugin.getEnumTl() != null 
-						  ? SaLE.getPlugin().getEnumTl().getLocalization(ssh.getItemStack().getType())
+						  ? VSS.getPlugin().getEnumTl().getLocalization(ssh.getItemStack().getType())
 						  : ssh.getItemStack().getType().toString()))
 				.replace("%shop%", ssh.getSignShopName());
 		if(plugin.getIFHEco() != null)
@@ -800,7 +800,7 @@ public class ShopFunctionHandler
         final ItemStack f = filter.clone();
         i.setAmount(1);
         f.setAmount(1);
-        return SaLE.getPlugin().getItemStackComparison().isSimilar(i, f);
+        return VSS.getPlugin().getItemStackComparison().isSimilar(i, f);
 	}
 	
 	public static String toBase64(ItemStack is)

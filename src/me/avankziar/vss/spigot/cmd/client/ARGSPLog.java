@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import me.avankziar.ifh.general.economy.currency.CurrencyType;
 import me.avankziar.ifh.spigot.economy.currency.EconomyCurrency;
 import me.avankziar.vss.general.ChatApi;
-import me.avankziar.vss.spigot.SaLE;
+import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.assistance.Utility;
@@ -28,9 +28,9 @@ import me.avankziar.vss.spigot.objects.ClientLog.WayType;
 
 public class ARGSPLog extends ArgumentModule
 {
-	private SaLE plugin;
+	private VSS plugin;
 	
-	public ARGSPLog(SaLE plugin, ArgumentConstructor argumentConstructor)
+	public ARGSPLog(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;
@@ -118,8 +118,8 @@ public class ARGSPLog extends ArgumentModule
 						.replace("%amount%", String.valueOf(amo))
 						.replace("%item%", is.getItemMeta().hasDisplayName() 
 								? is.getItemMeta().getDisplayName() 
-								: (SaLE.getPlugin().getEnumTl() != null
-								  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+								: (VSS.getPlugin().getEnumTl() != null
+								  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								  : is.getType().toString()))
 						.replace("%shop%", shopname)
 						.replace("%format%", plugin.getIFHEco().format(cost, ec));
@@ -130,8 +130,8 @@ public class ARGSPLog extends ArgumentModule
 						.replace("%amount%", String.valueOf(amo))
 						.replace("%item%", is.getItemMeta().hasDisplayName() 
 								? is.getItemMeta().getDisplayName() 
-								: (SaLE.getPlugin().getEnumTl() != null
-								  ? SaLE.getPlugin().getEnumTl().getLocalization(is.getType())
+								: (VSS.getPlugin().getEnumTl() != null
+								  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								  : is.getType().toString()))
 						.replace("%shop%", shopname)
 						.replace("%format%", String.valueOf(cost)+" "+plugin.getVaultEco().currencyNamePlural());
