@@ -78,7 +78,7 @@ public class GuiPreListener implements Listener
 		event.setResult(Result.DENY);
 		BottomGuiClickEvent gce = new BottomGuiClickEvent(
 				event, 
-				VSS.getPlugin().pluginName,
+				VSS.getPlugin().pluginname,
 				GUIApi.getGui(uuid));
 		Bukkit.getPluginManager().callEvent(gce);
 	}

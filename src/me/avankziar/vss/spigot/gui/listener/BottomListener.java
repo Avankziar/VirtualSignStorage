@@ -10,9 +10,10 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
-import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.GUIApi;
 import me.avankziar.vss.spigot.gui.events.BottomGuiClickEvent;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
@@ -20,7 +21,6 @@ import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class BottomListener implements Listener
 {
@@ -34,7 +34,7 @@ public class BottomListener implements Listener
 	@EventHandler
 	public void onBottomGui(BottomGuiClickEvent event)
 	{
-		if(!event.getPluginName().equals(plugin.pluginName))
+		if(!event.getPluginName().equals(plugin.pluginname))
 		{
 			return;
 		}
@@ -56,7 +56,7 @@ public class BottomListener implements Listener
 		GuiType gt = GUIApi.getGuiType(player.getUniqueId());
 		if(gt == GuiType.ADMINISTRATION)
 		{
-			SignShop ssh = GUIApi.getGuiSSH(player.getUniqueId());
+			SignStorage ssh = GUIApi.getGuiSSH(player.getUniqueId());
 			if(ssh == null)
 			{
 				return;
@@ -83,7 +83,7 @@ public class BottomListener implements Listener
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignHandler.ItemsAddedToShop")
 					.replace("%amount%", String.valueOf(amount))
 					.replace("%now%", String.valueOf(ssh.getItemStorageCurrent())+" / "+String.valueOf(ssh.getItemStorageTotal()))));
-			plugin.getMysqlHandler().updateData(MysqlHandler.Type.SIGNSHOP, ssh, "`id` = ?", ssh.getId());
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
 			SignHandler.updateSign(ssh);
 		} else if(gt == GuiType.ITEM_INPUT)
 		{
@@ -108,7 +108,7 @@ public class BottomListener implements Listener
 			return;
 		}
 		int sshID = Integer.parseInt(i);
-		SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
 		if(ssh == null)
 		{
 			return;
@@ -138,11 +138,11 @@ public class BottomListener implements Listener
 		}
 		if(plugin.getYamlHandler().getConfig().getBoolean("SignShop.ShopUseMaterialAsShopName"))
 		{
-			ssh.setSignShopName(VSS.getPlugin().getEnumTl() != null
+			ssh.setSignStorageName(VSS.getPlugin().getEnumTl() != null
 					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					  : is.getType().toString());
 		}
-		plugin.getMysqlHandler().updateData(MysqlHandler.Type.SIGNSHOP, ssh, "`id` = ?", ssh.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
 		SignHandler.updateSign(ssh);
 		player.closeInventory();
 		GuiHandler.openAdministration(ssh, player, SettingsLevel.BASE, false);

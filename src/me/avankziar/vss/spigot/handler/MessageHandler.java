@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.ListedType;
+import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.StorageAccessType;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.MysqlHandler;
-import me.avankziar.vss.spigot.objects.ListedType;
-import me.avankziar.vss.spigot.objects.ShopAccessType;
-import me.avankziar.vss.spigot.objects.SignShop;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -39,17 +39,18 @@ public class MessageHandler
 	
 	public void sendMessageToOwnerAndMember(int shopid, String msg)
 	{
-		SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", shopid);
-		ArrayList<ShopAccessType> member = ShopAccessType.convert(plugin.getMysqlHandler().getFullList(MysqlHandler.Type.SHOPACCESSTYPE,
+		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
+		ArrayList<StorageAccessType> member = StorageAccessType.convert(
+				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
 				"`id` ASC", "`sign_shop_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
 		sendMessage(ssh.getOwner(), msg);
-		for(ShopAccessType sat : member)
+		for(StorageAccessType sat : member)
 		{
 			sendMessage(sat.getUUID(), msg);
 		}
 	}
 	
-	public void sendMessageToOwnerAndMember(SignShop ssh, String msg)
+	public void sendMessageToOwnerAndMember(SignStorage ssh, String msg)
 	{
 		sendMessageToOwnerAndMember(ssh.getId(), msg);
 	}
@@ -76,17 +77,18 @@ public class MessageHandler
 	
 	public void sendMessageToOwnerAndMember(int shopid, ArrayList<ArrayList<BaseComponent>> listInList)
 	{
-		SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", shopid);
-		ArrayList<ShopAccessType> member = ShopAccessType.convert(plugin.getMysqlHandler().getFullList(MysqlHandler.Type.SHOPACCESSTYPE,
+		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
+		ArrayList<StorageAccessType> member = StorageAccessType.convert(
+				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
 				"`id` ASC", "`sign_shop_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
 		sendMessage(ssh.getOwner(), listInList);
-		for(ShopAccessType sat : member)
+		for(StorageAccessType sat : member)
 		{
 			sendMessage(sat.getUUID(), listInList);
 		}
 	}
 	
-	public void sendMessageToOwnerAndMember(SignShop ssh, ArrayList<ArrayList<BaseComponent>> listInList)
+	public void sendMessageToOwnerAndMember(SignStorage ssh, ArrayList<ArrayList<BaseComponent>> listInList)
 	{
 		sendMessageToOwnerAndMember(ssh.getId(), listInList);
 	}

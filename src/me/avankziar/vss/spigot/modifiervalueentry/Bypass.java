@@ -3,7 +3,6 @@ package me.avankziar.vss.spigot.modifiervalueentry;
 import java.util.LinkedHashMap;
 
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.cmdtree.BaseConstructor;
 
 public class Bypass
 {
@@ -17,7 +16,7 @@ public class Bypass
 		
 		public String getValueLable()
 		{
-			return VSS.getPlugin().pluginName.toLowerCase()+"-"+this.toString().toLowerCase();
+			return VSS.getPlugin().pluginname.toLowerCase()+"-"+this.toString().toLowerCase();
 		}
 	}
 	private static LinkedHashMap<Bypass.Permission, String> mapPerm = new LinkedHashMap<>();
@@ -60,7 +59,7 @@ public class Bypass
 		
 		public String getModification()
 		{
-			return BaseConstructor.getPlugin().pluginName.toLowerCase()+"-"+this.toString().toLowerCase();
+			return VSS.getPlugin().pluginname.toLowerCase()+"-"+this.toString().toLowerCase();
 		}
 	}
 	private static LinkedHashMap<Bypass.Counter, String> mapCount = new LinkedHashMap<>();

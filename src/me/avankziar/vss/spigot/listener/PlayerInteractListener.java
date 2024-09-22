@@ -17,15 +17,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.ListedType;
+import me.avankziar.vss.general.objects.PlayerData;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
-import me.avankziar.vss.spigot.objects.ListedType;
-import me.avankziar.vss.spigot.objects.PlayerData;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class PlayerInteractListener implements Listener
 {
@@ -56,7 +56,7 @@ public class PlayerInteractListener implements Listener
 		}
 		final Player player = event.getPlayer();
 		final Action action = event.getAction();
-		final SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP,
+		final SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), player.getWorld().getName(),
 				b.getX(), b.getY(), b.getZ());
@@ -70,7 +70,7 @@ public class PlayerInteractListener implements Listener
 		dodo(player, ssh, b, bs, action);
 	}
 	
-	public void dodo(Player player, SignShop ssh, Block b, BlockState bs, Action action)
+	public void dodo(Player player, SignStorage sst, Block b, BlockState bs, Action action)
 	{		
 		if(SignHandler.isBreakToggle(player.getUniqueId()))
 		{
@@ -81,10 +81,10 @@ public class PlayerInteractListener implements Listener
 			return;
 		}
 		PlayerData pd = (PlayerData) plugin.getMysqlHandler().getData(
-				MysqlHandler.Type.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
-		if((ssh.getMaterial() == Material.AIR)
-				&& (SignHandler.isOwner(ssh, player.getUniqueId())
-				|| SignHandler.isListed(ListedType.MEMBER, ssh, player.getUniqueId())
+				MysqlType.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
+		if((sst.getMaterial() == Material.AIR)
+				&& (SignHandler.isOwner(sst, player.getUniqueId())
+				|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
 				|| SignHandler.isBypassToggle(player.getUniqueId())))
 		{
 			new BukkitRunnable()
@@ -92,40 +92,40 @@ public class PlayerInteractListener implements Listener
 				@Override
 				public void run()
 				{
-					GuiHandler.openInputInfo(ssh, player, pd.getLastSettingLevel(), true);
+					GuiHandler.openInputInfo(sst, player, pd.getLastSettingLevel(), true);
 				}
 			}.runTaskAsynchronously(plugin);
 			return;
 		}
 		if(action == Action.LEFT_CLICK_BLOCK)
 		{
-			if(SignHandler.isOwner(ssh, player.getUniqueId()) || SignHandler.isListed(ListedType.MEMBER, ssh, player.getUniqueId()))
+			if(SignHandler.isOwner(sst, player.getUniqueId()) || SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
 			{
 				if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
 				{
-					SignHandler.takeOutItemFromShop(ssh, player);
+					SignHandler.takeOutItemFromShop(sst, player);
 					return;
 				}
 			}
-			if(ssh.isItemHologram())
+			if(sst.isItemHologram())
 			{
-				ItemHologramHandler.spawnHologram(ssh);
+				ItemHologramHandler.spawnHologram(sst);
 			}
 			return;
 		} else if(action == Action.RIGHT_CLICK_BLOCK)
 		{
-			if(SignHandler.isOwner(ssh, player.getUniqueId())
-					|| SignHandler.isListed(ListedType.MEMBER, ssh, player.getUniqueId())
+			if(SignHandler.isOwner(sst, player.getUniqueId())
+					|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
 					|| SignHandler.isBypassToggle(player.getUniqueId()))
 			{
-				if(ssh.getItemStack() != null)
+				if(sst.getItemStack() != null)
 				{
 					if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
 					{
-						if(ssh.getItemStack() == null || ssh.getItemStack().getType() == Material.AIR)
+						if(sst.getItemStack() == null || sst.getItemStack().getType() == Material.AIR)
 						{
 							player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.ShopItemIsNull")
-									.replace("%name%", ssh.getDisplayName())));
+									.replace("%name%", sst.getDisplayName())));
 							return;
 						}
 						new BukkitRunnable()
@@ -133,17 +133,17 @@ public class PlayerInteractListener implements Listener
 							@Override
 							public void run()
 							{
-								GuiHandler.openAdministration(ssh, player,
+								GuiHandler.openAdministration(sst, player,
 										plugin.getYamlHandler().getConfig().getBoolean("SignShop.Gui.ForceSettingsLevel", false)
 										? SettingsLevel.valueOf(plugin.getYamlHandler().getConfig().getString("SignShop.Gui.ToBeForcedSettingsLevel", "BASE"))
 										: pd.getLastSettingLevel(), true);
 							}
 						}.runTaskAsynchronously(plugin);
-						SignHandler.updateSign(ssh);
+						SignHandler.updateSign(sst);
 						return;
 					} else
 					{
-						if(SignHandler.putInItemIntoShop(ssh, player, player.getInventory().getItemInMainHand()))
+						if(SignHandler.putInItemIntoShop(sst, player, player.getInventory().getItemInMainHand()))
 						{
 							return;
 						}
@@ -156,45 +156,7 @@ public class PlayerInteractListener implements Listener
 			@Override
 			public void run()
 			{
-				if((ssh.getListedType() == ListedType.BLACKLIST && SignHandler.isListed(ListedType.BLACKLIST, ssh, player.getUniqueId()))
-						|| (ssh.getListedType() == ListedType.WHITELIST && !SignHandler.isListed(ListedType.WHITELIST, ssh, player.getUniqueId()))
-						|| (ssh.getListedType() == ListedType.MEMBER && !SignHandler.isListed(ListedType.MEMBER, ssh, player.getUniqueId()))
-						|| (ssh.getListedType() == ListedType.CUSTOM && !SignHandler.isListed(ListedType.CUSTOM, ssh, player.getUniqueId()))
-					)
-				{
-					switch(ssh.getListedType())
-					{
-					case ALL:
-						break;
-					case BLACKLIST:
-						player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.IsBlackList")
-								.replace("%name%", ssh.getSignShopName())));
-						break;
-					case WHITELIST:
-						player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.IsNotWhiteList")
-								.replace("%name%", ssh.getSignShopName())));
-						break;
-					case CUSTOM:
-						player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.IsNotCustomList")
-								.replace("%name%", ssh.getSignShopName())));
-						break;
-					case MEMBER:
-						player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.IsNotMember")
-								.replace("%name%", ssh.getSignShopName())));
-						break;
-					}
-					//event.setCancelled(true);
-					return;
-				}
-				GuiHandler.openShop(ssh, player, pd.getLastSettingLevel(), false);
-			}
-		}.runTaskAsynchronously(plugin);
-		new BukkitRunnable()
-		{
-			@Override
-			public void run()
-			{
-				SignHandler.updateSign(ssh);
+				SignHandler.updateSign(sst);
 			}
 		}.runTask(plugin);
 	}
@@ -232,7 +194,7 @@ public class PlayerInteractListener implements Listener
 			return;
 		}
 		Player player = event.getPlayer();
-		SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP,
+		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), player.getWorld().getName(),
 				b.getX(), b.getY(), b.getZ());

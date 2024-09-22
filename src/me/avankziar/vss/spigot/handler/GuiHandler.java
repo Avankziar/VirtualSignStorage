@@ -44,10 +44,13 @@ import com.mojang.authlib.properties.Property;
 
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.ListedType;
+import me.avankziar.vss.general.objects.PlayerData;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.assistance.Utility;
-import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.GUIApi;
 import me.avankziar.vss.spigot.gui.events.ClickFunction;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
@@ -56,119 +59,92 @@ import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
-import me.avankziar.vss.spigot.objects.ListedType;
-import me.avankziar.vss.spigot.objects.PlayerData;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class GuiHandler
 {
 	private static VSS plugin = VSS.getPlugin();
-	public static String SIGNSHOP_ID = "signshop_id";
+	public static String SIGNSTORAGE_ID = "signstorage_id";
 	public static String PLAYER_UUID = "player_uuid";
 	public static String SEARCH_TELEPORT_OR_LOCATION = "search_teleport_or_location";
 	public static String PAGE = "page";
 	public static String WHERE = "where";
 	
-	public static void openAdministration(SignShop ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
+	public static void openAdministration(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ADMINISTRATION;
-		GUIApi gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6, "Shop: "+ssh.getSignShopName(), 
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "Shop: "+ssh.getSignStorageName(), 
 				settingsLevel == null ? SettingsLevel.BASE : settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
+		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openAdministration(SignShop ssh, Player player, SettingsLevel settingsLevel, Inventory inv, boolean closeInv)
+	public static void openAdministration(SignStorage ssh, Player player, SettingsLevel settingsLevel, Inventory inv, boolean closeInv)
 	{
 		GuiType gt = GuiType.ADMINISTRATION;
-		GUIApi gui = new GUIApi(plugin.pluginName, inv, gt.toString(), 
+		GUIApi gui = new GUIApi(plugin.pluginname, inv, gt.toString(), 
 				settingsLevel == null ? SettingsLevel.BASE : settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
+		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openShop(SignShop ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
-	{
-		GuiType gt = GuiType.SHOP;
-		GUIApi gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6, "Shop "+ssh.getSignShopName(), settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
-		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
-	}
-	
-	public static void openShop(SignShop ssh, Player player, SettingsLevel settingsLevel, Inventory inv, boolean closeInv)
-	{
-		GuiType gt = GuiType.SHOP;
-		GUIApi gui = new GUIApi(plugin.pluginName, inv, gt.toString(), settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
-		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
-	}
-	
-	public static void openInputInfo(SignShop ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
+	public static void openInputInfo(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ITEM_INPUT;
-		GUIApi gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6, "Shop:"+String.valueOf(ssh.getId()), settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "Shop:"+String.valueOf(ssh.getId()), settingsLevel);
+		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openKeyOrNumInput(SignShop ssh, Player player, GuiType gt, SettingsLevel settingsLevel, String keyboardOrNumpad, boolean closeInv)
+	public static void openKeyOrNumInput(SignStorage ssh, Player player, GuiType gt, SettingsLevel settingsLevel, String keyboardOrNumpad, boolean closeInv)
 	{
-		GUIApi gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6, ssh.getSignShopName()+keyboardOrNumpad, settingsLevel);
-		SignShop ssh2 = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", ssh.getId());
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, ssh.getSignStorageName()+keyboardOrNumpad, settingsLevel);
+		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openSearch(ArrayList<SignShop> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
+	public static void openSearch(ArrayList<SignStorage> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
-		GUIApi gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6,
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6,
 				ChatApi.tl(plugin.getYamlHandler().getLang().getString("SearchFunctionHandler.Title")
 				.replace("%mat%", searchMat.toString())), settingsLevel);
 		openSearchGui(list, player, gt, gui, settingsLevel, closeInv, searchMat, teleport_OR_Location);
 	}
 	
-	public static void openSubscribed(ArrayList<SignShop> list, Player player, int page, String where, boolean closeInv, Inventory inv)
+	public static void openSubscribed(ArrayList<SignStorage> list, Player player, int page, String where, boolean closeInv, Inventory inv)
 	{
 		GuiType gt = GuiType.SUBSCIBED;
 		GUIApi gui = null;
 		if(inv == null)
 		{
-			gui = new GUIApi(plugin.pluginName, gt.toString(), null, 6,
+			gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6,
 					ChatApi.tl(plugin.getYamlHandler().getLang().getString("SubscribedFunctionHandler.Title")
 							.replace("%player%", player.getName())),
 					SettingsLevel.BASE);
 		} else
 		{
 			inv.clear();
-			gui = new GUIApi(plugin.pluginName, inv, gt.toString(), SettingsLevel.BASE);
+			gui = new GUIApi(plugin.pluginname, inv, gt.toString(), SettingsLevel.BASE);
 		}
 		openListGui(list, player, gt, gui, closeInv, page, where);
 	}
 	
-	private static void openGui(SignShop ssh, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv)
+	private static void openGui(SignStorage sst, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		if(plugin.getIFHEco() != null)
 		{
-			Account ac = plugin.getIFHEco().getAccount(ssh.getAccountId());
+			Account ac = plugin.getIFHEco().getAccount(sst.getAccountId());
 			if(ac == null)
 			{
 				player.spigot().sendMessage(ChatApi.tctl(plugin.getYamlHandler().getLang().getString("GuiHandler.AccountNotExist")
-						.replace("%player%", Utility.convertUUIDToName(ssh.getOwner().toString()))));
-				if(gt == GuiType.SHOP)
-				{
-					return;
-				}
+						.replace("%player%", Utility.convertUUIDToName(sst.getOwner().toString()))));
 			}
 		} else if(plugin.getVaultEco() != null)
 		{
-			if(!plugin.getVaultEco().hasAccount(Bukkit.getOfflinePlayer(ssh.getOwner())))
+			if(!plugin.getVaultEco().hasAccount(Bukkit.getOfflinePlayer(sst.getOwner())))
 			{
 				player.spigot().sendMessage(ChatApi.tctl(plugin.getYamlHandler().getLang().getString("GuiHandler.AccountNotExist")
-						.replace("%player%", Utility.convertUUIDToName(ssh.getOwner().toString()))));
-				if(gt == GuiType.SHOP)
-				{
-					return;
-				}
+						.replace("%player%", Utility.convertUUIDToName(sst.getOwner().toString()))));
 			}
 		}
 		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
@@ -178,9 +154,9 @@ public class GuiHandler
 		{
 			if(y.get(i+".IsInfoItem") != null && y.getBoolean(i+".IsInfoItem"))
 			{
-				ItemStack is = ssh.getItemStack();
+				ItemStack is = sst.getItemStack();
 				LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-				map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
+				map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, sst.getId()));
 				gui.add(i, is, settingsLevel, true, map, getClickFunction(y, String.valueOf(i)));
 				continue;
 			}
@@ -188,7 +164,7 @@ public class GuiHandler
 			{
 				if(fillNotDefineGuiSlots)
 				{
-					filler(gui, ssh.getId(), i, filler);
+					filler(gui, sst.getId(), i, filler);
 				}
 				continue;
 			}			
@@ -201,7 +177,7 @@ public class GuiHandler
 			{
 				if(fillNotDefineGuiSlots)
 				{
-					filler(gui, ssh.getId(), i, filler);
+					filler(gui, sst.getId(), i, filler);
 				}
 				continue;
 			}
@@ -211,7 +187,7 @@ public class GuiHandler
 				{
 					if(fillNotDefineGuiSlots)
 					{
-						filler(gui, ssh.getId(), i, filler);
+						filler(gui, sst.getId(), i, filler);
 					}
 					continue;
 				}
@@ -224,87 +200,9 @@ public class GuiHandler
 					{
 						if(fillNotDefineGuiSlots)
 						{
-							filler(gui, ssh.getId(), i, filler);
+							filler(gui, sst.getId(), i, filler);
 						}
 						continue;
-					}
-				}
-			}
-			if(y.get(i+".CanBuy") != null)
-			{
-				if(y.getBoolean(i+".CanBuy"))
-				{
-					if(!ssh.canBuy())
-					{
-						if(fillNotDefineGuiSlots)
-						{
-							filler(gui, ssh.getId(), i, filler);
-						}
-						continue;
-					}
-					if(gt == GuiType.SHOP)
-					{
-						if(SignHandler.isDiscount(ssh, System.currentTimeMillis()))
-						{
-							if((ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0)
-									&& (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0))
-							{
-								if(fillNotDefineGuiSlots)
-								{
-									filler(gui, ssh.getId(), i, filler);
-								}
-								continue;
-							}
-						} else
-						{
-							if(ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0)
-							{
-								if(fillNotDefineGuiSlots)
-								{
-									filler(gui, ssh.getId(), i, filler);
-								}
-								continue;
-							}
-						}
-					}
-				}
-			}
-			if(y.get(i+".CanSell") != null)
-			{
-				if(y.getBoolean(i+".CanSell"))
-				{
-					if(!ssh.canSell())
-					{
-						if(fillNotDefineGuiSlots)
-						{
-							filler(gui, ssh.getId(), i, filler);
-						}
-						continue;
-					}
-					if(gt == GuiType.SHOP)
-					{
-						if(SignHandler.isDiscount(ssh, System.currentTimeMillis()))
-						{
-							if((ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0)
-									&& (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0))
-							{
-								if(fillNotDefineGuiSlots)
-								{
-									filler(gui, ssh.getId(), i, filler);
-								}
-								continue;
-							}
-						} else
-						{
-							if(ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0)
-							{
-								if(fillNotDefineGuiSlots)
-								{
-									filler(gui, ssh.getId(), i, filler);
-								}
-								continue;
-							}
-						}
 					}
 				}
 			}
@@ -330,7 +228,7 @@ public class GuiHandler
 				{
 					if(fillNotDefineGuiSlots)
 					{
-						filler(gui, ssh.getId(), i, filler);
+						filler(gui, sst.getId(), i, filler);
 					}
 					continue;
 				}
@@ -339,22 +237,22 @@ public class GuiHandler
 			UUID otheruuid = null;
 			if(y.get(i+".PlayerSearchNum") != null)
 			{
-				if(ssh.getNumText().isBlank() || ssh.getNumText().isEmpty())
+				if(sst.getNumText().isBlank() || sst.getNumText().isEmpty())
 				{
 					if(fillNotDefineGuiSlots)
 					{
-						filler(gui, ssh.getId(), i, filler);
+						filler(gui, sst.getId(), i, filler);
 					}
 					continue;
 				}
 				int num = y.getInt(i+".PlayerSearchNum");
 				ArrayList<Object> l = plugin.getMysqlHandler().getList(
-						MysqlHandler.Type.PLAYERDATA, "`player_name` ASC", num, 1, "`player_name` like ?", "%"+ssh.getNumText()+"%");
+						MysqlType.PLAYERDATA, "`player_name` ASC", num, 1, "`player_name` like ?", "%"+sst.getNumText()+"%");
 				if(l == null || l.isEmpty())
 				{
 					if(fillNotDefineGuiSlots)
 					{
-						filler(gui, ssh.getId(), i, filler);
+						filler(gui, sst.getId(), i, filler);
 					}
 					continue;
 				}
@@ -367,7 +265,7 @@ public class GuiHandler
 				{
 					if(fillNotDefineGuiSlots)
 					{
-						filler(gui, ssh.getId(), i, filler);
+						filler(gui, sst.getId(), i, filler);
 					}
 					continue;
 				}
@@ -401,7 +299,7 @@ public class GuiHandler
 			}
 			if(lore != null)
 			{
-				lore = (ArrayList<String>) getLorePlaceHolder(ssh, player, lore, playername);
+				lore = (ArrayList<String>) getLorePlaceHolder(sst, player, lore, playername);
 			}
 			
 			if(y.get(i+".InfoLore") != null && y.getBoolean(i+".InfoLore"))
@@ -410,7 +308,7 @@ public class GuiHandler
 				{
 					lore = new ArrayList<>();
 				}
-				ArrayList<String> infoLore = getStringPlaceHolder(ssh.getItemStack(), ssh.getOwner());
+				ArrayList<String> infoLore = getStringPlaceHolder(sst.getItemStack(), sst.getOwner());
 				for(String s : infoLore)
 				{
 					lore.add(ChatApi.tl(s));
@@ -422,7 +320,7 @@ public class GuiHandler
 					: (VSS.getPlugin().getEnumTl() != null
 							  ? VSS.getPlugin().getEnumTl().getLocalization(mat)
 							  : is.getType().toString()));
-			displayname = getStringPlaceHolder(ssh, player, displayname, playername);
+			displayname = getStringPlaceHolder(sst, player, displayname, playername);
 			if(is == null)
 			{
 				is = new ItemStack(mat, amount);
@@ -438,7 +336,7 @@ public class GuiHandler
 			}
 			is.setItemMeta(im);
 			LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-			map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
+			map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, sst.getId()));
 			if(otheruuid != null)
 			{
 				map.put(PLAYER_UUID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.STRING, otheruuid.toString()));
@@ -454,20 +352,20 @@ public class GuiHandler
 				{
 					player.closeInventory();
 				}
-				gui.open(player, gt, ssh.getId());
+				gui.open(player, gt, sst.getId());
 			}
 		}.runTask(plugin);
 		
 	}
 	
-	private static void openSearchGui(ArrayList<SignShop> list, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv,
+	private static void openSearchGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
 		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
 		Material filler = Material.valueOf(plugin.getConfig().getString("SignShop.Gui.FillerItemMaterial", "LIGHT_GRAY_STAINED_GLASS_PANE"));
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
-		for(SignShop ssh : list)
+		for(SignStorage ssh : list)
 		{
 			ArrayList<String> lore = null;
 			if(y.get("Lore."+settingsLevel.toString()) != null)
@@ -508,7 +406,7 @@ public class GuiHandler
 			}
 			is.setItemMeta(im);
 			LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-			map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
+			map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
 			map.put(SEARCH_TELEPORT_OR_LOCATION, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.STRING, String.valueOf(teleport_OR_Location)));
 			gui.add(i, is, settingsLevel, true, map, getClickFunction(y, null));
 			i++;
@@ -534,13 +432,13 @@ public class GuiHandler
 		}.runTask(plugin);
 	}
 	
-	private static void openListGui(ArrayList<SignShop> list, Player player, GuiType gt, GUIApi gui, boolean closeInv, int page, String whereQuery)
+	private static void openListGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, boolean closeInv, int page, String whereQuery)
 	{
 		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
 		Material filler = Material.valueOf(plugin.getConfig().getString("SignShop.Gui.FillerItemMaterial", "LIGHT_GRAY_STAINED_GLASS_PANE"));
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
-		for(SignShop ssh : list)
+		for(SignStorage ssh : list)
 		{
 			ArrayList<String> lore = null;
 			if(y.get("Lore") != null)
@@ -566,7 +464,7 @@ public class GuiHandler
 			}
 			is.setItemMeta(im);
 			LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-			map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
+			map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, ssh.getId()));
 			gui.add(i, is, SettingsLevel.NOLEVEL, true, map, getClickFunction(y, null));
 			i++;
 		}
@@ -623,7 +521,7 @@ public class GuiHandler
 			}
 			is.setItemMeta(im);
 			LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-			map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, 0));
+			map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, 0));
 			if(y.getString(i+".Pagination").equalsIgnoreCase("Next"))
 			{
 				map.put(PAGE, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, page+1));
@@ -668,7 +566,7 @@ public class GuiHandler
 		im.setLore(new ArrayList<>());
 		is.setItemMeta(im);
 		LinkedHashMap<String, Entry<GUIApi.Type, Object>> map = new LinkedHashMap<>();
-		map.put(SIGNSHOP_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, sshId));
+		map.put(SIGNSTORAGE_ID, new AbstractMap.SimpleEntry<GUIApi.Type, Object>(GUIApi.Type.INTEGER, sshId));
 		gui.add(i, is, SettingsLevel.NOLEVEL, true, map, new ClickFunction[0]);
 	}
 	
@@ -721,7 +619,7 @@ public class GuiHandler
         return skull;
     }
 	
-	public static List<String> getLorePlaceHolder(SignShop ssh, Player player, List<String> lore, String playername)
+	public static List<String> getLorePlaceHolder(SignStorage ssh, Player player, List<String> lore, String playername)
 	{
 		List<String> list = new ArrayList<>();
 		for(String s : lore)
@@ -1442,7 +1340,7 @@ public class GuiHandler
 	    return s;
 	}
 	
-	public static String getStringPlaceHolder(SignShop ssh, Player player, String text, String playername)
+	public static String getStringPlaceHolder(SignStorage ssh, Player player, String text, String playername)
 	{
 		String s = text;
 		if(text.contains("%owner%"))
@@ -1460,22 +1358,6 @@ public class GuiHandler
 		{
 			s = s.replace("%material%", (ssh.getMaterial() == null ? "/" : ssh.getMaterial().toString()));
 		}
-		if(text.contains("%isonblacklist%"))
-		{
-			if(playername != null)
-			{
-				UUID uuid = Utility.convertNameToUUID(playername);
-				s = s.replace("%isonblacklist%", 
-						uuid == null ? "/" :
-							getBoolean(plugin.getMysqlHandler().exist(MysqlHandler.Type.SHOPACCESSTYPE,
-								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
-								uuid.toString(), ssh.getId(), ListedType.BLACKLIST.toString()))
-						);
-			} else
-			{
-				s = s.replace("%isonblacklist%", "/");
-			}
-		}
 		if(text.contains("%isonwhitelist%"))
 		{
 			if(playername != null)
@@ -1483,7 +1365,7 @@ public class GuiHandler
 				UUID uuid = Utility.convertNameToUUID(playername);
 				s = s.replace("%isonwhitelist%", 
 						uuid == null ? "/" :
-							getBoolean(plugin.getMysqlHandler().exist(MysqlHandler.Type.SHOPACCESSTYPE,
+							getBoolean(plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
 								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
 								uuid.toString(), ssh.getId(), ListedType.WHITELIST.toString()))
 						);
@@ -1499,7 +1381,7 @@ public class GuiHandler
 				UUID uuid = Utility.convertNameToUUID(playername);
 				s = s.replace("%ismember%", 
 						uuid == null ? "/" :
-							getBoolean(plugin.getMysqlHandler().exist(MysqlHandler.Type.SHOPACCESSTYPE,
+							getBoolean(plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
 								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
 								uuid.toString(), ssh.getId(), ListedType.MEMBER.toString()))
 						);
@@ -1508,30 +1390,9 @@ public class GuiHandler
 				s = s.replace("%ismember%", "/");
 			}
 		}
-		if(text.contains("%isoncustom%"))
-		{
-			if(playername != null)
-			{
-				UUID uuid = Utility.convertNameToUUID(playername);
-				s = s.replace("%isoncustom%", 
-						uuid == null ? "/" :
-							getBoolean(plugin.getMysqlHandler().exist(MysqlHandler.Type.SHOPACCESSTYPE,
-								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
-								uuid.toString(), ssh.getId(), ListedType.CUSTOM.toString()))
-						);
-			} else
-			{
-				s = s.replace("%isoncustom%", "/");
-			}
-		}
 		if(text.contains("%id%"))
 		{
 			s = s.replace("%id%", String.valueOf(ssh.getId()));
-		}
-		if(text.contains("%subscribe%"))
-		{
-			s = s.replace("%subscribe%", getBoolean(plugin.getMysqlHandler().exist(MysqlHandler.Type.SUBSCRIBEDSHOP,
-					"`player_uuid` = ? AND `sign_shop_id` = ?", player.getUniqueId().toString(), ssh.getId())));
 		}
 		if(text.contains("%numtext%"))
 		{
@@ -1547,7 +1408,7 @@ public class GuiHandler
 		}
 		if(text.contains("%signshopname%"))
 		{
-			s = s.replace("%signshopname%", ssh.getSignShopName());
+			s = s.replace("%signshopname%", ssh.getSignStorageName());
 		}
 		if(text.contains("%server%"))
 		{
@@ -1573,37 +1434,9 @@ public class GuiHandler
 		{
 			s = s.replace("%accountid%", String.valueOf(ssh.getAccountId()));
 		}
-		if(text.contains("%storageid%"))
-		{
-			s = s.replace("%storageid%", ssh.getStorageID() == 0 ? "/" : String.valueOf(ssh.getStorageID()));
-		}
 		if(text.contains("%creationdate%"))
 		{
 			s = s.replace("%creationdate%", TimeHandler.getDateTime(ssh.getCreationDateTime()));
-		}
-		if(text.contains("%discountstart%"))
-		{
-			s = s.replace("%discountstart%", ssh.getDiscountStart() == 0 ? "/" : TimeHandler.getDateTime(ssh.getDiscountStart()));
-		}
-		if(text.contains("%discountend%"))
-		{
-			s = s.replace("%discountend%", ssh.getDiscountEnd() == 0 ? "/" :TimeHandler.getDateTime(ssh.getDiscountEnd()));
-		}
-		if(text.contains("%possiblebuy%"))
-		{
-			s = s.replace("%possiblebuy%", ssh.getPossibleBuy() < 0 ? "/" : String.valueOf(ssh.getPossibleBuy()));
-		}
-		if(text.contains("%possiblesell%"))
-		{
-			s = s.replace("%possiblesell%", ssh.getPossibleSell() < 0 ? "/" : String.valueOf(ssh.getPossibleSell()));
-		}
-		if(text.contains("%discountpossiblebuy%"))
-		{
-			s = s.replace("%discountpossiblebuy%", ssh.getDiscountPossibleBuy() < 0 ? "/" : String.valueOf(ssh.getDiscountPossibleBuy()));
-		}
-		if(text.contains("%discountpossiblesell%"))
-		{
-			s = s.replace("%discountpossiblesell%", ssh.getDiscountPossibleSell() < 0 ? "/" : String.valueOf(ssh.getDiscountPossibleSell()));
 		}
 		if(text.contains("%itemstoragecurrent%"))
 		{
@@ -1613,21 +1446,9 @@ public class GuiHandler
 		{
 			s = s.replace("%itemstoragetotal%", String.valueOf(ssh.getItemStorageTotal()));
 		}
-		if(text.contains("%buytoggle%"))
+		if(text.contains("%unlimited%"))
 		{
-			s = s.replace("%buytoggle%", getBoolean(ssh.canBuy()));
-		}
-		if(text.contains("%selltoggle%"))
-		{
-			s = s.replace("%selltoggle%", getBoolean(ssh.canSell()));
-		}
-		if(text.contains("%unlimitedbuy%"))
-		{
-			s = s.replace("%unlimitedbuy%", getBoolean(ssh.isUnlimitedBuy()));
-		}
-		if(text.contains("%unlimitedsell%"))
-		{
-			s = s.replace("%unlimitedsell%", getBoolean(ssh.isUnlimitedSell()));
+			s = s.replace("%unlimitedbuy%", getBoolean(ssh.isUnlimited()));
 		}
 		if(text.contains("%glow%"))
 		{
@@ -1645,738 +1466,24 @@ public class GuiHandler
 		return ChatApi.tl(s);
 	}
 	
-	private static String getStringPlaceHolderIFH(SignShop ssh, Player player, String text,
+	private static String getStringPlaceHolderIFH(SignStorage ssh, Player player, String text,
 			Account ac, int dg, boolean useSI, boolean useSy, String ts, String ds, String playername)
 	{
-		int buyFrac = 0;
-		if(ssh.getBuyAmount() != null)
-		{
-			buyFrac = String.valueOf(ssh.getBuyAmount().doubleValue()).split("\\.")[1].length();
-		}
-		int sellFrac = 0;
-		if(ssh.getSellAmount() != null)
-		{
-			sellFrac = String.valueOf(ssh.getSellAmount().doubleValue()).split("\\.")[1].length();
-		}
-		int dbuyFrac = 0;
-		if(ssh.getDiscountBuyAmount() != null)
-		{
-			dbuyFrac = String.valueOf(ssh.getDiscountBuyAmount().doubleValue()).split("\\.")[1].length();
-		}
-		int dsellFrac = 0;
-		if(ssh.getDiscountSellAmount() != null)
-		{
-			dsellFrac = String.valueOf(ssh.getDiscountSellAmount().doubleValue()).split("\\.")[1].length();
-		}
-		boolean inDiscount = System.currentTimeMillis() >= ssh.getDiscountStart() && System.currentTimeMillis() < ssh.getDiscountEnd();
 		String s = text;
 		if(text.contains("%accountname%"))
 		{
 			s = s.replace("%accountname%", (ac == null || ac.getID() == 0) ? "/" : ac.getAccountName());
 		}
-		if(text.contains("%buyraw1%"))
-		{
-			s = s.replace("%buyraw1%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getBuyAmount(), ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%sellraw1%"))
-		{
-			s = s.replace("%sellraw1%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getSellAmount(), ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));		
-		}
-		if(text.contains("%buy1%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy1%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount(), ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount(), ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount(), ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy1%", b);
-			}
-		}
-		if(text.contains("%buy8%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy8%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*8, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*8, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*8, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy8%", b);
-			}
-		}
-		if(text.contains("%buy16%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy16%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*16, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*16, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*16, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy16%", b);
-			}
-		}
-		if(text.contains("%buy32%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy32%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*32, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*32, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*32, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy32%", b);
-			}
-		}
-		if(text.contains("%buy64%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy64%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*64, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*64, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*64, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy64%", b);
-			}
-		}
-		if(text.contains("%buy576%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy576%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*576, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*576, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*576, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy576%", b);
-			}			
-		}
-		if(text.contains("%buy1728%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy1728%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*1728, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*1728, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*1728, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy1728%", b);
-			}			
-		}
-		if(text.contains("%buy2304%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy2304%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getBuyAmount()*2304, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getBuyAmount()*2304, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*2304, ac.getCurrency(), dg, buyFrac, useSI, useSy, ts, ds);
-				s = s.replace("%buy2304%", b);
-			}			
-		}
-		if(text.contains("%sell1%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell1%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount(), ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount(), ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount(), ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell1%", v);
-			}			
-		}
-		if(text.contains("%sell8%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell8%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*8, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*8, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*8, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell8%", v);
-			}			
-		}
-		if(text.contains("%sell16%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell16%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*16, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*16, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*16, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell16%", v);
-			}			
-		}
-		if(text.contains("%sell32%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell32%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*32, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*32, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*32, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell32%", v);
-			}			
-		}
-		if(text.contains("%sell64%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell64%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*64, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*64, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*64, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell64%", v);
-			}			
-		}
-		if(text.contains("%sell576%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell576%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*576, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*576, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*576, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell576%", v);
-			}			
-		}
-		if(text.contains("%sell1728%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell1728%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*1728, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*1728, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*1728, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell1728%", v);
-			}			
-		}
-		if(text.contains("%sell2304%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell2304%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					plugin.getIFHEco().format(ssh.getSellAmount()*2304, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds));
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: plugin.getIFHEco().format(ssh.getSellAmount()*2304, ac.getCurrency(), dg, sellFrac, useSI, useSy, ts, ds)) 
-						: plugin.getIFHEco().format(ssh.getDiscountSellAmount()*2304, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds);
-				s = s.replace("%sell2304%", v);
-			}			
-		}
-		if(text.contains("%discountbuy1%"))
-		{
-			s = s.replace("%discountbuy1%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount(), ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy8%"))
-		{
-			s = s.replace("%discountbuy8%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*8, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy16%"))
-		{
-			s = s.replace("%discountbuy16%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*16, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy32%"))
-		{
-			s = s.replace("%discountbuy32%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*32, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy64%"))
-		{
-			s = s.replace("%discountbuy64%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*64, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy576%"))
-		{
-			s = s.replace("%discountbuy576%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*576, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy1728%"))
-		{
-			s = s.replace("%discountbuy1728%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*1728, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountbuy2304%"))
-		{
-			s = s.replace("%discountbuy2304%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountBuyAmount()*2304, ac.getCurrency(), dg, dbuyFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell1%"))
-		{
-			s = s.replace("%discountsell1%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount(), ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell8%"))
-		{
-			s = s.replace("%discountsell8%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*8, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell16%"))
-		{
-			s = s.replace("%discountsell16%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*16, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell32%"))
-		{
-			s = s.replace("%discountsell32%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*32, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell64%"))
-		{
-			s = s.replace("%discountsell64%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*64, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell576%"))
-		{
-			s = s.replace("%discountsell576%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*576, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell1728%"))
-		{
-			s = s.replace("%discountsell1728%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*1728, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
-		if(text.contains("%discountsell2304%"))
-		{
-			s = s.replace("%discountsell2304%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				plugin.getIFHEco().format(ssh.getDiscountSellAmount()*2304, ac.getCurrency(), dg, dsellFrac, useSI, useSy, ts, ds));
-		}
 		return ChatApi.tl(s);
 	}
 	
-	private static String getStringPlaceHolderVault(SignShop ssh, Player player, String text, String playername)
+	private static String getStringPlaceHolderVault(SignStorage ssh, Player player, String text, String playername)
 	{
-		boolean inDiscount = System.currentTimeMillis() >= ssh.getDiscountStart() && System.currentTimeMillis() < ssh.getDiscountEnd();
 		String s = text;
 		if(text.contains("%accountname%"))
 		{
 			String n = Utility.convertUUIDToName(ssh.getOwner().toString());
 			s = s.replace("%accountname%", n != null ? n : "/");
-		}
-		if(text.contains("%buyraw1%"))
-		{
-			s = s.replace("%buyraw1%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getBuyAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%sellraw1%"))
-		{
-			s = s.replace("%sellraw1%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getSellAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%buy1%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy1%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount())+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getBuyAmount())+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy1%", b);
-			}
-		}
-		if(text.contains("%buy8%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy8%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getBuyAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy8%", b);
-			}
-		}
-		if(text.contains("%buy16%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy16%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountBuyAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy16%", b);
-			}
-		}
-		if(text.contains("%buy32%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy32%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getBuyAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy32%", b);
-			}
-		}
-		if(text.contains("%buy64%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy64%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountBuyAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy64%", b);
-			}
-		}
-		if(text.contains("%buy576%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy576%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountBuyAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy576%", b);
-			}			
-		}
-		if(text.contains("%buy1728%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy1728%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountBuyAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy1728%", b);
-			}			
-		}
-		if(text.contains("%buy2304%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%buy2304%", (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getBuyAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String b = (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0)
-						? (ssh.getBuyAmount() == null || ssh.getBuyAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getBuyAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountBuyAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%buy2304%", b);
-			}			
-		}
-		if(text.contains("%sell1%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell1%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount())+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount())+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell1%", v);
-			}			
-		}
-		if(text.contains("%sell8%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell8%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell8%", v);
-			}			
-		}
-		if(text.contains("%sell16%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell16%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell16%", v);
-			}			
-		}
-		if(text.contains("%sell32%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell32%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell32%", v);
-			}			
-		}
-		if(text.contains("%sell64%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell64%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell64%", v);
-			}			
-		}
-		if(text.contains("%sell576%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell576%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell576%", v);
-			}			
-		}
-		if(text.contains("%sell1728%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell1728%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell1728%", v);
-			}			
-		}
-		if(text.contains("%sell2304%"))
-		{
-			if(!inDiscount)
-			{
-				s = s.replace("%sell2304%", (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0) ? "/" : 
-					String.valueOf(ssh.getSellAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural());
-			} else
-			{
-				String v = (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0)
-						? (ssh.getSellAmount() == null || ssh.getSellAmount() < 0.0
-							? "/"
-							: String.valueOf(ssh.getSellAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural()) 
-						: String.valueOf(ssh.getDiscountSellAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural();
-				s = s.replace("%sell2304%", v);
-			}			
-		}
-		if(text.contains("%discountbuy1%"))
-		{
-			s = s.replace("%discountbuy1%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy8%"))
-		{
-			s = s.replace("%discountbuy8%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy16%"))
-		{
-			s = s.replace("%discountbuy16%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy32%"))
-		{
-			s = s.replace("%discountbuy32%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy64%"))
-		{
-			s = s.replace("%discountbuy64%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy576%"))
-		{
-			s = s.replace("%discountbuy576%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy1728%"))
-		{
-			s = s.replace("%discountbuy1728%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountbuy2304%"))
-		{
-			s = s.replace("%discountbuy2304%", (ssh.getDiscountBuyAmount() == null || ssh.getDiscountBuyAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountBuyAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell1%"))
-		{
-			s = s.replace("%discountsell1%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount())+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell8%"))
-		{
-			s = s.replace("%discountsell8%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*8)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell16%"))
-		{
-			s = s.replace("%discountsell16%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*16)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell32%"))
-		{
-			s = s.replace("%discountsell32%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*32)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell64%"))
-		{
-			s = s.replace("%discountsell64%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*64)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell576%"))
-		{
-			s = s.replace("%discountsell576%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*576)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell1728%"))
-		{
-			s = s.replace("%discountsell1728%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*1728)+" "+ plugin.getVaultEco().currencyNamePlural());
-		}
-		if(text.contains("%discountsell2304%"))
-		{
-			s = s.replace("%discountsell2304%", (ssh.getDiscountSellAmount() == null || ssh.getDiscountSellAmount() < 0.0) ? "/" : 
-				String.valueOf(ssh.getDiscountSellAmount()*2304)+" "+ plugin.getVaultEco().currencyNamePlural());
 		}
 		return ChatApi.tl(s);
 	}

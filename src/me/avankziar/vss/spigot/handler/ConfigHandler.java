@@ -1,6 +1,6 @@
 package me.avankziar.vss.spigot.handler;
 
-import me.avankziar.vss.spigot.cmdtree.BaseConstructor;
+import me.avankziar.vss.spigot.VSS;
 
 public class ConfigHandler
 {
@@ -11,7 +11,7 @@ public class ConfigHandler
 	
 	public CountType getCountPermType()
 	{
-		String s = BaseConstructor.getPlugin().getYamlHandler().getConfig().getString("Mechanic.CountPerm", "HIGHEST");
+		String s = VSS.getPlugin().getYamlHandler().getConfig().getString("Mechanic.CountPerm", "HIGHEST");
 		CountType ct;
 		try
 		{
@@ -25,56 +25,76 @@ public class ConfigHandler
 	
 	public boolean isSignShopEnabled()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.SignShop", false);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.SignShop", false);
 	}
 	
 	public boolean isAuctionEnabled()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.Auction", false);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.Auction", false);
 	}
 	
 	public boolean isMechanicModifierEnabled()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.Modifier", false);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.Modifier", false);
 	}
 	
 	public boolean isMechanicValueEntryEnabled()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.ValueEntry", false);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.ValueEntry", false);
 	}
 	
 	public String getSignShopInitLine()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignInitializationLine", "[SaleShop]");
+		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignInitializationLine", "[SaleShop]");
 	}
 	
 	public String getSignShopCopyLine()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignCopyLine", "[Copy]");
+		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignCopyLine", "[Copy]");
 	}
 	
 	public String getSignShopMoveLine()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignMoveLine", "[Move]");
+		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignMoveLine", "[Move]");
 	}
 	
 	public long getDefaulStartItemStorage()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getLong("SignShop.DefaultStartItemStorage", 3456);
+		return VSS.getPlugin().getYamlHandler().getConfig().getLong("SignShop.DefaultStartItemStorage", 3456);
+	}
+	
+	public long getDefaultItemOutput()
+	{
+		return 0;//ADDME
+	}
+	
+	public long getDefaultItemShiftOutput()
+	{
+		return 0;//ADDME
+	}
+	
+	public long getDefaultItemInput()
+	{
+		return 0;//ADDME
+	}
+	
+	public long getDefaultItemShiftInput()
+	{
+		return 0;//ADDME
 	}
 	
 	public boolean shopCanTradeShulker()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.ShopCanTradeShulker", true);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.ShopCanTradeShulker", true);
 	}
 	
 	public boolean fillNotDefineGuiSlots()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.Gui.FillNotDefineGuiSlots", true);
+		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.Gui.FillNotDefineGuiSlots", true);
 	}
 	
 	public int getDefaulMaxSubscribeShops()
 	{
-		return BaseConstructor.getPlugin().getYamlHandler().getConfig().getInt("SignShop.DefaultMaxSubscribtion", 45);
+		return VSS.getPlugin().getYamlHandler().getConfig().getInt("SignShop.DefaultMaxSubscribtion", 45);
 	}
 }

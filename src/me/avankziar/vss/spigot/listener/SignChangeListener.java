@@ -13,17 +13,16 @@ import me.avankziar.ifh.general.economy.account.AccountCategory;
 import me.avankziar.ifh.general.economy.currency.CurrencyType;
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.ListedType;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
-import me.avankziar.vss.spigot.database.MysqlHandler;
-import me.avankziar.vss.spigot.database.MysqlHandler.Type;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
 import me.avankziar.vss.spigot.hook.WorldGuardHook;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
-import me.avankziar.vss.spigot.objects.ListedType;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class SignChangeListener implements Listener
 {
@@ -41,7 +40,7 @@ public class SignChangeListener implements Listener
 		{
 			return;
 		}
-		if(plugin.getMysqlHandler().exist(MysqlHandler.Type.SIGNSHOP,
+		if(plugin.getMysqlHandler().exist(MysqlType.SIGNSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), event.getBlock().getWorld().getName(),
 				event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ()))
@@ -77,7 +76,7 @@ public class SignChangeListener implements Listener
 				return;
 			}
 		}
-		int signShopAmount = plugin.getMysqlHandler().getCount(MysqlHandler.Type.SIGNSHOP, "`player_uuid` = ?", player.getUniqueId().toString());
+		int signShopAmount = plugin.getMysqlHandler().getCount(MysqlType.SIGNSTORAGE, "`player_uuid` = ?", player.getUniqueId().toString());
 		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_CREATION_AMOUNT_);
 		if(signShopAmount > maxSignShopAmount)
 		{
@@ -98,7 +97,7 @@ public class SignChangeListener implements Listener
 				return;
 			}
 			int sshID = Integer.valueOf(line2);
-			SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
 			if(ssh == null)
 			{
 				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopNotExists")
@@ -117,7 +116,7 @@ public class SignChangeListener implements Listener
 			ssh.setZ(event.getBlock().getZ());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopMoved")
 					.replace("%id%", line2)
-					.replace("%shopname%", ssh.getSignShopName())));
+					.replace("%shopname%", ssh.getSignStorageName())));
 			event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, ssh, event.getBlock())));
 			event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, ssh, event.getBlock())));
 			event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, ssh, event.getBlock())));
@@ -134,7 +133,7 @@ public class SignChangeListener implements Listener
 			}
 			Sign sign = (Sign) bs;
 			sign.setWaxed(true);
-			plugin.getMysqlHandler().updateData(Type.SIGNSHOP, ssh, "`id` = ?", ssh.getId());
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
 			return;
 		} else if(event.getLine(1).equalsIgnoreCase(new ConfigHandler().getSignShopCopyLine()))
 		{
@@ -147,7 +146,7 @@ public class SignChangeListener implements Listener
 				return;
 			}
 			int sshID = Integer.valueOf(line2);
-			SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
 			if(ssh == null)
 			{
 				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopNotExists")
@@ -159,7 +158,7 @@ public class SignChangeListener implements Listener
 				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 				return;
 			}
-			SignShop copy = ssh;
+			SignStorage copy = ssh;
 			copy.setServer(plugin.getServername());
 			copy.setWorld(event.getBlock().getWorld().getName());
 			copy.setX(event.getBlock().getX());
@@ -167,11 +166,11 @@ public class SignChangeListener implements Listener
 			copy.setZ(event.getBlock().getZ());
 			copy.setItemStorageCurrent(0);
 			copy.setItemStorageTotal(new ConfigHandler().getDefaulStartItemStorage());
-			copy.setSignShopName("Copy: "+copy.getSignShopName());
+			copy.setSignStorageName("Copy: "+copy.getSignStorageName());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopCopy")
 					.replace("%id%", line2)
-					.replace("%shopname%", ssh.getSignShopName())));
-			plugin.getMysqlHandler().create(Type.SIGNSHOP, copy);
+					.replace("%shopname%", ssh.getSignStorageName())));
+			plugin.getMysqlHandler().create(MysqlType.SIGNSTORAGE, copy);
 			event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, copy, event.getBlock())));
 			event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, copy, event.getBlock())));
 			event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, copy, event.getBlock())));
@@ -190,28 +189,25 @@ public class SignChangeListener implements Listener
 			sign.setWaxed(true);
 			return;
 		}
-		int lastnumber = plugin.getMysqlHandler().lastID(MysqlHandler.Type.SIGNSHOP)+1;
+		int lastnumber = plugin.getMysqlHandler().lastID(MysqlType.SIGNSTORAGE)+1;
 		int acid = 0;
 		if(plugin.getIFHEco() != null)
 		{
-			Account ac = plugin.getIFHEco().getDefaultAccount(player.getUniqueId(), AccountCategory.SHOP, plugin.getIFHEco().getDefaultCurrency(CurrencyType.DIGITAL));
-			if(ac == null)
-			{
-				ac = plugin.getIFHEco().getDefaultAccount(player.getUniqueId(), AccountCategory.MAIN, plugin.getIFHEco().getDefaultCurrency(CurrencyType.DIGITAL));
-			}
+			Account ac = plugin.getIFHEco().getDefaultAccount(player.getUniqueId(),
+					AccountCategory.MAIN, plugin.getIFHEco().getDefaultCurrency(CurrencyType.DIGITAL));
 			acid = ac.getID();
 		}
-		long defaultStartItemStorage = new ConfigHandler().getDefaulStartItemStorage();
-		SignShop ssh = new SignShop(
+		ConfigHandler cfh = new ConfigHandler();
+		SignStorage ssh = new SignStorage(
 				0, player.getUniqueId(),
-				"Shop_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
-				defaultStartItemStorage, 0,
-				-1.0, -1.0, -1, -1,
-				0, 0, -1.0, -1.0, -1, -1, 
+				"Storage_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
+				cfh.getDefaulStartItemStorage(), 0,
 				plugin.getServername(), player.getWorld().getName(),
 				event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
-				0, false, false, true, true, "", false, ListedType.ALL, false);
-		plugin.getMysqlHandler().create(MysqlHandler.Type.SIGNSHOP, ssh);
+				false, "", false, ListedType.MEMBER, false,
+				cfh.getDefaultItemOutput(), cfh.getDefaultItemShiftOutput(),
+				cfh.getDefaultItemInput(), cfh.getDefaultItemShiftInput());
+		plugin.getMysqlHandler().create(MysqlType.SIGNSTORAGE, ssh);
 		event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, ssh, event.getBlock())));
 		event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, ssh, event.getBlock())));
 		event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, ssh, event.getBlock())));
@@ -229,7 +225,7 @@ public class SignChangeListener implements Listener
 		Sign sign = (Sign) bs;
 		sign.setWaxed(true);
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopCreated")
-				.replace("%name%", ssh.getSignShopName())
+				.replace("%name%", ssh.getSignStorageName())
 				));
 		return;
 	}

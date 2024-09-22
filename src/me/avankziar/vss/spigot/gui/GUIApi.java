@@ -17,12 +17,12 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.events.ClickFunction;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class GUIApi
 {
@@ -374,10 +374,10 @@ public class GUIApi
 		return playerInGuiType.get(uuid);
 	}
 	
-	public static SignShop getGuiSSH(UUID uuid)
+	public static SignStorage getGuiSSH(UUID uuid)
 	{
 		int sshID = playerInGuiSSHID.get(uuid);
-		return (SignShop) VSS.getPlugin().getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+		return (SignStorage) VSS.getPlugin().getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
 	}
 	
 	public static SettingsLevel getSettingsLevel(UUID uuid)

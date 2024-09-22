@@ -8,17 +8,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.cmd.sale.ARGSubscribed;
-import me.avankziar.vss.spigot.database.MysqlHandler.Type;
+import me.avankziar.vss.spigot.cmd.vss.ARGSubscribed;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
-import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.GuiHandler;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class SubscribedFunctionHandler
 {
-	public static void doClickFunktion(ClickFunctionType cft, Player player, SignShop ssh,
+	public static void doClickFunktion(ClickFunctionType cft, Player player, SignStorage ssh,
 			Inventory openInv, int page, String where)
 	{
 		switch(cft)
@@ -30,7 +29,7 @@ public class SubscribedFunctionHandler
 		}
 	}
 	
-	private static void subscribed(Player player, SignShop ssh)
+	private static void subscribed(Player player, SignStorage ssh)
 	{
 		if(!VSS.getPlugin().getServername().equals(ssh.getServer()))
 		{
@@ -54,7 +53,7 @@ public class SubscribedFunctionHandler
 				public void run()
 				{
 					player.closeInventory();
-					GuiHandler.openShop(ssh, player, SettingsLevel.BASE, false);
+					//GuiHandler.openShop(ssh, player, SettingsLevel.BASE, false);
 				}
 			}.runTask(VSS.getPlugin());
 		}
@@ -62,8 +61,8 @@ public class SubscribedFunctionHandler
 	
 	private static void pagination(Player player, int page, String where, Inventory inv)
 	{
-		String sql = "SELECT * FROM `"+Type.SIGNSHOP.getValue()+"` ";
-		ArrayList<SignShop> list = ARGSubscribed.getSubscribed(sql, where, page);
+		String sql = "SELECT * FROM `"+MysqlType.SIGNSTORAGE.getValue()+"` ";
+		ArrayList<SignStorage> list = ARGSubscribed.getSubscribed(sql, where, page);
 		GuiHandler.openSubscribed(list, player, page, where, true, inv);
 	}
 }

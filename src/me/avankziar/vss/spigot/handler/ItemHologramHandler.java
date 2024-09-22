@@ -9,15 +9,15 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 
+import me.avankziar.vss.general.objects.ItemHologram;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.objects.ItemHologram;
-import me.avankziar.vss.spigot.objects.SignShop;
 
 public class ItemHologramHandler
 {
 	public static LinkedHashMap<String, ItemHologram> taskMap = new LinkedHashMap<>();
 	
-	public static void spawnHologram(SignShop ssh)
+	public static void spawnHologram(SignStorage ssh)
 	{
 		if(!VSS.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.ItemHologram.CanSpawn", false))
 		{

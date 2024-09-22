@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
+import me.avankziar.vss.general.cmdtree.CommandConstructor;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
-import me.avankziar.vss.spigot.cmdtree.CommandConstructor;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
 
 public class TabCompletion implements TabCompleter

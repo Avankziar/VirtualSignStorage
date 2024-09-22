@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.command.CommandSender;
 
+import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.VSS;
 
 public abstract class ArgumentModule

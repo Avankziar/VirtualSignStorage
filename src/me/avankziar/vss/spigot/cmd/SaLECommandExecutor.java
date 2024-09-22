@@ -10,14 +10,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.avankziar.vss.general.ChatApi;
+import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
+import me.avankziar.vss.general.cmdtree.BaseConstructor;
+import me.avankziar.vss.general.cmdtree.CommandConstructor;
+import me.avankziar.vss.general.cmdtree.CommandSuggest;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
-import me.avankziar.vss.spigot.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
-import me.avankziar.vss.spigot.cmdtree.BaseConstructor;
-import me.avankziar.vss.spigot.cmdtree.CommandConstructor;
-import me.avankziar.vss.spigot.cmdtree.CommandExecuteType;
-import me.avankziar.vss.spigot.cmdtree.CommandSuggest;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -231,9 +230,9 @@ public class SaLECommandExecutor implements CommandExecutor
 	}
 	
 	public static void pastNextPage(Player player,
-			int page, CommandExecuteType cet, String...objects)
+			int page, CommandSuggest.Type cet, String...objects)
 	{
-		String cmdstring = CommandSuggest.get(cet);
+		String cmdstring = CommandSuggest.get(cet).getCommandString();
 		int i = page+1;
 		int j = page-1;
 		TextComponent MSG = ChatApi.tctl("");

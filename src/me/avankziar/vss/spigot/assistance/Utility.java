@@ -6,9 +6,9 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.PlayerData;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.MysqlHandler;
-import me.avankziar.vss.spigot.objects.PlayerData;
 
 public class Utility
 {
@@ -35,18 +35,18 @@ public class Utility
 	
 	public static String convertUUIDToName(String uuid)
 	{
-		if(plugin.getMysqlHandler().exist(MysqlHandler.Type.PLAYERDATA, "player_uuid = ?", uuid))
+		if(plugin.getMysqlHandler().exist(MysqlType.PLAYERDATA, "player_uuid = ?", uuid))
 		{
-			return ((PlayerData) plugin.getMysqlHandler().getData(MysqlHandler.Type.PLAYERDATA, "player_uuid = ?", uuid)).getName();
+			return ((PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "player_uuid = ?", uuid)).getName();
 		}
 		return null;
 	}
 	
 	public static UUID convertNameToUUID(String playername)
 	{
-		if(plugin.getMysqlHandler().exist(MysqlHandler.Type.PLAYERDATA, "`player_name` = ?", playername))
+		if(plugin.getMysqlHandler().exist(MysqlType.PLAYERDATA, "`player_name` = ?", playername))
 		{
-			return ((PlayerData) plugin.getMysqlHandler().getData(MysqlHandler.Type.PLAYERDATA, "`player_name` = ?", playername)).getUUID();
+			return ((PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_name` = ?", playername)).getUUID();
 		}
 		return null;
 	}

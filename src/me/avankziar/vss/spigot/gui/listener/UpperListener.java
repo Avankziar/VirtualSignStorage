@@ -10,18 +10,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import me.avankziar.vss.general.database.MysqlType;
+import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.events.UpperGuiClickEvent;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.gui.objects.ClickType;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.gui.AdminstrationFunctionHandler;
-import me.avankziar.vss.spigot.handler.gui.SearchFunctionHandler;
-import me.avankziar.vss.spigot.handler.gui.ShopFunctionHandler;
 import me.avankziar.vss.spigot.handler.gui.SubscribedFunctionHandler;
-import me.avankziar.vss.spigot.objects.SignShop;
+import me.avankziar.vss.spigot.handler.gui._SearchFunctionHandler;
 
 public class UpperListener implements Listener
 {
@@ -55,7 +54,7 @@ public class UpperListener implements Listener
 	@EventHandler
 	public void onUpperGui(UpperGuiClickEvent event) throws IOException
 	{
-		if(!event.getPluginName().equals(plugin.pluginName))
+		if(!event.getPluginName().equals(plugin.pluginname))
 		{
 			return;
 		}
@@ -72,7 +71,7 @@ public class UpperListener implements Listener
 		{
 			return;
 		}
-		if(!event.getValuesInteger().containsKey(GuiHandler.SIGNSHOP_ID))
+		if(!event.getValuesInteger().containsKey(GuiHandler.SIGNSTORAGE_ID))
 		{
 			return;
 		}
@@ -81,8 +80,8 @@ public class UpperListener implements Listener
 			return;
 		}
 		setCooldown(player.getUniqueId(), dur, TimeUnit.MILLISECONDS);
-		int sshID = event.getValuesInteger().get(GuiHandler.SIGNSHOP_ID);
-		SignShop ssh = (SignShop) plugin.getMysqlHandler().getData(MysqlHandler.Type.SIGNSHOP, "`id` = ?", sshID);
+		int sshID = event.getValuesInteger().get(GuiHandler.SIGNSTORAGE_ID);
+		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
 		UUID ou = null;
 		if(event.getValuesString().containsKey(GuiHandler.PLAYER_UUID))
 		{
@@ -123,21 +122,8 @@ public class UpperListener implements Listener
 			break;
 		case ADMINISTRATION:
 		case NUMPAD_ACCOUNT:
-		case NUMPAD_BUY:
-		case NUMPAD_DISCOUNT_BUY:
-		case NUMPAD_DISCOUNT_END:
-		case NUMPAD_DISCOUNT_POSSIBLE_BUY:
-		case NUMPAD_DISCOUNT_POSSIBLE_SELL:
-		case NUMPAD_DISCOUNT_HOUR:
-		case NUMPAD_DISCOUNT_SELL:
-		case NUMPAD_DISCOUNT_START:
-		case NUMPAD_POSSIBLE_BUY:
-		case NUMPAD_POSSIBLE_SELL:
-		case NUMPAD_SELL:
-		case KEYBOARD_BLACKLIST:
-		case KEYBOARD_CUSTOM:
 		case KEYBOARD_MEMBER:
-		case KEYBOARD_SIGNSHOPNAME:
+		case KEYBOARD_SIGNSTORAGENAME:
 		case KEYBOARD_WHITELIST:
 			new BukkitRunnable()
 			{
@@ -149,16 +135,16 @@ public class UpperListener implements Listener
 				}
 			}.runTaskAsynchronously(plugin);
 			break;
-		case SHOP:
+		/*case SHOP:
 			new BukkitRunnable()
 			{
 				@Override
 				public void run()
 				{
-					ShopFunctionHandler.doClickFunktion(gt, cft, player, ssh, event.getEvent().getClickedInventory(), event.getSettingsLevel());
+					_ShopFunctionHandler.doClickFunktion(gt, cft, player, ssh, event.getEvent().getClickedInventory(), event.getSettingsLevel());
 				}
 			}.runTaskAsynchronously(plugin);
-			break;
+			break;*/
 		case SEARCH_BUY:
 		case SEARCH_SELL:
 			new BukkitRunnable()
@@ -166,7 +152,7 @@ public class UpperListener implements Listener
 				@Override
 				public void run()
 				{
-					SearchFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), teleport_OR_location);
+					_SearchFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), teleport_OR_location);
 				}
 			}.runTaskAsynchronously(plugin);
 			break;
