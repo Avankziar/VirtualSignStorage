@@ -56,35 +56,35 @@ public class BottomListener implements Listener
 		GuiType gt = GUIApi.getGuiType(player.getUniqueId());
 		if(gt == GuiType.ADMINISTRATION)
 		{
-			SignStorage ssh = GUIApi.getGuiSSH(player.getUniqueId());
-			if(ssh == null)
+			SignStorage sst = GUIApi.getGuiSST(player.getUniqueId());
+			if(sst == null)
 			{
 				return;
 			}
-			if(ssh.getItemStorageCurrent() >= ssh.getItemStorageTotal())
+			if(sst.getItemStorageCurrent() >= sst.getItemStorageTotal())
 			{
 				return;
 			}
-			if(!ssh.getItemStack().toString().equals(is.toString()))
+			if(!sst.getItemStack().toString().equals(is.toString()))
 			{
 				return;
 			}
 			final int amount;
-			if(ssh.getItemStorageCurrent() + event.getEvent().getCurrentItem().getAmount() >= ssh.getItemStorageTotal())
+			if(sst.getItemStorageCurrent() + event.getEvent().getCurrentItem().getAmount() >= sst.getItemStorageTotal())
 			{
-				amount = (int)(ssh.getItemStorageTotal() - ssh.getItemStorageCurrent());
+				amount = (int)(sst.getItemStorageTotal() - sst.getItemStorageCurrent());
 				event.getEvent().getCurrentItem().setAmount(event.getEvent().getCurrentItem().getAmount()-amount);
 			} else
 			{
 				amount = event.getEvent().getCurrentItem().getAmount();
 				event.getEvent().getCurrentItem().setAmount(0);
 			}
-			ssh.setItemStorageCurrent(ssh.getItemStorageCurrent()+((long) amount));
+			sst.setItemStorageCurrent(sst.getItemStorageCurrent()+((long) amount));
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignHandler.ItemsAddedToShop")
 					.replace("%amount%", String.valueOf(amount))
-					.replace("%now%", String.valueOf(ssh.getItemStorageCurrent())+" / "+String.valueOf(ssh.getItemStorageTotal()))));
-			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
-			SignHandler.updateSign(ssh);
+					.replace("%now%", String.valueOf(sst.getItemStorageCurrent())+" / "+String.valueOf(sst.getItemStorageTotal()))));
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+			SignHandler.updateSign(sst);
 		} else if(gt == GuiType.ITEM_INPUT)
 		{
 			if(event.getEvent().getView().getTitle().startsWith("Shop:"))
@@ -119,7 +119,7 @@ public class BottomListener implements Listener
 		}
 		if(isShulker(is))
 		{
-			if(!new ConfigHandler().shopCanTradeShulker())
+			if(!ConfigHandler.canStoreShulker())
 			{
 				return;
 			}
@@ -136,7 +136,7 @@ public class BottomListener implements Listener
 					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					  : is.getType().toString());
 		}
-		if(plugin.getYamlHandler().getConfig().getBoolean("SignShop.ShopUseMaterialAsShopName"))
+		if(ConfigHandler.useMaterialAsStorageName())
 		{
 			ssh.setSignStorageName(VSS.getPlugin().getEnumTl() != null
 					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())

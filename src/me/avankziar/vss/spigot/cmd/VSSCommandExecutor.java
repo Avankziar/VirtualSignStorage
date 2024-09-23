@@ -23,15 +23,15 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class SaLECommandExecutor implements CommandExecutor
+public class VSSCommandExecutor implements CommandExecutor
 {
 	private VSS plugin;
 	private static CommandConstructor cc;
 	
-	public SaLECommandExecutor(VSS plugin, CommandConstructor cc)
+	public VSSCommandExecutor(VSS plugin, CommandConstructor cc)
 	{
 		this.plugin = plugin;
-		SaLECommandExecutor.cc = cc;
+		VSSCommandExecutor.cc = cc;
 	}
 	
 	@Override

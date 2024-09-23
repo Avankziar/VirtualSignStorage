@@ -21,7 +21,7 @@ public class ARG_BreakToggle extends ArgumentModule
 		this.plugin = plugin;
 	}
 
-	//sale shop breaktoggle
+	//vss shop breaktoggle
 	@Override
 	public void run(CommandSender sender, String[] args) throws IOException
 	{

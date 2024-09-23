@@ -23,15 +23,15 @@ import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.objects.SubscribedShop;
 
-public class ARGSubscribed extends ArgumentModule
+public class _ARGSubscribed
 {
-	private VSS plugin;
+	/*private VSS plugin;
 	
 	public ARGSubscribed(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;
-	}
+	}*/
 
 	//sale abo [page] [type...]
 	/*
@@ -44,7 +44,7 @@ public class ARGSubscribed extends ArgumentModule
 	 * sameserver
 	 * sameworld
 	 */
-	@Override
+	/*@Override
 	public void run(CommandSender sender, String[] args) throws IOException
 	{
 		Player player = (Player) sender;
@@ -253,5 +253,5 @@ public class ARGSubscribed extends ArgumentModule
 		String orderby = " ORDER BY `id` ASC LIMIT "+(page*45)+", 44";
 		VSS.getPlugin().getLogger().info("SQL: "+sql+where+orderby);
 		return SignStorage.convert(VSS.getPlugin().getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql+where+orderby));
-	}
+	}*/
 }

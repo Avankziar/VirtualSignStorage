@@ -1,4 +1,4 @@
-name: VSS
+name: VirtualSignStorage
 main: me.avankziar.vss.spigot.VSS
 version: 1
 author: Avankziar
@@ -7,3 +7,4 @@ description: A SignStorage Plugin
 depend: [InterfaceHub]
 softdepend: [Vault,WorldGuard]
 website: tba
+prefix: VSS

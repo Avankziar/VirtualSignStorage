@@ -65,5 +65,4 @@ public class Base64Handler
             throw new IllegalStateException("Unable to save item stacks.", e);
         }
 	}
-
 }

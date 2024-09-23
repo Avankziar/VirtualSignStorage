@@ -21,11 +21,11 @@ import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 
-public class ARG_SearchSell extends ArgumentModule
+public class _ARG_SearchSell extends ArgumentModule
 {
 	private VSS plugin;
 	
-	public ARG_SearchSell(VSS plugin, ArgumentConstructor argumentConstructor)
+	public _ARG_SearchSell(VSS plugin, ArgumentConstructor argumentConstructor)
 	{
 		super(argumentConstructor);
 		this.plugin = plugin;

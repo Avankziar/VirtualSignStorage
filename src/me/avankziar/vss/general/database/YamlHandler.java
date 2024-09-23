@@ -12,9 +12,8 @@ import java.util.List;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.avankziar.vss.general.database.Language.ISO639_2B;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.database.Language;
-import me.avankziar.vss.spigot.database.Language.ISO639_2B;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
 
 public class YamlHandler implements YamlHandling

@@ -1,6 +1,11 @@
 package me.avankziar.vss.spigot.handler;
 
-import me.avankziar.vss.spigot.VSS;
+import java.util.List;
+
+import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 
 public class ConfigHandler
 {
@@ -11,7 +16,7 @@ public class ConfigHandler
 	
 	public CountType getCountPermType()
 	{
-		String s = VSS.getPlugin().getYamlHandler().getConfig().getString("Mechanic.CountPerm", "HIGHEST");
+		String s = config.getString("Mechanic.CountPerm", "HIGHEST");
 		CountType ct;
 		try
 		{
@@ -23,78 +28,142 @@ public class ConfigHandler
 		return ct;
 	}
 	
-	public boolean isSignShopEnabled()
+	public static YamlConfiguration config = null;
+	
+	public static boolean isSignShopEnabled()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.SignShop", false);
+		return config.getBoolean("Enable.SignStorage", false);
 	}
 	
 	public boolean isAuctionEnabled()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("Enable.Auction", false);
+		return config.getBoolean("Enable.Auction", false);
 	}
 	
-	public boolean isMechanicModifierEnabled()
+	public static boolean isMechanicModifierEnabled()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.Modifier", false);
+		return config.getBoolean("EnableMechanic.Modifier", false);
 	}
 	
-	public boolean isMechanicValueEntryEnabled()
+	public static boolean isMechanicValueEntryEnabled()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("EnableMechanic.ValueEntry", false);
+		return config.getBoolean("EnableMechanic.ValueEntry", false);
 	}
 	
-	public String getSignShopInitLine()
+	public static String getSignShopInitLine()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignInitializationLine", "[SaleShop]");
+		return config.getString("SignStorage.SignInitializationLine", "[VssStorage]");
 	}
 	
-	public String getSignShopCopyLine()
+	public static String getSignShopCopyLine()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignCopyLine", "[Copy]");
+		return config.getString("SignStorage.SignCopyLine", "[Copy]");
 	}
 	
-	public String getSignShopMoveLine()
+	public static String getSignShopMoveLine()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getString("SignShop.SignMoveLine", "[Move]");
+		return config.getString("SignStorage.SignMoveLine", "[Move]");
 	}
 	
-	public long getDefaulStartItemStorage()
+	public static long getDefaulStartItemStorage()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getLong("SignShop.DefaultStartItemStorage", 3456);
+		return config.getLong("SignShop.SignStorageStartItemStorage", 17280);
 	}
 	
-	public long getDefaultItemOutput()
+	public static List<String> getCostToAdd1Storage()
 	{
-		return 0;//ADDME
+		return config.getStringList("SignStorage.CostToAdd1Storage");
 	}
 	
-	public long getDefaultItemShiftOutput()
+	public static List<String> getForbiddenWorld()
 	{
-		return 0;//ADDME
+		return config.getStringList("SignStorage.ForbiddenWorld");
 	}
 	
-	public long getDefaultItemInput()
+	public static boolean isLine4CalculateInStack()
 	{
-		return 0;//ADDME
+		return config.getBoolean("SignStorage.Sign.Line4CalculateInStack", false);
 	}
 	
-	public long getDefaultItemShiftInput()
+	public static long getDefaultItemOutput()
 	{
-		return 0;//ADDME
+		return config.getLong("SignStorage.Sign.DefaultOutput", 1);
 	}
 	
-	public boolean shopCanTradeShulker()
+	public static long getDefaultItemShiftOutput()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.ShopCanTradeShulker", true);
+		return config.getLong("SignStorage.Sign.DefaultShiftOutput", 64);
 	}
 	
-	public boolean fillNotDefineGuiSlots()
+	public static long getDefaultItemInput()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getBoolean("SignShop.Gui.FillNotDefineGuiSlots", true);
+		return config.getLong("SignStorage.Sign.DefaultInput", 1);
 	}
 	
-	public int getDefaulMaxSubscribeShops()
+	public static long getDefaultItemShiftInput()
 	{
-		return VSS.getPlugin().getYamlHandler().getConfig().getInt("SignShop.DefaultMaxSubscribtion", 45);
+		return config.getLong("SignStorage.Sign.DefaultShiftInput", 64);
+	}
+	
+	public static boolean canItemHologramSpawn()
+	{
+		return config.getBoolean("SignStorage.ItemHologram.CanSpawn", true);
+	}
+	
+	public static long getItemHologramRunTimer()
+	{
+		return config.getLong("SignStorage.ItemHologram.RunTimerInSeconds", 2);
+	}
+	
+	public static long getItemHologramVisibilityTime()
+	{
+		return config.getLong("SignStorage.ItemHologram.VisibilityTimeInSeconds", 3);
+	}
+	
+	public static boolean canStoreShulker()
+	{
+		return config.getBoolean("SignStorage.CanStoreShulker", true);
+	}
+	
+	public static boolean useMaterialAsStorageName()
+	{
+		return config.getBoolean("SignStorage.StorageUseMaterialAsStorageName", true);
+	}
+	
+	public static boolean isForceSettingsLevel()
+	{
+		return config.getBoolean("SignStorage.Gui.ForceSettingsLevel", false);
+	}
+	
+	public static long getGuiClickCooldown()
+	{
+		return config.getLong("SignStorage.Gui.ClickCooldown", 500);
+	}
+	
+	public static SettingsLevel getForcedSettingsLevel()
+	{
+		try
+		{
+			return SettingsLevel.valueOf(config.getString("SignStorage.Gui.ToBeForcedSettingsLevel"));
+		} catch(Exception e)
+		{
+			return SettingsLevel.BASE;
+		}
+	}
+	
+	public static boolean fillNotDefineGuiSlots()
+	{
+		return config.getBoolean("SignStorage.Gui.FillNotDefineGuiSlots", true);
+	}
+	
+	public static Material fillerMaterial()
+	{
+		try
+		{
+			return Material.valueOf(config.getString("SignStorage.Gui.FillerItemMaterial"));
+		} catch(Exception e)
+		{
+			return Material.LIGHT_GRAY_STAINED_GLASS_PANE;
+		}
 	}
 }

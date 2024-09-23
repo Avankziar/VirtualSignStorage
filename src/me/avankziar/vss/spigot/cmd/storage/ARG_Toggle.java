@@ -21,7 +21,7 @@ public class ARG_Toggle extends ArgumentModule
 		this.plugin = plugin;
 	}
 
-	//sale shop toggle
+	//vss shop toggle
 	@Override
 	public void run(CommandSender sender, String[] args) throws IOException
 	{

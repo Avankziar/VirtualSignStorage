@@ -9,9 +9,8 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.avankziar.vss.general.database.Language.ISO639_2B;
 import me.avankziar.vss.general.objects.ListedType;
-import me.avankziar.vss.spigot.database.Language;
-import me.avankziar.vss.spigot.database.Language.ISO639_2B;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.gui.objects.ClickType;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
@@ -336,7 +335,7 @@ public class YamlManager
 				"",
 				"The user's password, with which he gets access to Mysql."});
 		
-		configSpigotKeys.put("Enable.SignShop"
+		configSpigotKeys.put("Enable.SignStorage"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 				true}));
 		/*configSpigotKeys.put("Enable.Auction"
@@ -368,165 +367,101 @@ public class YamlManager
 				"Löscht alle Spieler, die nach X Tage nicht online sind.",
 				"",
 				"Deletes all players who are not online after X days."});
-		addConfig("CleanUpTask.ShopLog.Active",
-				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"Wenn 'true' dann ist der Aufräumtask für Datenbankeinträge für Shoplog aktiv.",
-				"",
-				"If 'true' then the cleanup task for database entries for Shoplog is active."});
-		addConfig("CleanUpTask.ShopLog.DeleteAfterXDays",
-				new Object[] {
-				365},
-				new Object[] {
-				"",
-				"Löscht alle Shoplogs, die älter als X Tage sind.",
-				"",
-				"Deletes all store logs that are older than X days."});
-		addConfig("CleanUpTask.ShopDailyLog.Active",
-				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"Wenn 'true' dann ist der Aufräumtask für Datenbankeinträge für Shopdailylog aktiv.",
-				"",
-				"If 'true' then the cleanup task for database entries for Shopdailylog is active."});
-		addConfig("CleanUpTask.ShopDailyLog.DeleteAfterXDays",
-				new Object[] {
-				365},
-				new Object[] {
-				"",
-				"Löscht alle Shopdailylogs, die älter als X Tage sind.",
-				"",
-				"If 'true' then the cleanup task for database entries for client log is active."});
-		addConfig("CleanUpTask.ClientLog.Active",
-				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"Wenn 'true' dann ist der Aufräumtask für Datenbankeinträge für Clientlog aktiv.",
-				"",
-				""});
-		addConfig("CleanUpTask.ClientLog.DeleteAfterXDays",
-				new Object[] {
-				365},
-				new Object[] {
-				"",
-				"Löscht alle Clientlogs, die älter als X Tage sind.",
-				"",
-				"Deletes all client logs that are older than X days."});
-		addConfig("CleanUpTask.ClientDailyLog.Active",
-				new Object[] {
-				true},
-				new Object[] {
-				"",
-				"Wenn 'true' dann ist der Aufräumtask für Datenbankeinträge für Clientdailylog aktiv.",
-				"",
-				"Deletes all client dailylogs that are older than X days."});
-		addConfig("CleanUpTask.ClientDailyLog.DeleteAfterXDays",
-				new Object[] {
-				365},
-				new Object[] {
-				"",
-				"Löscht alle Clientdailylogs, die älter als X Tage sind.",
-				"",
-				""});
 		
 		configSpigotKeys.put("Mechanic.CountPerm"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 				"ADDUP"}));
-		addConfig("SignShop.SignInitializationLine",
+		addConfig("SignStorage.SignInitializationLine",
 				new Object[] {
-				"[SaleShop]"},
+				"[VssStorage]"},
 				new Object[] {
 				"",
-				"Zeile 0 welche zum initialisieren genutzt wird um ein SignShop zu gründen.",
+				"Zeile 0 welche zum initialisieren genutzt wird um ein SignStorage zu gründen.",
 				"",
-				"Line which is used for initialization to create a SignShop."});
-		addConfig("SignShop.SignCopyLine",
+				"Line which is used for initialization to create a SignStorage."});
+		addConfig("SignStorage.SignCopyLine",
 				new Object[] {
 				"[Copy]"},
 				new Object[] {
 				"",
-				"Zeile 1 welche zum Kopieren des angegeben Shops genutzt wird. Übernommen wird alles außer eingelagerte Items.",
+				"Zeile 1 welche zum Kopieren des angegeben Lager genutzt wird. Übernommen wird alles außer eingelagerte Items.",
 				"",
-				"Line 1 which is used to copy the specified store. Everything is copied except stored items."});
-		addConfig("SignShop.SignMoveLine",
+				"Line 1 which is used to copy the specified storage. Everything is copied except stored items."});
+		addConfig("SignStorage.SignMoveLine",
 				new Object[] {
 				"[Move]"},
 				new Object[] {
 				"",
-				"Zeile 1 welche zum Verlegen des angegeben Shops genutzt wird. Altes Shopschild ist somit inaktiv. Wird aber nicht abgebaut.",
+				"Zeile 1 welche zum Verlegen des angegeben Lagers genutzt wird. Altes Lagerschild ist somit inaktiv. Wird aber nicht abgebaut.",
 				"",
-				"Line 1 which is used to relocate the specified store. The old store sign is therefore inactive. But will not be removed."});
-		addConfig("SignShop.DefaultStartItemStorage",
+				"Line 1 which is used to relocate the specified storage. The old storage sign is therefore inactive. But will not be removed."});
+		addConfig("SignStorage.DefaultStartItemStorage",
 				new Object[] {
-				3456},
+				17280},
 				new Object[] {
 				"",
-				"Die Anzahl an Standartlagerplatz für ein neuer Shop.",
+				"Die Anzahl an Standartlagerplatz für ein neuer Lagers.",
 				"",
-				"The number of standard storage spaces for a new store."});
-		addConfig("SignShop.CostToAdd1Storage",
+				"The number of standard storage spaces for a new storage."});
+		addConfig("SignStorage.CostToAdd1Storage",
 				new Object[] {
 				"dollar;1000.0",
 				"token;99.0",
 				"vault;100.0"},
 				new Object[] {
 				"",
-				"Die Kosten pro Währung um den Lagerplatz eines Shops um 1 zu erhöhen.",
+				"Die Kosten pro Währung um den Lagerplatz eines Lagers um 1 zu erhöhen.",
 				"",
-				"The cost per currency to increase the storage space of a store by 1."});
-		addConfig("SignShop.DefaultMaxSubscribtion",
-				new Object[] {
-				45},
-				new Object[] {
-				"",
-				"Die Standart maximale Anzahl an abonnierten Shops. Per Permission erhöhbar.",
-				"",
-				"The standard maximum number of subscribed transactions. Can be increased by permission."});
-		addConfig("SignShop.ForbiddenWorld",
+				"The cost per currency to increase the storage space of a storage by 1."});
+		addConfig("SignStorage.ForbiddenWorld",
 				new Object[] {
 				"hubs", "spawns"},
 				new Object[] {
 				"",
-				"Die Welten, wo es verboten ist, Shops zu erstellen.",
+				"Die Welten, wo es verboten ist, Lager zu erstellen.",
 				"",
-				"The worlds where it is forbidden to create stores."});
-		addConfig("SignShop.DiscountTimePattern",
-				new Object[] {
-				"yyyy.MM.dd.HH:mm:ss"},
-				new Object[] {
-				"",
-				"Das Zeitformat um Rabatt zu definieren.",
-				"",
-				"The time format to define discount."});
-		addConfig("SignShop.Sign.Line4CalculateInStack",
+				"The worlds where it is forbidden to create storages."});
+		addConfig("SignStorage.Sign.Line4CalculateInStack",
 				new Object[] {
 				false},
 				new Object[] {
 				"",
-				"Wenn 'true' dann wird die 4 Zeile des Schildes des Shops in Stacks berechnet, ansteller einzelner Items.",
+				"Wenn 'true' dann wird die 4 Zeile des Schildes des Lagers in Stacks berechnet, ansteller einzelner Items.",
 				"",
-				"If 'true' then the 4 line of the store's sign is calculated in stacks instead of individual items."});
-		addConfig("SignShop.Tax.BuyInPercent",
+				"If 'true' then the 4 line of the storages sign is calculated in stacks instead of individual items."});
+		addConfig("SignStorage.Sign.DefaultOutput",
 				new Object[] {
-				1.0},
-				new Object[] {
-				"",
-				"Anzahl an Steuer in Prozent beim Kaufen in einem Shop.",
-				"",
-				"Number of tax in percent when buying in a store."});
-		addConfig("SignShop.Tax.SellInPercent",
-				new Object[] {
-				1.1},
+				1},
 				new Object[] {
 				"",
-				"Anzahl an Steuer in Prozent beim Verkaufen in einem Shop.",
 				"",
-				"Number of tax in percent when selling in a store."});
-		addConfig("SignShop.ItemHologram.CanSpawn",
+				"",
+				""});
+		addConfig("SignStorage.Sign.DefaultShiftOutput",
+				new Object[] {
+				64},
+				new Object[] {
+				"",
+				"",
+				"",
+				""});
+		addConfig("SignStorage.Sign.DefaultInput",
+				new Object[] {
+				1},
+				new Object[] {
+				"",
+				"",
+				"",
+				""});
+		addConfig("SignStorage.Sign.DefaultShiftInput",
+				new Object[] {
+				64},
+				new Object[] {
+				"",
+				"",
+				"",
+				""});
+		addConfig("SignStorage.ItemHologram.CanSpawn",
 				new Object[] {
 				true},
 				new Object[] {
@@ -534,7 +469,7 @@ public class YamlManager
 				"Wenn 'true' dann können ItemHologram spawnen.",
 				"",
 				"If 'true' then ItemHologram can spawn."});
-		addConfig("SignShop.ItemHologram.RunTimerInSeconds",
+		addConfig("SignStorage.ItemHologram.RunTimerInSeconds",
 				new Object[] {
 				2},
 				new Object[] {
@@ -542,7 +477,7 @@ public class YamlManager
 				"Wie lange die Wiederholung der Schedular des ItemHologram läuft.",
 				"",
 				"How long the repetition of the ItemHologram's Schedular runs."});
-		addConfig("SignShop.ItemHologram.VisibilityTimeInSeconds",
+		addConfig("SignStorage.ItemHologram.VisibilityTimeInSeconds",
 				new Object[] {
 				3},
 				new Object[] {
@@ -550,41 +485,7 @@ public class YamlManager
 				"Wie lange das ItemHologram sichtbar ist. Mit dem Schedular könnte die Sichtbarkeit länger sein.",
 				"",
 				"How long the ItemHologram is visible. With the Schedular, the visibility could be longer."});
-		addConfig("SignShop.TransactionSummary.MessageToShopOwner.RunTimerInMinutes",
-				new Object[] {
-				5},
-				new Object[] {
-				"",
-				"Anzahl an Minuten wie lange die Wiederholungszeit des Scheduals ist, welcher für die Nachrichten der Shopeigentümer zuständig ist.",
-				"Dieser Schedular sammelt alle Nachrichten an die Shopeigentümer und fasst sie zusammen um sie an den Shopeigentümer zu schicken.",
-				"",
-				"Number of minutes how long the repetition time of the scheduler is, which is responsible for the messages of the store owners.",
-				"This scheduler collects all messages to the store owners and summarizes them to send them to the store owner."});
-		addConfig("SignShop.TransactionSummary.ShopLog.RunTimerInMinutes",
-				new Object[] {
-				15},
-				new Object[] {
-				"",
-				"Anzahl in Minuten für die Wiederholungsrate für die Transaktionzusammenfassung Schedular.",
-				"",
-				"Number in minutes for the repetition rate for the transaction summary Schedular."});
-		addConfig("SignShop.ShopLog.TimePattern",
-				new Object[] {
-				"dd-MM-yyyy/HH:mm"},
-				new Object[] {
-				"",
-				"ZeitFormat für den Shoplog.",
-				"",
-				"TimeFormat for the shoplog."});
-		addConfig("SignShop.ShopDailyLog.TimePattern",
-				new Object[] {
-				"dd-MM-yyyy"},
-				new Object[] {
-				"",
-				"Zeitformat für den Shopdailylog.",
-				"",
-				"Time format for the shopdailylog."});
-		addConfig("SignShop.ShopCanTradeShulker",
+		addConfig("SignStorage.CanStoreShulker",
 				new Object[] {
 				false},
 				new Object[] {
@@ -592,7 +493,7 @@ public class YamlManager
 				"Erlaubt den Shop Shulker zu verkaufen.",
 				"",
 				"Allows the store to sell Shulker."});
-		addConfig("SignShop.ShopUseMaterialAsShopName",
+		addConfig("SignStorage.StorageUseMaterialAsStorageName",
 				new Object[] {
 				true},
 				new Object[] {
@@ -600,10 +501,7 @@ public class YamlManager
 				"Wenn 'true' dann wird das Material als Shopname verwendet, wenn kein Displayname festgelegt wurde.",
 				"",
 				"If 'true' then the material is used as the store name if no display name has been defined."});
-		configSpigotKeys.put("SignShop.Gui.ForceSettingsLevel"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-				false}));
-		addConfig("SignShop.Gui.ForceSettingsLevel",
+		addConfig("SignStorage.Gui.ForceSettingsLevel",
 				new Object[] {
 				false},
 				new Object[] {
@@ -611,7 +509,7 @@ public class YamlManager
 				"Wenn 'true' dann wird bei jedem öffnen des Shop & AdministrationGui das Settingslevel auf den unten angegeben Wert gesetzt.",
 				"",
 				"If 'true' then the settings level is set to the value specified below each time the Shop & AdministrationGui is opened."});
-		addConfig("SignShop.Gui.ClickCooldown",
+		addConfig("SignStorage.Gui.ClickCooldown",
 				new Object[] {
 				500},
 				new Object[] {
@@ -619,7 +517,7 @@ public class YamlManager
 				"Cooldown beim Klicken in den Guis in Millisekunden.",
 				"",
 				"Cooldown when clicking in the guis in milliseconds."});
-		addConfig("SignShop.Gui.ToBeForcedSettingsLevel",
+		addConfig("SignStorage.Gui.ToBeForcedSettingsLevel",
 				new Object[] {
 				SettingsLevel.BASE.toString()},
 				new Object[] {
@@ -627,7 +525,7 @@ public class YamlManager
 				"SettingsLevel welches gesetzt wird, wenn es geforced wird.",
 				"",
 				"SettingsLevel which is set when it is forced."});
-		addConfig("SignShop.Gui.FillNotDefineGuiSlots",
+		addConfig("SignStorage.Gui.FillNotDefineGuiSlots",
 				new Object[] {
 				true},
 				new Object[] {
@@ -635,7 +533,7 @@ public class YamlManager
 				"Wenn 'true' werden alle leeren Slots in einem Gui mit Füllitems aufgefüllt.",
 				"",
 				"If 'true', all empty slots in a gui are filled with filler items."});
-		addConfig("SignShop.Gui.FillerItemMaterial",
+		addConfig("SignStorage.Gui.FillerItemMaterial",
 				new Object[] {
 				Material.LIGHT_GRAY_STAINED_GLASS_PANE.toString()},
 				new Object[] {
@@ -643,7 +541,7 @@ public class YamlManager
 				"Füllmaterial für die Guis",
 				"",
 				"Filling material for the guis"});
-		addConfig("SignShop.Search.Radius",
+		/*addConfig("SignShop.Search.Radius",
 				new Object[] {
 				"PROXY"},
 				new Object[] {
@@ -676,132 +574,92 @@ public class YamlManager
 				"Bei LOCATION wird nur die Location des Shops und ein paar andere Daten per Chat geschrieben. Bei TELEPORT wird der Spieler teleportiert.",
 				"",
 				"Determines what is done by the search commands Guis when clicking on the stores.",
-				"With LOCATION, only the location of the store and a few other details are written via chat. With TELEPORT the player is teleported."});
+				"With LOCATION, only the location of the store and a few other details are written via chat. With TELEPORT the player is teleported."});*/
 	}
 	
 	//INFO:Commands
 	public void initCommands()
 	{
 		comBypass();
-		commandsInput("sale", "sale", "sale.cmd.sale", 
-				"/sale [pagenumber]", "/sale ", false,
-				"&c/sale &f| Infoseite für alle Befehle.",
-				"&c/sale &f| Info page for all commands.",
-				"&bBefehlsrecht für &f/sale",
-				"&bCommandright for &f/sale",
+		commandsInput("vss", "vss", "vss.cmd.sale", 
+				"/vss [pagenumber]", "/vss ", false,
+				"&c/vss &f| Infoseite für alle Befehle.",
+				"&c/vss &f| Info page for all commands.",
+				"&bBefehlsrecht für &f/vss",
+				"&bCommandright for &f/vss",
 				"&eBasisbefehl für das Sale Plugin.",
 				"&eGroundcommand for the Sale Plugin.");
-		String basePermission = "sale.cmd";
-		argumentInput("sale_shop", "shop", basePermission,
-				"/sale shop", "/sale shop ", false,
-				"&c/sale shop &f| Zwischenbefehl.",
-				"&c/sale shop &f| Intermediate command.",
-				"&bBefehlsrecht für &f/sale shop",
-				"&bCommandright for &f/sale shop",
+		String basePermission = "vss.cmd";
+		argumentInput("vss_storage", "storage", basePermission,
+				"/vss storage", "/vss storage ", false,
+				"&c/vss storage &f| Zwischenbefehl.",
+				"&c/vss storage &f| Intermediate command.",
+				"&bBefehlsrecht für &f/vss storage",
+				"&bCommandright for &f/vss storage",
 				"&eBefehl für den Zwischenbefehl.",
 				"&eCommand for the intermediate command.");
-		argumentInput("sale_debug", "debug", basePermission,
-				"/sale debug <xxx>", "/sale debug ", false,
-				"&c/sale debug <xxx> &f| Zu Testzwecken des Plugin. Benutzung auf eigene Gefahr.",
-				"&c/sale debug <xxx> &f| For testing the plugin. Use at your own risk.",
-				"&bBefehlsrecht für &f/sale debug",
-				"&bCommandright for &f/sale debug",
+		argumentInput("vss_debug", "debug", basePermission,
+				"/vss debug <xxx>", "/vss debug ", false,
+				"&c/vss debug <xxx> &f| Zu Testzwecken des Plugin. Benutzung auf eigene Gefahr.",
+				"&c/vss debug <xxx> &f| For testing the plugin. Use at your own risk.",
+				"&bBefehlsrecht für &f/vss debug",
+				"&bCommandright for &f/vss debug",
 				"&eZu Testzwecken des Plugin. Benutzung auf eigene Gefahr.",
 				"&eFor testing the plugin. Use at your own risk.");
-		argumentInput("sale_shop_delete", "delete", basePermission,
-				"/sale shop delete <xxx:yyy...>", "/sale shop delete ", false,
-				"&c/sale shop delete <xxx:yyy...> &f| Löscht alle Shops nach den Parameter(xxx). Param. sind id, player, server, world, item, radius.",
-				"&c/sale shop delete <xxx:yyy...> &f| Deletes all stores after the parameter(xxx). Param. are id, player, server, world, item, radius.",
-				"&bBefehlsrecht für &f/sale shop delete",
-				"&bCommandright for &f/sale shop delete",
+		argumentInput("vss_storage_delete", "delete", basePermission,
+				"/vss storage delete <xxx:yyy...>", "/vss storage delete ", false,
+				"&c/vss storage delete <xxx:yyy...> &f| Löscht alle Shops nach den Parameter(xxx). Param. sind id, player, server, world, item, radius.",
+				"&c/vss storage delete <xxx:yyy...> &f| Deletes all stores after the parameter(xxx). Param. are id, player, server, world, item, radius.",
+				"&bBefehlsrecht für &f/vss storage delete",
+				"&bCommandright for &f/vss storage delete",
 				"&eBefehl zum Löschen von Shops über Parameterangaben.",
 				"&eCommand to delete stores via parameter specifications.");
-		argumentInput("sale_shop_breaktoggle", "breaktoggle", basePermission,
-				"/sale shop breaktoggle", "/sale shop breaktoggle ", false,
-				"&c/sale shop breaktoggle &f| Togglet ob man Shops direkt löschen durch das Abbauen kann.",
-				"&c/sale shop breaktoggle &f| Togglet whether you can delete stores directly by dismantling.",
-				"&bBefehlsrecht für &f/sale shop breaktoggle",
-				"&bCommandright for &f/sale shop breaktoggle",
+		argumentInput("vss_storage_breaktoggle", "breaktoggle", basePermission,
+				"/vss storage breaktoggle", "/vss storage breaktoggle ", false,
+				"&c/vss storage breaktoggle &f| Togglet ob man Shops direkt löschen durch das Abbauen kann.",
+				"&c/vss storage breaktoggle &f| Togglet whether you can delete stores directly by dismantling.",
+				"&bBefehlsrecht für &f/vss storage breaktoggle",
+				"&bCommandright for &f/vss storage breaktoggle",
 				"&eBefehl für die direkte",
 				"&eCommand for the intermediate command.");
-		argumentInput("sale_shop_toggle", "toggle", basePermission,
-				"/sale shop toggle", "/sale shop toggle ", false,
-				"&c/sale shop toggle &f| Togglet ob man fremde Shops durch das Gui administrieren kann.",
-				"&c/sale shop toggle &f| Toggle whether you can administrate foreign stores through the gui.",
-				"&bBefehlsrecht für &f/sale shop toggle",
-				"&bCommandright for &f/sale shop toggle",
+		argumentInput("vss_storage_toggle", "toggle", basePermission,
+				"/vss storage toggle", "/vss storage toggle ", false,
+				"&c/vss storage toggle &f| Togglet ob man fremde Shops durch das Gui administrieren kann.",
+				"&c/vss storage toggle &f| Toggle whether you can administrate foreign stores through the gui.",
+				"&bBefehlsrecht für &f/vss storage toggle",
+				"&bCommandright for &f/vss storage toggle",
 				"&eBefehl zum togglet ob man fremde Shops durch das Gui administrieren kann.",
 				"&eCommand to toggle whether you can administrate foreign stores through the gui.");
-		argumentInput("sale_shop_toggle", "toggle", basePermission,
-				"/sale shop toggle", "/sale shop toggle ", false,
-				"&c/sale shop toggle &f| Togglet ob man fremde Shops durch das Gui administrieren kann.",
-				"&c/sale shop toggle &f| Toggle whether you can administrate foreign stores through the gui.",
-				"&bBefehlsrecht für &f/sale shop toggle",
-				"&bCommandright for &f/sale shop toggle",
+		argumentInput("vss_storage_toggle", "toggle", basePermission,
+				"/vss storage toggle", "/vss storage toggle ", false,
+				"&c/vss storage toggle &f| Togglet ob man fremde Shops durch das Gui administrieren kann.",
+				"&c/vss storage toggle &f| Toggle whether you can administrate foreign stores through the gui.",
+				"&bBefehlsrecht für &f/vss storage toggle",
+				"&bCommandright for &f/vss storage toggle",
 				"&eBefehl zum togglet ob man fremde Shops durch das Gui administrieren kann.",
 				"&eCommand to toggle whether you can administrate foreign stores through the gui.");
-		argumentInput("sale_shop_log", "log", basePermission+".shop",
-				"/sale shop log [number] [shopid] [player] [boolean]", "/sale shop log", false,
-				"&c/sale shop log [Zahl] [Shopid] [Spieler] [boolean] &f| Zeigt die Shop Aktivitäten des Eigentümer an. True für Buy.",
-				"&c/sale shop log [number] [shopid] [player] [boolean] &f| Displays the shop activities of the owner. True for Buy.",
-				"&bBefehlsrecht für &f/sale shop log",
-				"&bCommandright for &f/sale shop log",
-				"&eBefehl zeigt die Shop Aktivitäten des Eigentümer an.",
-				"&eCommand for displays the shop activities of the owner.");
-		argumentInput("sale_shop_dailylog", "dailylog", basePermission+".signshop",
-				"/sale shop dailylog [number] [shopid] [player]", "/sale shop dailylog", false,
-				"&c/sale shop dailylog [Zahl] [Shopid] [Spieler] &f| Zeigt die Shop Tagesaktivitäten des Eigentümer an.",
-				"&c/sale shop dailylog [number] [shopid] [player] &f| Displays the shop dailyactivities of the owner.",
-				"&bBefehlsrecht für &f/sale shop dailylog",
-				"&bCommandright for &f/sale shop dailylog",
-				"&eBefehl zeigt die Shop Aktivitäten des Eigentümer an.",
-				"&eCommand for displays the shop activities of the owner.");
-		argumentInput("sale_shop_searchbuy", "searchbuy", basePermission+".signshop",
-				"/sale shop searchbuy [Material] [Displayname...]", "/sale shop searchbuy", false,
-				"&c/sale shop searchbuy [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum kaufen.",
-				"&c/sale shop searchbuy [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to buy.",
-				"&bBefehlsrecht für &f/sale shop searchbuy",
-				"&bCommandright for &f/sale shop searchbuy",
+		argumentInput("vss_storage_searchbuy", "searchbuy", basePermission+".signstorage",
+				"/vss storage searchbuy [Material] [Displayname...]", "/vss storage searchbuy", false,
+				"&c/vss storage searchbuy [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum kaufen.",
+				"&c/vss storage searchbuy [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to buy.",
+				"&bBefehlsrecht für &f/vss storage searchbuy",
+				"&bCommandright for &f/vss storage searchbuy",
 				"&eSucht alle Shops nach den angegebenen Parameter für Items zum kaufen.",
 				"&eSearches all stores for the specified parameters for items to buy.");
-		argumentInput("sale_shop_searchsell", "searchsell", basePermission+".signshop",
-				"/sale shop searchsell [Material] [Displayname...]", "/sale shop searchsell", false,
-				"&c/sale shop searchsell [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum verkaufen.",
-				"&c/sale shop searchsell [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to sell.",
-				"&bBefehlsrecht für &f/sale shop searchsell",
-				"&bCommandright for &f/sale shop searchsell",
+		argumentInput("vss_storage_searchsell", "searchsell", basePermission+".signstorage",
+				"/vss storage searchsell [Material] [Displayname...]", "/vss storage searchsell", false,
+				"&c/vss storage searchsell [Material] [Displayname...] &f| Sucht alle Shops nach den angegebenen Parameter für Items zum verkaufen.",
+				"&c/vss storage searchsell [Material] [Displayname...] &f| Searches all stores for the specified parameters for items to sell.",
+				"&bBefehlsrecht für &f/vss storage searchsell",
+				"&bCommandright for &f/vss storage searchsell",
 				"&eSucht alle Shops nach den angegebenen Parameter für Items zum verkaufen.",
 				"&eSearches all stores for the specified parameters for items to sell.");
-		argumentInput("sale_client", "client", basePermission,
-				"/sale client", "/sale client ", false,
-				"&c/sale client &f| Zwischenbefehl.",
-				"&c/sale client &f| Intermediate command.",
-				"&bBefehlsrecht für &f/sale client",
-				"&bCommandright for &f/sale client",
-				"&eBefehl für den Zwischenbefehl.",
-				"&eCommand for the intermediate command.");
-		argumentInput("sale_client_log", "log", basePermission+".client",
-				"/sale client log [number] [player] [boolean]", "/sale client log", false,
-				"&c/sale client [Zahl] [Spieler] [boolean] &f| Zeigt die client Aktivitäten des Spielers an. True für Buy.",
-				"&c/sale client [number] [player] [boolean] &f| Displays the client activities of the player. True for Buy.",
-				"&bBefehlsrecht für &f/sale client log",
-				"&bCommandright for &f/sale client log",
-				"&eBefehl zeigt die client Aktivitäten des Spielers an.",
-				"&eCommand for displays the client activities of the player.");
-		argumentInput("sale_client_dailylog", "dailylog", basePermission+".client",
-				"/sale client dailylog [number] [player]", "/sale client dailylog", false,
-				"&c/sale client dailylog [Zahl] [Spieler] &f| Zeigt die client Tagesaktivitäten des Spielers an.",
-				"&c/sale client dailylog [number] [player] &f| Displays the client dailyactivities of the player.",
-				"&bBefehlsrecht für &f/sale client dailylog",
-				"&bCommandright for &f/sale client dailylog",
-				"&eBefehl zeigt die Shop Aktivitäten des Eigentümer an.",
-				"&eCommand for displays the shop activities of the owner.");
-		argumentInput("sale_subscribed", "subscribed", basePermission+".subscribed",
-				"/sale subscribed [page] [searchparameter...]", "/sale subscribed", false,
-				"&c/sale subscribed [Seitenzahl] [Suchparameter...] &f| Auflistung per Gui aller abonnierten Shops. Suchparameter erlauben größere Eingrenzung. X ist dabei den Wert den ihr suchen wollt.",
-				"&c/sale subscribed [page] [searchparameter...] &f| Listing via Gui of all subscribed stores. Search parameters allow you to narrow down your search. X is the value you want to search for.",
-				"&bBefehlsrecht für &f/sale subscribed",
-				"&bCommandright for &f/sale subscribed",
+		argumentInput("vss_subscribed", "subscribed", basePermission+".subscribed",
+				"/vss subscribed [page] [searchparameter...]", "/vss subscribed", false,
+				"&c/vss subscribed [Seitenzahl] [Suchparameter...] &f| Auflistung per Gui aller abonnierten Shops. Suchparameter erlauben größere Eingrenzung. X ist dabei den Wert den ihr suchen wollt.",
+				"&c/vss subscribed [page] [searchparameter...] &f| Listing via Gui of all subscribed stores. Search parameters allow you to narrow down your search. X is the value you want to search for.",
+				"&bBefehlsrecht für &f/vss subscribed",
+				"&bCommandright for &f/vss subscribed",
 				"&eAuflistung per Gui aller abonnierten Shops. Suchparameter erlauben größere Eingrenzung. X ist dabei den Wert den ihr suchen wollt.",
 				"&eListing via Gui of all subscribed stores. Search parameters allow you to narrow down your search. X is the value you want to search for.");
 	}
@@ -933,7 +791,41 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Befehl ist in Cooldown!",
 						"&cThe command is in cooldown!"}));
-		languageKeys.put("ShopOwnerNotEnought",
+		
+		languageKeys.put("SignHandler.ItemsAddedToShop", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast &f%amount% &eItems dem Lager hinzugefügt. Zz.: &r%now%",
+						"&eYou have added &f%amount% &eitems to the storage. Attn: &r%now%"}));
+		
+		languageKeys.put("Cmd.OtherCmd",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cBitte nutze den Befehl mit einem weiteren Argument aus der Tabliste!",
+						"&cPlease use the command with another argument from the tab list!"}));
+		languageKeys.put("Cmd.Toggle.Active", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu kannst nun fremde Lagerschilder administrieren!",
+						"&eYou can now administrate foreign storage signs!"}));
+		languageKeys.put("Cmd.Toggle.Deactive", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu kannst du nicht mehr fremde Lagerschilder administrieren!",
+						"&eYou cannot administrate other storage signs anymore!"}));
+		languageKeys.put("Cmd.BreakToggle.Active", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu kannst nun Lagerschilder direkt abbauen!",
+						"&eYou can now take down StorageSigns directly!"}));
+		languageKeys.put("Cmd.BreakToggle.Deactive", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu kannst du nicht mehr Lagerschilder direkt abbauen!",
+						"&eYou cannot take down storage signs directly anymore!"}));
+		languageKeys.put("Cmd.Delete.NoFoundToDelete", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cUnter den angegeben Parameter sind keine Lager gefunden worden!",
+						"&cNo storages have been found under the specified parameters!"}));
+		languageKeys.put("Cmd.Delete.Delete", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast %storageamount% Lager gelöscht! &rVerlorene Items: %itemlost%",
+						"&eYou have deleted %storageamount% storage! &rLost Items: %itemlost%"}));
+		/*languageKeys.put("ShopOwnerNotEnought",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer ShopEigentümer hat nicht genug Geld!",
 						"&cThe shopowner dont have enough money!"}));
@@ -947,8 +839,8 @@ public class YamlManager
 						"&eClick me!"}));
 		languageKeys.put("Headline", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e=====&7[&6SaLE&7]&e=====",
-						"&e=====&7[&6SaLE&7]&e====="}));
+						"&e=====&7[&6VSS&7]&e=====",
+						"&e=====&7[&6VSS&7]&e====="}));
 		languageKeys.put("Next", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&e&nnächste Seite &e==>",
@@ -1094,10 +986,7 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&aDu hast das Item &r%name% &azum Shop &f%signshop% &ahinzugefügt!",
 						"&aYou have added the item &r%name% &ato the store &f%signshop%&a!"}));
-		languageKeys.put("SignHandler.ItemsAddedToShop", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast &f%amount% &eItems dem Shop hinzugefügt. Zz.: &r%now%",
-						"&eYou have added &f%amount% &eitems to the store. Attn: &r%now%"}));
+		
 		languageKeys.put("SignHandler.NoItemsIsSetUp", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Shop hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
@@ -1432,90 +1321,7 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&7[&aV&7]&f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%",
 						"&7[&aS&7]&f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%"}));
-		languageKeys.put("Cmd.OtherCmd",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cBitte nutze den Befehl mit einem weiteren Argument aus der Tabliste!",
-						"&cPlease use the command with another argument from the tab list!"}));
-		languageKeys.put("Cmd.Delete.NoFoundToDelete", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cUnter den angegeben Parameter sind keine Shops gefunden worden!",
-						"&cNo stores have been found under the specified parameters!"}));
-		languageKeys.put("Cmd.Delete.Delete", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast %shopamount% Shop gelöscht! &rVerlorene Items: %itemlost% | Gelöschte Logs: %log% | Gelöschte DailyLog: %dailylog% | Gelöschte Subs: %subs%",
-						"&eYou have deleted %shopamount% shops! &rLost Items: %itemlost% | Deleted Logs: %log% | Deleted DailyLog: %dailylog% | Deleted Subs: %subs%"}));
-		languageKeys.put("Cmd.BreakToggle.Active", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu kannst nun Shopschilder direkt abbauen!",
-						"&eYou can now take down ShopSigns directly!"}));
-		languageKeys.put("Cmd.BreakToggle.Deactive", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu kannst du nicht mehr Shopschilder direkt abbauen!",
-						"&eYou cannot take down store signs directly anymore!"}));
-		languageKeys.put("Cmd.Toggle.Active", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu kannst nun fremde Shopschilder administrieren!",
-						"&eYou can now administrate foreign shop signs!"}));
-		languageKeys.put("Cmd.Toggle.Deactive", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu kannst du nicht mehr fremde Shopschilder administrieren!",
-						"&eYou cannot administrate other shop signs anymore!"}));
-		languageKeys.put("Cmd.ShopLog.NoLogs", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cKeine Signshoplogs vorhanden!",
-						"&cNo Signshoplogs available!"}));
-		languageKeys.put("Cmd.ShopLog.Headline", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&f===&eShopLog %shopid%/%player%, Seite %page%, Type %waytype%&f===",
-						"&f===&eShopLog %shopid%/%player%, page %page%, Type %waytype%&f==="}));
-		languageKeys.put("Cmd.ShopLog.Buy", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% [&#FF8800K&7]&e%player% &#FF8800>> &f%shop% &#FF8800>> &r%item% &rx &e%amount% &#FF8800>> %format%",
-						"&7%time% [&#FF8800B&7]&e%player% &#FF8800>> &f%shop% &#FF8800>> &r%item% &rx &e%amount% &#FF8800>> %format%"}));
-		languageKeys.put("Cmd.ShopLog.Sell", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% [&aV&7]&e%player% &a>> &f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%",
-						"&7%time% [&aS&7]&e%player% &a>> &f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%"}));
-		languageKeys.put("Cmd.ShopDailyLog.NoLogs", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cKeine täglichen Signshoplogs vorhanden!",
-						"&cNo daily Signshoplogs available!"}));
-		languageKeys.put("Cmd.ShopDailyLog.Headline", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&f===&eShopDailyLog %shopid%/%player%, Seite %page%&f===",
-						"&f===&eShopDailyLog %shopid%/%player%, page %page%&f==="}));
-		languageKeys.put("Cmd.ShopDailyLog.Log", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% &e>> &f%shop% &e>> &7[&#FF8800K&7] &rx &e%buyamo% &e>> &r%buyformat% &r| &7[&aV&7] &rx &e%sellamo% &e>> &r%sellformat%",
-						"&7%time% &e>> &f%shop% &e>> &7[&#FF8800B&7] &rx &e%buyamo% &e>> &r%buyformat% &r| &7[&aS&7] &rx &e%sellamo% &e>> &r%sellformat%"}));
-		languageKeys.put("Cmd.ClientLog.NoLogs", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cKeine Kundenlogs vorhanden!",
-						"&cNo clientlogs available!"}));
-		languageKeys.put("Cmd.ClientLog.Headline", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&f===&eKundenLog %player%, Seite %page%, Type %waytype%&f===",
-						"&f===&eClientLog %player%, page %page%, Type %waytype%&f==="}));
-		languageKeys.put("Cmd.ClientLog.Buy", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% [&#FF8800K&7]&f%shop% &#FF8800>> &r%item% &rx &e%amount% &#FF8800>> %format%",
-						"&7%time% [&#FF8800B&7]&f%shop% &#FF8800>> &r%item% &rx &e%amount% &#FF8800>> %format%"}));
-		languageKeys.put("Cmd.ClientLog.Sell", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% [&aV&7]&f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%",
-						"&7%time% [&aS&7]&f%shop% &a>> &r%item% &rx &e%amount% &a>> &r%format%"}));
-		languageKeys.put("Cmd.ClientDailyLog.NoLogs", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cKeine täglichen Kundenlogs vorhanden!",
-						"&cNo daily Signshoplogs available!"}));
-		languageKeys.put("Cmd.ClientDailyLog.Headline", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&f===&eKundenTagesLog %player%, Seite %page%&f===",
-						"&f===&eShopLog %player%, page %page%&f==="}));
-		languageKeys.put("Cmd.ClientDailyLog.Log", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&7%time% &e>> &7[&#FF8800K&7] &rx &e%buyamo% &e>> &r%buyformat% &r| &7[&aV&7] &rx &e%sellamo% &e>> &r%sellformat%",
-						"&7%time% &e>> &7[&#FF8800B&7] &rx &e%buyamo% &e>> &r%buyformat% &r| &7[&aS&7] &rx &e%sellamo% &e>> &r%sellformat%"}));
+						
 		languageKeys.put("Cmd.Search.NoItemInHand", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu hast kein Item in HauptHand!",
@@ -1587,7 +1393,7 @@ public class YamlManager
 						"&eShop &f%signshopname% &e- Owner &f%owner%",
 						"&eItems: &f%itemstoragecurrent% / %itemstoragetotal%",
 						"&eLocation: &f%server% - %world% | %x% %y% %z%",
-						"&7===================="}));
+						"&7===================="}));*/
 	}
 	
 	public void initModifierValueEntryLanguage() //INFO:ModifierValueEntryLanguages

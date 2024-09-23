@@ -26,7 +26,7 @@ public class ARGDelete extends ArgumentModule
 		this.plugin = plugin;
 	}
 
-	//sale delete [xxx:yyy...]
+	//vss delete [xxx:yyy...]
 	@Override
 	public void run(CommandSender sender, String[] args) throws IOException
 	{
@@ -120,7 +120,7 @@ public class ARGDelete extends ArgumentModule
 			plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		}
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.Delete.Delete")
-				.replace("%shopamount%", String.valueOf(sshla))
+				.replace("%storageamount%", String.valueOf(sshla))
 				.replace("%itemlost%", String.valueOf(itemLost))
 				));
 		return;

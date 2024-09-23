@@ -27,7 +27,6 @@ public class ARGDebug extends ArgumentModule
 		this.plugin = plugin;
 	}
 
-	//sale debug searchvoidsign
 	@Override
 	public void run(CommandSender sender, String[] args) throws IOException
 	{

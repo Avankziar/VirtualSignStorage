@@ -17,6 +17,7 @@ import me.avankziar.vss.spigot.gui.events.UpperGuiClickEvent;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.gui.objects.ClickType;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
+import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.gui.AdminstrationFunctionHandler;
 import me.avankziar.vss.spigot.handler.gui.SubscribedFunctionHandler;
@@ -30,7 +31,7 @@ public class UpperListener implements Listener
 	public UpperListener(VSS plugin)
 	{
 		this.plugin = plugin;
-		dur = plugin.getYamlHandler().getConfig().getLong("SignShop.Gui.ClickCooldown", 1000L);
+		dur = ConfigHandler.getGuiClickCooldown();
 	}
 	
 	private LinkedHashMap<UUID, Long> cooldown = new LinkedHashMap<>();;

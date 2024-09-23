@@ -11,7 +11,7 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.cmd.vss.ARGSubscribed;
+import me.avankziar.vss.spigot.cmd.vss._ARGSubscribed;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 
@@ -62,7 +62,7 @@ public class SubscribedFunctionHandler
 	private static void pagination(Player player, int page, String where, Inventory inv)
 	{
 		String sql = "SELECT * FROM `"+MysqlType.SIGNSTORAGE.getValue()+"` ";
-		ArrayList<SignStorage> list = ARGSubscribed.getSubscribed(sql, where, page);
+		ArrayList<SignStorage> list = _ARGSubscribed.getSubscribed(sql, where, page);
 		GuiHandler.openSubscribed(list, player, page, where, true, inv);
 	}
 }

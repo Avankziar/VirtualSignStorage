@@ -374,7 +374,7 @@ public class GUIApi
 		return playerInGuiType.get(uuid);
 	}
 	
-	public static SignStorage getGuiSSH(UUID uuid)
+	public static SignStorage getGuiSST(UUID uuid)
 	{
 		int sshID = playerInGuiSSHID.get(uuid);
 		return (SignStorage) VSS.getPlugin().getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
@@ -385,11 +385,11 @@ public class GUIApi
 		return playerGuiSettingsLevel.get(uuid);
 	}
     
-	public static void addInGui(UUID uuid, String inventoryIdentifier, GuiType gt, SettingsLevel settingsLevel, int sshid)
+	public static void addInGui(UUID uuid, String inventoryIdentifier, GuiType gt, SettingsLevel settingsLevel, int sstid)
     {
 		playerInGui.put(uuid, inventoryIdentifier);
 		playerInGuiType.put(uuid, gt);
-		playerInGuiSSHID.put(uuid, sshid);
+		playerInGuiSSHID.put(uuid, sstid);
 		playerGuiSettingsLevel.put(uuid, settingsLevel);
     }
     

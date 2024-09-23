@@ -13,6 +13,7 @@ import me.avankziar.vss.general.objects.ItemHologram;
 import me.avankziar.vss.general.objects.PlayerData;
 import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
+import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
 
 public class BackgroundTask
@@ -51,7 +52,7 @@ public class BackgroundTask
 				{
 					return;
 				}
-				int signShopCount = 0;
+				int signStorageCount = 0;
 				long itemLost = 0;
 				ArrayList<UUID> uuidlist = new ArrayList<>();
 				ArrayList<Integer> ssIdList = new ArrayList<>();
@@ -69,7 +70,7 @@ public class BackgroundTask
 							"`id` ASC", "`player_uuid` = ?", owner.toString()));
 					ssList.addAll(list);
 				}
-				signShopCount = ssList.size();
+				signStorageCount = ssList.size();
 				for(SignStorage ss : ssList)
 				{
 					itemLost += ss.getItemStorageCurrent();
@@ -81,9 +82,9 @@ public class BackgroundTask
 				{
 					return;
 				}
-				plugin.getLogger().info("==========SaLE Database DeleteTask==========");
+				plugin.getLogger().info("==========VSS Database DeleteTask==========");
 				plugin.getLogger().info("Deleted PlayerData: "+playerCount);
-				plugin.getLogger().info("Deleted SignShop: "+signShopCount);
+				plugin.getLogger().info("Deleted SignStorage: "+signStorageCount);
 				plugin.getLogger().info("Lost ItemAmount: "+itemLost);
 				plugin.getLogger().info("===========================================");
 			}
@@ -122,8 +123,8 @@ public class BackgroundTask
 								plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", ss.getId());
 							}
 						}
-						plugin.getLogger().info("==========SaLE Database DeleteTask==========");
-						plugin.getLogger().info("Deleted Ingame Void SignShops: "+i);
+						plugin.getLogger().info("==========VSS Database DeleteTask==========");
+						plugin.getLogger().info("Deleted Ingame Void SignStorage: "+i);
 						plugin.getLogger().info("===========================================");
 					}
 				}.runTask(plugin);
@@ -133,7 +134,6 @@ public class BackgroundTask
 	
 	public void removeShopItemHologram()
 	{
-		long runEveryXSeconds = plugin.getYamlHandler().getConfig().getInt("SignShop.ItemHologram.RunTimerInSeconds", 5);
 		new BukkitRunnable()
 		{
 			@Override
@@ -141,7 +141,7 @@ public class BackgroundTask
 			{
 				doRemoveShopItemHologram();
 			}
-		}.runTaskTimer(plugin, 0L, runEveryXSeconds*20L);
+		}.runTaskTimer(plugin, 0L, ConfigHandler.getItemHologramRunTimer()*20L);
 	}
 	
 	public void doRemoveShopItemHologram()

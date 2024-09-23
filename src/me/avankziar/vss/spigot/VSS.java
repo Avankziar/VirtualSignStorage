@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,16 +42,15 @@ import me.avankziar.vss.general.database.YamlManager;
 import me.avankziar.vss.general.objects.ItemHologram;
 import me.avankziar.vss.spigot.assistance.BackgroundTask;
 import me.avankziar.vss.spigot.assistance.Utility;
-import me.avankziar.vss.spigot.cmd.SaLECommandExecutor;
 import me.avankziar.vss.spigot.cmd.TabCompletion;
+import me.avankziar.vss.spigot.cmd.VSSCommandExecutor;
 import me.avankziar.vss.spigot.cmd.storage.ARG_BreakToggle;
-import me.avankziar.vss.spigot.cmd.storage.ARG_SearchBuy;
-import me.avankziar.vss.spigot.cmd.storage.ARG_SearchSell;
+import me.avankziar.vss.spigot.cmd.storage._ARG_SearchBuy;
+import me.avankziar.vss.spigot.cmd.storage._ARG_SearchSell;
 import me.avankziar.vss.spigot.cmd.storage.ARG_Toggle;
 import me.avankziar.vss.spigot.cmd.vss.ARGDebug;
 import me.avankziar.vss.spigot.cmd.vss.ARGDelete;
-import me.avankziar.vss.spigot.cmd.vss.ARGShop;
-import me.avankziar.vss.spigot.cmd.vss.ARGSubscribed;
+import me.avankziar.vss.spigot.cmd.vss.ARGStorage;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.database.MysqlSetup;
@@ -110,13 +108,13 @@ public class VSS extends JavaPlugin
 		plugin = this;
 		log = getLogger();
 		
-		//https://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=SaLE
-		log.info(" ███████╗ █████╗ ██╗     ███████╗ | API-Version: "+plugin.getDescription().getAPIVersion());
-		log.info(" ██╔════╝██╔══██╗██║     ██╔════╝ | Author: "+plugin.getDescription().getAuthors().toString());
-		log.info(" ███████╗███████║██║     █████╗   | Plugin Website: "+plugin.getDescription().getWebsite());
-		log.info(" ╚════██║██╔══██║██║     ██╔══╝   | Depend Plugins: "+plugin.getDescription().getDepend().toString());
-		log.info(" ███████║██║  ██║███████╗███████╗ | SoftDepend Plugins: "+plugin.getDescription().getSoftDepend().toString());
-		log.info(" ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝ | LoadBefore: "+plugin.getDescription().getLoadBefore().toString());
+		//https://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=VSS
+		log.info(" ██╗   ██╗███████╗███████╗ | API-Version: "+plugin.getDescription().getAPIVersion());
+		log.info(" ██║   ██║██╔════╝██╔════╝ | Author: "+plugin.getDescription().getAuthors().toString());
+		log.info(" ██║   ██║███████╗███████╗ | Plugin Website: "+plugin.getDescription().getWebsite());
+		log.info(" ╚██╗ ██╔╝╚════██║╚════██║ | Depend Plugins: "+plugin.getDescription().getDepend().toString());
+		log.info("  ╚████╔╝ ███████║███████║ | SoftDepend Plugins: "+plugin.getDescription().getSoftDepend().toString());
+		log.info("   ╚═══╝  ╚══════╝╚══════╝ | LoadBefore: "+plugin.getDescription().getLoadBefore().toString());
 		
 		setupIFHAdministration();
 		
@@ -136,6 +134,8 @@ public class VSS extends JavaPlugin
 			Bukkit.getPluginManager().getPlugin(pluginname).getPluginLoader().disablePlugin(plugin);
 			return;
 		}
+		
+		ConfigHandler.config = getYamlHandler().getConfig();
 		
 		setupIFHItemStackComparison();
 		
@@ -211,30 +211,30 @@ public class VSS extends JavaPlugin
 	
 	private void setupCommandTree()
 	{		
-		infoCommand += plugin.getYamlHandler().getCommands().getString("sale.Name");
+		infoCommand += plugin.getYamlHandler().getCommands().getString("vss.Name");
 		
 		TabCompletion tab = new TabCompletion(plugin);
 		
-		ArgumentConstructor debug = new ArgumentConstructor(CommandSuggest.Type.SALE_DEBUG, "sale_debug", 0, 1, 1, false, false, null);
+		ArgumentConstructor debug = new ArgumentConstructor(CommandSuggest.Type.VSS_DEBUG, "vss_debug", 0, 1, 1, false, false, null);
 		new ARGDebug(plugin, debug);
 		
-		ArgumentConstructor delete = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP_DELETE, "sale_shop_delete", 1, 1, 99, false, false, null);
+		ArgumentConstructor delete = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_DELETE, "vss_storage_delete", 1, 1, 99, false, false, null);
 		new ARGDelete(plugin, delete);
 		
-		ArgumentConstructor breaktoggle = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP_BREAKTOGGLE, "sale_shop_breaktoggle",
+		ArgumentConstructor breaktoggle = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_BREAKTOGGLE, "vss_storage_breaktoggle",
 				1, 1, 1, false, false, null);
 		new ARG_BreakToggle(plugin, breaktoggle);
-		ArgumentConstructor toggle = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP_TOGGLE, "sale_shop_toggle", 1, 1, 1, false, false, null);
+		ArgumentConstructor toggle = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_TOGGLE, "vss_storage_toggle", 1, 1, 1, false, false, null);
 		new ARG_Toggle(plugin, toggle);
-		ArgumentConstructor searchbuy = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP_SEARCHBUY, "sale_shop_searchbuy", 1, 1, 999, false, false, null);
-		new ARG_SearchBuy(plugin, searchbuy);
-		ArgumentConstructor searchsell = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP_SEARCHBUY, "sale_shop_searchsell", 1, 1, 999, false, false, null);
-		new ARG_SearchSell(plugin, searchsell);
-		ArgumentConstructor shop = new ArgumentConstructor(CommandSuggest.Type.SALE_SHOP, "sale_shop", 0, 0, 0, false, false, null,
+		ArgumentConstructor searchbuy = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_SEARCHBUY, "vss_storage_searchbuy", 1, 1, 999, false, false, null);
+		new _ARG_SearchBuy(plugin, searchbuy);
+		ArgumentConstructor searchsell = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_SEARCHBUY, "vss_storage_searchsell", 1, 1, 999, false, false, null);
+		new _ARG_SearchSell(plugin, searchsell);
+		ArgumentConstructor shop = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE, "vss_storage", 0, 0, 0, false, false, null,
 				breaktoggle, delete, toggle, searchbuy, searchsell);
-		new ARGShop(plugin, shop);	
+		new ARGStorage(plugin, shop);	
 		
-		ArrayList<String> subsType = new ArrayList<>();
+		/*ArrayList<String> subsType = new ArrayList<>();
 		subsType.addAll(Arrays.asList(
 				"buycost>X", "buycost<X",
 				"sellcost>X", "sellcost<X",
@@ -245,13 +245,14 @@ public class VSS extends JavaPlugin
 		subs.put(1, subsType);
 		subs.put(2, subsType);
 		subs.put(3, subsType);
-		ArgumentConstructor subscribed = new ArgumentConstructor(CommandSuggest.Type.SALE_SUBSCRIBED, "sale_subscribed", 0, 0, 10, false, false, subs);
-		new ARGSubscribed(plugin, subscribed);	
+		ArgumentConstructor subscribed = new ArgumentConstructor(CommandSuggest.Type.SALE_SUBSCRIBED, "vss_subscribed", 0, 0, 10, false, false, subs);
+		new ARGSubscribed(plugin, subscribed);*/
 		
-		CommandConstructor sale = new CommandConstructor(CommandSuggest.Type.SALE, "sale", false, false,
-				debug, shop, subscribed);
+		CommandConstructor sale = new CommandConstructor(CommandSuggest.Type.VSS, "vss", false, false,
+				debug, shop//, subscribed
+				);
 		registerCommand(sale.getPath(), sale.getName());
-		getCommand(sale.getName()).setExecutor(new SaLECommandExecutor(plugin, sale));
+		getCommand(sale.getName()).setExecutor(new VSSCommandExecutor(plugin, sale));
 		getCommand(sale.getName()).setTabCompleter(tab);
 	}
 	
@@ -468,7 +469,7 @@ public class VSS extends JavaPlugin
 	
 	public void setupIFHConsumer()
 	{
-		//setupIFHValueEntry();
+		setupIFHValueEntry();
 		setupIFHModifier();
 		setupIFHEnumTranslation();
 		setupIFHEconomy();
@@ -479,7 +480,7 @@ public class VSS extends JavaPlugin
 	
 	public void setupIFHValueEntry()
 	{
-		if(!new ConfigHandler().isMechanicValueEntryEnabled())
+		if(!ConfigHandler.isMechanicValueEntryEnabled())
 		{
 			return;
 		}
@@ -689,7 +690,7 @@ public class VSS extends JavaPlugin
 	
 	private void setupIFHModifier() 
 	{
-		if(!new ConfigHandler().isMechanicModifierEnabled())
+		if(!ConfigHandler.isMechanicModifierEnabled())
 		{
 			return;
 		}
