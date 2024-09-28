@@ -14,17 +14,24 @@ import me.avankziar.vss.spigot.database.MysqlHandler;
 
 public class StorageAccessType implements MysqlHandable
 {
+	public enum StorageType 
+	{
+		QUANTITY, VARIOUS;
+	}
+	
 	private int id;
 	private int signStorageID;
+	private StorageType storageType;
 	private UUID uUID;
 	private ListedType listedType;
 	
 	public StorageAccessType(){}
 	
-	public StorageAccessType(int id, int signStorageID, UUID uUID, ListedType listedType)
+	public StorageAccessType(int id, int signStorageID, StorageType storageType, UUID uUID, ListedType listedType)
 	{
 		setId(id);
 		setSignStorageID(signStorageID);
+		setStorageType(storageType);
 		setUUID(uUID);
 		setListedType(listedType);
 	}
@@ -47,6 +54,14 @@ public class StorageAccessType implements MysqlHandable
 	public void setSignStorageID(int signStorageID)
 	{
 		this.signStorageID = signStorageID;
+	}
+
+	public StorageType getStorageType() {
+		return storageType;
+	}
+
+	public void setStorageType(StorageType storageType) {
+		this.storageType = storageType;
 	}
 
 	public UUID getUUID()
@@ -75,14 +90,15 @@ public class StorageAccessType implements MysqlHandable
 		try
 		{
 			String sql = "INSERT INTO `" + tablename
-					+ "`(`player_uuid`, `sign_storage_id`, `listed_type`) " 
+					+ "`(`player_uuid`, `sign_storage_id`,  `storage_type`, `listed_type`) " 
 					+ "VALUES("
-					+ "?, ?, ?"
+					+ "?, ?, ? ?"
 					+ ")";
 			PreparedStatement ps = conn.prepareStatement(sql);
 	        ps.setString(1, getUUID().toString());
 	        ps.setInt(2, getSignStorageID());
-	        ps.setString(3, getListedType().toString());
+	        ps.setString(3, getStorageType().toString());
+	        ps.setString(4, getListedType().toString());
 	        
 	        int i = ps.executeUpdate();
 	        MysqlHandler.addRows(QueryType.INSERT, i);
@@ -100,13 +116,14 @@ public class StorageAccessType implements MysqlHandable
 		try
 		{
 			String sql = "UPDATE `" + tablename
-				+ "` SET `player_uuid` = ?, `sign_storage_id` = ?, `listed_type` = ?"
+				+ "` SET `player_uuid` = ?, `sign_storage_id` = ?, `storage_type` = ?,`listed_type` = ?"
 				+ " WHERE "+whereColumn;
 			PreparedStatement ps = conn.prepareStatement(sql);
 		    ps.setString(1, getUUID().toString());
 		    ps.setInt(2, getSignStorageID());
-		    ps.setString(3, getListedType().toString());
-			int i = 4;
+		    ps.setString(3, getStorageType().toString());
+		    ps.setString(4, getListedType().toString());
+			int i = 5;
 			for(Object o : whereObject)
 			{
 				ps.setObject(i, o);
@@ -144,6 +161,7 @@ public class StorageAccessType implements MysqlHandable
 			{
 				al.add(new StorageAccessType(rs.getInt("id"),
 						rs.getInt("sign_storage_id"),
+						StorageType.valueOf(rs.getString("storage_type")),
 						UUID.fromString(rs.getString("player_uuid")),
 						ListedType.valueOf(rs.getString("listed_type"))));
 			}
@@ -175,6 +193,7 @@ public class StorageAccessType implements MysqlHandable
 			{
 				al.add(new StorageAccessType(rs.getInt("id"),
 						rs.getInt("sign_storage_id"),
+						StorageType.valueOf(rs.getString("storage_type")),
 						UUID.fromString(rs.getString("player_uuid")),
 						ListedType.valueOf(rs.getString("listed_type"))));
 			}

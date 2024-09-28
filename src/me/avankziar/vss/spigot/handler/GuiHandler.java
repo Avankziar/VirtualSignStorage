@@ -45,7 +45,7 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
 import me.avankziar.vss.general.objects.PlayerData;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.TimeHandler;
 import me.avankziar.vss.spigot.assistance.Utility;
@@ -67,41 +67,41 @@ public class GuiHandler
 	public static String PAGE = "page";
 	public static String WHERE = "where";
 	
-	public static void openAdministration(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
+	public static void openAdministration(SignQStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ADMINISTRATION;
 		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, ssh.getSignStorageName(), 
 				settingsLevel == null ? SettingsLevel.BASE : settingsLevel);
-		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
+		SignQStorage ssh2 = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openAdministration(SignStorage ssh, Player player, SettingsLevel settingsLevel, Inventory inv, boolean closeInv)
+	public static void openAdministration(SignQStorage ssh, Player player, SettingsLevel settingsLevel, Inventory inv, boolean closeInv)
 	{
 		GuiType gt = GuiType.ADMINISTRATION;
 		GUIApi gui = new GUIApi(plugin.pluginname, inv, gt.toString(), 
 				settingsLevel == null ? SettingsLevel.BASE : settingsLevel);
-		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
+		SignQStorage ssh2 = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openInputInfo(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
+	public static void openInputInfo(SignQStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ITEM_INPUT;
 		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "ID: "+String.valueOf(ssh.getId()), settingsLevel);
-		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
+		SignQStorage ssh2 = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	public static void openKeyOrNumInput(SignStorage ssh, Player player, GuiType gt, SettingsLevel settingsLevel, String keyboardOrNumpad, boolean closeInv)
+	public static void openKeyOrNumInput(SignQStorage ssh, Player player, GuiType gt, SettingsLevel settingsLevel, String keyboardOrNumpad, boolean closeInv)
 	{
 		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, ssh.getSignStorageName()+keyboardOrNumpad, settingsLevel);
-		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
+		SignQStorage ssh2 = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
 	@ScheduledForRemoval
-	public static void openSearch(ArrayList<SignStorage> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
+	public static void openSearch(ArrayList<SignQStorage> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
 		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6,
@@ -111,7 +111,7 @@ public class GuiHandler
 	}
 	
 	@ScheduledForRemoval
-	public static void openSubscribed(ArrayList<SignStorage> list, Player player, int page, String where, boolean closeInv, Inventory inv)
+	public static void openSubscribed(ArrayList<SignQStorage> list, Player player, int page, String where, boolean closeInv, Inventory inv)
 	{
 		GuiType gt = GuiType.SUBSCIBED;
 		GUIApi gui = null;
@@ -129,7 +129,7 @@ public class GuiHandler
 		openListGui(list, player, gt, gui, closeInv, page, where);
 	}
 	
-	private static void openGui(SignStorage sst, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv)
+	private static void openGui(SignQStorage sst, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		if(plugin.getIFHEco() != null)
 		{
@@ -358,14 +358,14 @@ public class GuiHandler
 		
 	}
 	
-	private static void openSearchGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv,
+	private static void openSearchGui(ArrayList<SignQStorage> list, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
 		boolean fillNotDefineGuiSlots = ConfigHandler.fillNotDefineGuiSlots();
 		Material filler = ConfigHandler.fillerMaterial();
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
-		for(SignStorage ssh : list)
+		for(SignQStorage ssh : list)
 		{
 			ArrayList<String> lore = null;
 			if(y.get("Lore."+settingsLevel.toString()) != null)
@@ -432,13 +432,13 @@ public class GuiHandler
 		}.runTask(plugin);
 	}
 	
-	private static void openListGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, boolean closeInv, int page, String whereQuery)
+	private static void openListGui(ArrayList<SignQStorage> list, Player player, GuiType gt, GUIApi gui, boolean closeInv, int page, String whereQuery)
 	{
 		boolean fillNotDefineGuiSlots = ConfigHandler.fillNotDefineGuiSlots();
 		Material filler = ConfigHandler.fillerMaterial();
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
-		for(SignStorage ssh : list)
+		for(SignQStorage ssh : list)
 		{
 			ArrayList<String> lore = null;
 			if(y.get("Lore") != null)
@@ -619,7 +619,7 @@ public class GuiHandler
         return skull;
     }*/
 	
-	public static List<String> getLorePlaceHolder(SignStorage ssh, Player player, List<String> lore, String playername)
+	public static List<String> getLorePlaceHolder(SignQStorage ssh, Player player, List<String> lore, String playername)
 	{
 		List<String> list = new ArrayList<>();
 		for(String s : lore)
@@ -1340,7 +1340,7 @@ public class GuiHandler
 	    return s;
 	}
 	
-	public static String getStringPlaceHolder(SignStorage ssh, Player player, String text, String playername)
+	public static String getStringPlaceHolder(SignQStorage ssh, Player player, String text, String playername)
 	{
 		String s = text;
 		if(text.contains("%owner%"))
@@ -1466,7 +1466,7 @@ public class GuiHandler
 		return ChatApi.tl(s);
 	}
 	
-	private static String getStringPlaceHolderIFH(SignStorage ssh, Player player, String text,
+	private static String getStringPlaceHolderIFH(SignQStorage ssh, Player player, String text,
 			Account ac, int dg, boolean useSI, boolean useSy, String ts, String ds, String playername)
 	{
 		String s = text;
@@ -1477,7 +1477,7 @@ public class GuiHandler
 		return ChatApi.tl(s);
 	}
 	
-	private static String getStringPlaceHolderVault(SignStorage ssh, Player player, String text, String playername)
+	private static String getStringPlaceHolderVault(SignQStorage ssh, Player player, String text, String playername)
 	{
 		String s = text;
 		if(text.contains("%accountname%"))

@@ -1,7 +1,7 @@
 package me.avankziar.vss.general.database;
 
 import me.avankziar.vss.general.objects.PlayerData;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.general.objects.StorageAccessType;
 
 public enum MysqlType
@@ -13,7 +13,7 @@ public enum MysqlType
 			+ " player_name text,"
 			+ " last_setting_level text,"
 			+ " last_login BIGINT);"),
-	SIGNSTORAGE("vssSignStorage", new SignStorage(), ServerType.SPIGOT,
+	SIGNQSTORAGE("vssSignQuantityStorage", new SignQStorage(), ServerType.SPIGOT,
 			"CREATE TABLE IF NOT EXISTS `%%tablename%%"
 			+ "` (id int AUTO_INCREMENT PRIMARY KEY,"
 			+ " player_uuid char(36) NOT NULL,"
@@ -43,6 +43,7 @@ public enum MysqlType
 			"CREATE TABLE IF NOT EXISTS `%%tablename%%"
 			+ "` (id int AUTO_INCREMENT PRIMARY KEY,"
 			+ " player_uuid char(36) NOT NULL,"
+			+ " storage_type text,"
 			+ " sign_storage_id int,"
 			+ " listed_type text);")
 	;

@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
 
@@ -89,8 +89,8 @@ public class ARGDebug extends ArgumentModule
 			public void run()
 			{
 				player.sendMessage("Please be waiting. Async Process ");
-				ArrayList<SignStorage> alss = SignStorage.convert(plugin.getMysqlHandler().getFullList(
-						MysqlType.SIGNSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
+				ArrayList<SignQStorage> alss = SignQStorage.convert(plugin.getMysqlHandler().getFullList(
+						MysqlType.SIGNQSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override
@@ -98,7 +98,7 @@ public class ARGDebug extends ArgumentModule
 					{
 						int i = 0;
 						int ii = 0;
-						for(SignStorage ss : alss)
+						for(SignQStorage ss : alss)
 						{
 							Block block = Bukkit.getWorld(ss.getWorld()).getBlockAt(ss.getX(), ss.getY(), ss.getZ());
 							
@@ -129,21 +129,21 @@ public class ARGDebug extends ArgumentModule
 			public void run()
 			{
 				player.sendMessage("Please be waiting. Async Process ");
-				ArrayList<SignStorage> alss = SignStorage.convert(plugin.getMysqlHandler().getFullList(
-						MysqlType.SIGNSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
+				ArrayList<SignQStorage> alss = SignQStorage.convert(plugin.getMysqlHandler().getFullList(
+						MysqlType.SIGNQSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override
 					public void run()
 					{
 						int i = 0;
-						for(SignStorage ss : alss)
+						for(SignQStorage ss : alss)
 						{
 							Block block = Bukkit.getWorld(ss.getWorld()).getBlockAt(ss.getX(), ss.getY(), ss.getZ());
 							if(!(block.getState() instanceof org.bukkit.block.Sign))
 							{
 								i++;
-								plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", ss.getId());
+								plugin.getMysqlHandler().deleteData(MysqlType.SIGNQSTORAGE, "`id` = ?", ss.getId());
 							}
 						}
 						if(player != null)

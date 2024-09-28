@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ItemHologram;
 import me.avankziar.vss.general.objects.PlayerData;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
@@ -56,7 +56,7 @@ public class BackgroundTask
 				long itemLost = 0;
 				ArrayList<UUID> uuidlist = new ArrayList<>();
 				ArrayList<Integer> ssIdList = new ArrayList<>();
-				ArrayList<SignStorage> ssList = new ArrayList<>();
+				ArrayList<SignQStorage> ssList = new ArrayList<>();
 				for(PlayerData pd : PlayerData.convert(plugin.getMysqlHandler().getFullList(MysqlType.PLAYERDATA,
 						"`id` ASC",	"`last_login` < ?", offlineSinceAtLeast)))
 				{
@@ -66,12 +66,12 @@ public class BackgroundTask
 					}
 					UUID owner = pd.getUUID();
 					uuidlist.add(owner);
-					ArrayList<SignStorage> list = SignStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNSTORAGE,
+					ArrayList<SignQStorage> list = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE,
 							"`id` ASC", "`player_uuid` = ?", owner.toString()));
 					ssList.addAll(list);
 				}
 				signStorageCount = ssList.size();
-				for(SignStorage ss : ssList)
+				for(SignQStorage ss : ssList)
 				{
 					itemLost += ss.getItemStorageCurrent();
 					ssIdList.add(ss.getId());
@@ -98,15 +98,15 @@ public class BackgroundTask
 			@Override
 			public void run()
 			{
-				ArrayList<SignStorage> alss = SignStorage.convert(plugin.getMysqlHandler().getFullList(
-						MysqlType.SIGNSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
+				ArrayList<SignQStorage> alss = SignQStorage.convert(plugin.getMysqlHandler().getFullList(
+						MysqlType.SIGNQSTORAGE, "`id` ASC", "`server_name` = ?", VSS.getPlugin().getServername()));
 				new BukkitRunnable()
 				{
 					@Override
 					public void run()
 					{
 						int i = 0;
-						for(SignStorage ss : alss)
+						for(SignQStorage ss : alss)
 						{
 							Block block = null;
 							try
@@ -120,7 +120,7 @@ public class BackgroundTask
 							if(!(block.getState() instanceof org.bukkit.block.Sign))
 							{
 								i++;
-								plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", ss.getId());
+								plugin.getMysqlHandler().deleteData(MysqlType.SIGNQSTORAGE, "`id` = ?", ss.getId());
 							}
 						}
 						plugin.getLogger().info("==========VSS Database DeleteTask==========");

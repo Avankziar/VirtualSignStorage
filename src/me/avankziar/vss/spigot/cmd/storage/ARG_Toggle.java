@@ -9,7 +9,7 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
 public class ARG_Toggle extends ArgumentModule
 {
@@ -26,13 +26,13 @@ public class ARG_Toggle extends ArgumentModule
 	public void run(CommandSender sender, String[] args) throws IOException
 	{
 		Player player = (Player) sender;
-		if(SignHandler.bypassToggle.contains(player.getUniqueId().toString()))
+		if(SignQuantityHandler.bypassToggle.contains(player.getUniqueId().toString()))
 		{
-			SignHandler.bypassToggle.remove(player.getUniqueId().toString());
+			SignQuantityHandler.bypassToggle.remove(player.getUniqueId().toString());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.Toggle.Deactive")));
 		} else
 		{
-			SignHandler.bypassToggle.add(player.getUniqueId().toString());
+			SignQuantityHandler.bypassToggle.add(player.getUniqueId().toString());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.Toggle.Active")));
 		}
 	}

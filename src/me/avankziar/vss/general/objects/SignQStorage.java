@@ -16,7 +16,7 @@ import me.avankziar.vss.spigot.database.MysqlHandable;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.handler.Base64Handler;
 
-public class SignStorage implements MysqlHandable
+public class SignQStorage implements MysqlHandable
 {
 	private int id;
 	private UUID owner;
@@ -47,9 +47,9 @@ public class SignStorage implements MysqlHandable
 	private long itemInput; //How much item per leftclick to storage goes.
 	private long itemShiftInput;
 	
-	public SignStorage(){}
+	public SignQStorage(){}
 	
-	public SignStorage(int id, UUID owner, String signStorageName, int accountId, long creationDateTime,
+	public SignQStorage(int id, UUID owner, String signStorageName, int accountId, long creationDateTime,
 			ItemStack itemStack, String displayName, Material mat,
 			long itemStorageTotal, long itemStorageCurrent,
 			String server, String world, int x, int y, int z,
@@ -84,7 +84,7 @@ public class SignStorage implements MysqlHandable
 		setItemShiftInput(itemShiftInput);
 	}
 	
-	private SignStorage(int id, UUID owner, String signStorageName, int accountId, long creationDateTime,
+	private SignQStorage(int id, UUID owner, String signStorageName, int accountId, long creationDateTime,
 			String itemStack, String displayName, String mat,
 			long itemStorageTotal, long itemStorageCurrent,
 			String server, String world, int x, int y, int z,
@@ -484,7 +484,7 @@ public class SignStorage implements MysqlHandable
 			ArrayList<Object> al = new ArrayList<>();
 			while (rs.next()) 
 			{
-				al.add(new SignStorage(rs.getInt("id"),
+				al.add(new SignQStorage(rs.getInt("id"),
 						UUID.fromString(rs.getString("player_uuid")),
 						rs.getString("sign_storage_name"),
 						rs.getInt("account_id"),
@@ -535,7 +535,7 @@ public class SignStorage implements MysqlHandable
 			ArrayList<Object> al = new ArrayList<>();
 			while (rs.next()) 
 			{
-				al.add(new SignStorage(rs.getInt("id"),
+				al.add(new SignQStorage(rs.getInt("id"),
 						UUID.fromString(rs.getString("player_uuid")),
 						rs.getString("sign_storage_name"),
 						rs.getInt("account_id"),
@@ -568,14 +568,14 @@ public class SignStorage implements MysqlHandable
 		return new ArrayList<>();
 	}
 	
-	public static ArrayList<SignStorage> convert(ArrayList<Object> arrayList)
+	public static ArrayList<SignQStorage> convert(ArrayList<Object> arrayList)
 	{
-		ArrayList<SignStorage> l = new ArrayList<>();
+		ArrayList<SignQStorage> l = new ArrayList<>();
 		for(Object o : arrayList)
 		{
-			if(o instanceof SignStorage)
+			if(o instanceof SignQStorage)
 			{
-				l.add((SignStorage) o);
+				l.add((SignQStorage) o);
 			}
 		}
 		return l;

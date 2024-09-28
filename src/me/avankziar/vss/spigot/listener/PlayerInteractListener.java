@@ -20,12 +20,12 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
 import me.avankziar.vss.general.objects.PlayerData;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
 public class PlayerInteractListener implements Listener
 {
@@ -56,7 +56,7 @@ public class PlayerInteractListener implements Listener
 		}
 		final Player player = event.getPlayer();
 		final Action action = event.getAction();
-		final SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
+		final SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), player.getWorld().getName(),
 				b.getX(), b.getY(), b.getZ());
@@ -70,9 +70,9 @@ public class PlayerInteractListener implements Listener
 		dodo(player, ssh, b, bs, action);
 	}
 	
-	public void dodo(Player player, SignStorage sst, Block b, BlockState bs, Action action)
+	public void dodo(Player player, SignQStorage sst, Block b, BlockState bs, Action action)
 	{		
-		if(SignHandler.isBreakToggle(player.getUniqueId()))
+		if(SignQuantityHandler.isBreakToggle(player.getUniqueId()))
 		{
 			return;
 		}
@@ -83,9 +83,9 @@ public class PlayerInteractListener implements Listener
 		PlayerData pd = (PlayerData) plugin.getMysqlHandler().getData(
 				MysqlType.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
 		if((sst.getMaterial() == Material.AIR)
-				&& (SignHandler.isOwner(sst, player.getUniqueId())
-				|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
-				|| SignHandler.isBypassToggle(player.getUniqueId())))
+				&& (SignQuantityHandler.isOwner(sst, player.getUniqueId())
+				|| SignQuantityHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
+				|| SignQuantityHandler.isBypassToggle(player.getUniqueId())))
 		{
 			new BukkitRunnable()
 			{
@@ -99,13 +99,13 @@ public class PlayerInteractListener implements Listener
 		}
 		if(action == Action.LEFT_CLICK_BLOCK)
 		{
-			if(SignHandler.isOwner(sst, player.getUniqueId()) 
-					|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
+			if(SignQuantityHandler.isOwner(sst, player.getUniqueId()) 
+					|| SignQuantityHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
 			{
 				if(player.getInventory().getItemInMainHand() == null 
 						|| player.getInventory().getItemInMainHand().getType() == Material.AIR)
 				{
-					SignHandler.takeOutItemFromShop(sst, player);
+					SignQuantityHandler.takeOutItemFromShop(sst, player);
 					return;
 				}
 			}
@@ -116,9 +116,9 @@ public class PlayerInteractListener implements Listener
 			return;
 		} else if(action == Action.RIGHT_CLICK_BLOCK)
 		{
-			if(SignHandler.isOwner(sst, player.getUniqueId())
-					|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
-					|| SignHandler.isBypassToggle(player.getUniqueId()))
+			if(SignQuantityHandler.isOwner(sst, player.getUniqueId())
+					|| SignQuantityHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId())
+					|| SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 			{
 				if(sst.getItemStack() != null)
 				{
@@ -128,7 +128,7 @@ public class PlayerInteractListener implements Listener
 						if(sst.getItemStack() == null || sst.getItemStack().getType() == Material.AIR)
 						{
 							player.sendMessage(ChatApi.tl(
-									plugin.getYamlHandler().getLang().getString("PlayerInteractListener.ShopItemIsNull")
+									plugin.getYamlHandler().getLang().getString("PlayerInteractListener.StorageItemIsNull")
 									.replace("%name%", sst.getDisplayName())));
 							return;
 						}
@@ -142,11 +142,11 @@ public class PlayerInteractListener implements Listener
 										: pd.getLastSettingLevel(), true);
 							}
 						}.runTaskAsynchronously(plugin);
-						SignHandler.updateSign(sst);
+						SignQuantityHandler.updateSign(sst);
 						return;
 					} else
 					{
-						if(SignHandler.putInItemIntoShop(sst, player, player.getInventory().getItemInMainHand()))
+						if(SignQuantityHandler.putInItemIntoShop(sst, player, player.getInventory().getItemInMainHand()))
 						{
 							return;
 						}
@@ -159,7 +159,7 @@ public class PlayerInteractListener implements Listener
 			@Override
 			public void run()
 			{
-				SignHandler.updateSign(sst);
+				SignQuantityHandler.updateSign(sst);
 			}
 		}.runTask(plugin);
 	}
@@ -197,7 +197,7 @@ public class PlayerInteractListener implements Listener
 			return;
 		}
 		Player player = event.getPlayer();
-		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
+		SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), player.getWorld().getName(),
 				b.getX(), b.getY(), b.getZ());

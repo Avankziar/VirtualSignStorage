@@ -50,24 +50,29 @@ public class ConfigHandler
 		return config.getBoolean("EnableMechanic.ValueEntry", false);
 	}
 	
-	public static String getSignShopInitLine()
+	public static String getSignQuantityStorageInitLine()
 	{
-		return config.getString("SignStorage.SignInitializationLine", "[VssStorage]");
+		return config.getString("SignStorage.SignQuantityInitializationLine", "[VssQuantity]");
 	}
 	
-	public static String getSignShopCopyLine()
+	public static String getSignVariousStorageInitLine()
+	{
+		return config.getString("SignStorage.SignVariousInitializationLine", "[VssVarious]");
+	}
+	
+	public static String getSignStorageCopyLine()
 	{
 		return config.getString("SignStorage.SignCopyLine", "[Copy]");
 	}
 	
-	public static String getSignShopMoveLine()
+	public static String getSignStorageMoveLine()
 	{
 		return config.getString("SignStorage.SignMoveLine", "[Move]");
 	}
 	
-	public static long getDefaulStartItemStorage()
+	public static long getDefaulStartItemStorageQuantity()
 	{
-		return config.getLong("SignShop.SignStorageStartItemStorage", 17280);
+		return config.getLong("SignShop.SignStorageStartItemStorageQuantity", 17280);
 	}
 	
 	public static List<String> getCostToAdd1Storage()

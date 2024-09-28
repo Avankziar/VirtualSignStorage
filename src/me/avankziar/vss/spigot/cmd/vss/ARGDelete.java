@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
@@ -105,7 +105,7 @@ public class ARGDelete extends ArgumentModule
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.Delete.NoFoundToDelete")));
 			return;
 		}
-		ArrayList<SignStorage> sshl = SignStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNSTORAGE,
+		ArrayList<SignQStorage> sshl = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE,
 				"`id` ASC", query, ol.toArray(new Object[ol.size()])));
 		final int sshla = sshl.size();
 		if(sshla <= 0)
@@ -114,10 +114,10 @@ public class ARGDelete extends ArgumentModule
 			return;
 		}
 		long itemLost = 0;
-		for(SignStorage ssh : sshl)
+		for(SignQStorage ssh : sshl)
 		{
 			itemLost += ssh.getItemStorageCurrent();
-			plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
+			plugin.getMysqlHandler().deleteData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		}
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.Delete.Delete")
 				.replace("%storageamount%", String.valueOf(sshla))

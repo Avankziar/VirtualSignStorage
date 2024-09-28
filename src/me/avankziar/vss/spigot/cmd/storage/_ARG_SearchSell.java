@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
@@ -117,7 +117,7 @@ public class _ARG_SearchSell extends ArgumentModule
 		{
 			orderBy = "rand(), `item_storage_current` ASC";
 		}
-		ArrayList<SignStorage> list = new ArrayList<>();
+		ArrayList<SignQStorage> list = new ArrayList<>();
 		String s = null;
 		String w = null;
 		//-----Für den SearchSell teil
@@ -139,44 +139,44 @@ public class _ARG_SearchSell extends ArgumentModule
 				s = plugin.getServername();
 				w = player.getWorld().getName();
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-							+ MysqlType.SIGNSTORAGE.getValue()+
+							+ MysqlType.SIGNQSTORAGE.getValue()+
 							"` WHERE `material` = ? AND `can_sell` = ? AND `sell_amount` > ? "
 							+ "AND `server_name` = ? AND `world` = ? "
 							+ "AND `x` < ? AND `x` > ? "
 							+ "AND `y` < ? AND `y` > ? "
 							+ "AND `z` < ? AND `z` > ? "
 							+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), true, 0,
 						s, w, xmax, xmin, ymax, ymin, zmax, zmin));
 				break;
 			case "PROXY":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), true, 0));
 				break;
 			case "SERVER":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "AND `server_name` = ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
 				s = plugin.getServername();
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), true, 0, s));
 				break;
 			case "WORLD":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "AND `server_name` = ? AND `world` = ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
 				s = plugin.getServername();
 				w = player.getWorld().getName();
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, orderBy, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, orderBy, sql,
 						searchMat.toString(), true, 0, s, w));
 				break;
 			}
@@ -193,7 +193,7 @@ public class _ARG_SearchSell extends ArgumentModule
 				int zmax = player.getLocation().getBlockZ()+r;
 				int zmin = player.getLocation().getBlockZ()-r;
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `display_name` LIKE ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "AND `server_name` = ? AND `world` = ? "
 						+ "AND `x` < ? AND `x` > ? "
@@ -202,36 +202,36 @@ public class _ARG_SearchSell extends ArgumentModule
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
 				s = plugin.getServername();
 				w = player.getWorld().getName();
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), "%"+searchDisplayname+"%", true, 0, s, w, xmax, xmin, ymax, ymin, zmax, zmin));
 				break;
 			case "PROXY":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `display_name` LIKE ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), "%"+searchDisplayname+"%", true, 0));
 				break;
 			case "SERVER":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `display_name` LIKE ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "AND `server_name` = ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
 				s = plugin.getServername();
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), "%"+searchDisplayname+"%", true, 0, s));
 				break;
 			case "WORLD":
 				sql = "SELECT *, cast(item_storage_total - item_storage_current as SIGNED) as blubb FROM `" 
-						+ MysqlType.SIGNSTORAGE.getValue()+
+						+ MysqlType.SIGNQSTORAGE.getValue()+
 						"` WHERE `material` = ? AND `display_name` LIKE ? AND `can_sell` = ? AND `sell_amount` > ? "
 						+ "AND `server_name` = ? AND `world` = ? "
 						+ "HAVING blubb > 0 ORDER BY "+orderBy+" LIMIT 0, 53";
 				s = plugin.getServername();
 				w = player.getWorld().getName();
-				list = SignStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNSTORAGE, sql,
+				list = SignQStorage.convert(plugin.getMysqlHandler().getSQL(MysqlType.SIGNQSTORAGE, sql,
 						searchMat.toString(), "%"+searchDisplayname+"%", 1, true, 0, s, w));
 				break;
 			}

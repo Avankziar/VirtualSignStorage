@@ -9,7 +9,7 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.cmdtree.ArgumentConstructor;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.cmdtree.ArgumentModule;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
 public class ARG_BreakToggle extends ArgumentModule
 {
@@ -26,13 +26,13 @@ public class ARG_BreakToggle extends ArgumentModule
 	public void run(CommandSender sender, String[] args) throws IOException
 	{
 		Player player = (Player) sender;
-		if(SignHandler.isBreakToggle(player.getUniqueId()))
+		if(SignQuantityHandler.isBreakToggle(player.getUniqueId()))
 		{
-			SignHandler.breakToggle.remove(player.getUniqueId().toString());
+			SignQuantityHandler.breakToggle.remove(player.getUniqueId().toString());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.BreakToggle.Deactive")));
 		} else
 		{
-			SignHandler.breakToggle.add(player.getUniqueId().toString());
+			SignQuantityHandler.breakToggle.add(player.getUniqueId().toString());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Cmd.BreakToggle.Active")));
 		}
 	}

@@ -33,7 +33,7 @@ public class WorldGuardHook
 		return true;
 	}
 	
-	public static boolean canCreateShop(Player player, Location pointOne)
+	public static boolean canCreateStorage(Player player, Location pointOne)
 	{
 		RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
         com.sk89q.worldedit.util.Location loc1 = BukkitAdapter.adapt(pointOne);

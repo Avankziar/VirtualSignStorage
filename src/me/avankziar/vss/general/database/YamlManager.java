@@ -371,14 +371,22 @@ public class YamlManager
 		configSpigotKeys.put("Mechanic.CountPerm"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 				"ADDUP"}));
-		addConfig("SignStorage.SignInitializationLine",
+		addConfig("SignStorage.SignQuantityInitializationLine",
 				new Object[] {
 				"[VssStorage]"},
 				new Object[] {
 				"",
-				"Zeile 0 welche zum initialisieren genutzt wird um ein SignStorage zu gründen.",
+				"Zeile 0 welche zum initialisieren genutzt wird um ein SignQuantityStorage zu gründen.",
 				"",
-				"Line which is used for initialization to create a SignStorage."});
+				"Line which is used for initialization to create a SignQuantityStorage."});
+		addConfig("SignStorage.SignVariousInitializationLine",
+				new Object[] {
+				"[VssStorage]"},
+				new Object[] {
+				"",
+				"Zeile 0 welche zum initialisieren genutzt wird um ein SignVariousStorage zu gründen.",
+				"",
+				"Line which is used for initialization to create a SignVariousStorage."});
 		addConfig("SignStorage.SignCopyLine",
 				new Object[] {
 				"[Copy]"},
@@ -395,7 +403,7 @@ public class YamlManager
 				"Zeile 1 welche zum Verlegen des angegeben Lagers genutzt wird. Altes Lagerschild ist somit inaktiv. Wird aber nicht abgebaut.",
 				"",
 				"Line 1 which is used to relocate the specified storage. The old storage sign is therefore inactive. But will not be removed."});
-		addConfig("SignStorage.DefaultStartItemStorage",
+		addConfig("SignStorage.DefaultStartItemStorageQuantity",
 				new Object[] {
 				17280},
 				new Object[] {
@@ -821,8 +829,8 @@ public class YamlManager
 						"&cThere is an error in the file: &f%file%"}));
 		languageKeys.put("NotOwner"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu kannst diesen Wert nicht ändern, da dir der Shop nicht gehört.",
-						"&cYou can't change this value because you don't own the store."}));
+						"&cDu kannst diesen Wert nicht ändern, da dir das Lager nicht gehört.",
+						"&cYou can't change this value because you dont own the storage."}));
 		languageKeys.put("AccountNotExist"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Account %value% existiert nicht!",
@@ -865,54 +873,78 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&4Leer",
 						"&4Empty"}));
-		languageKeys.put("SignChangeListener.AlreadyHaveMaximalSignShop", 
+		languageKeys.put("SignChangeListener.AlreadyHaveMaximalSignStorage", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu hast schon die maximale Anzahl von SignShops erstellt. Lösche zuerst SignShops bevor neue erstellt werden! Aktuelle &f%actual% &cvon %max%",
-						"&cYou have already created the maximum number of SignShops. First delete SignShops before creating new ones! Current &f%actual% &cof %max%"}));
-		
-		languageKeys.put("PlayerInteractListener.ShopItemIsNull", 
+						"&cDu hast schon die maximale Anzahl von Schildlager erstellt. Lösche zuerst Schildlager bevor neue erstellt werden! Aktuelle &f%actual% &cvon %max%",
+						"&cYou have already created the maximum number of SignStorage. First delete SignStorage before creating new ones! Current &f%actual% &cof %max%"}));
+		languageKeys.put("SignChangeListener.WorldGuardCreateDeny", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu kannst das Administrationsgui nicht aufrufen, da der Shop noch kein Item gesetzt hat!",
-						"&cYou can not call the administration gui, because the store has not set an item yet!"}));
+						"&cIn dieser Region dürfen keine Schildlager erstellt werden!",
+						"&cNo signstorage may be created in this region!"}));
+		languageKeys.put("SignChangeListener.StorageCreated", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast den Shop &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Shops ein!",
+						"&eYou have created the store &f%name%! &bClick on the sign and set the item of the store there!"}));
+		languageKeys.put("SignChangeListener.StorageNotExists", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDer Shop %id% existiert nicht!",
+						"&cThe store %id% does not exist!"}));
+		languageKeys.put("SignChangeListener.StorageMoved", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDer Shops %id%-%shopname% wurde versetzt!",
+						"&eThe store %id%-%shopname% has been moved!"}));
+		languageKeys.put("SignChangeListener.StorageCopy", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDer Shops %id%-%shopname% wurde kopiert!",
+						"&eThe store %id%-%shopname% has been copied!"}));
 		
-		languageKeys.put("SignHandler.ItemsAddedToShop", 
+		languageKeys.put("PlayerInteractListener.StorageItemIsNull", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu kannst das Administrationsgui nicht aufrufen, da das Lager noch kein Item gesetzt hat!",
+						"&cYou can not call the administration gui, because the storage has not set an item yet!"}));
+		
+		languageKeys.put("SignHandler.ForbiddenWorld", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cIn dieser Welt darfst du keine Schildlager erstellt.",
+						"&cIn this world you may not create a signstorage."}));
+		languageKeys.put("SignQuantityHandler.ItemsAddedToStorage", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast &f%amount% &eItems dem Lager hinzugefügt. Zz.: &r%now%",
 						"&eYou have added &f%amount% &eitems to the storage. Attn: &r%now%"}));
-		languageKeys.put("SignHandler.NoItemsIsSetUp", 
+		languageKeys.put("SignQuantityHandler.NoItemsIsSetUp", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Shop hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
 						"&cThe store has not yet deployed an item, so no item can be spent on the hand!"}));
-		languageKeys.put("SignHandler.ItemsRemovedToShop", 
+		languageKeys.put("SignQuantityHandler.ItemsRemovedToStorage", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast &f%amount% &eItems aus dem Shop entfernt. Zz.: &r%now%",
-						"&eYou have removed &f%amount% &eItems from the store. Attn: &r%now%"}));
-		languageKeys.put("SignHandler.PercentColor.100AndAbove", 
+						"&eDu hast &f%amount% &eItems aus dem Lager entfernt. Zz.: &r%now%",
+						"&eYou have removed &f%amount% &eItems from the storage. Attn: &r%now%"}));
+		languageKeys.put("SignQuantityHandler.PercentColor.100AndAbove", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&9"}));
-		languageKeys.put("SignHandler.PercentColor.Between100And75", 
+		languageKeys.put("SignQuantityHandler.PercentColor.Between100And75", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&b"}));
-		languageKeys.put("SignHandler.PercentColor.Between75And50", 
+		languageKeys.put("SignQuantityHandler.PercentColor.Between75And50", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&a"}));
-		languageKeys.put("SignHandler.PercentColor.Between50And25", 
+		languageKeys.put("SignQuantityHandler.PercentColor.Between50And25", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&e"}));
-		languageKeys.put("SignHandler.PercentColor.Between25And10", 
+		languageKeys.put("SignQuantityHandler.PercentColor.Between25And10", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&#FF8800"}));
-		languageKeys.put("SignHandler.PercentColor.Between10And0", 
+		languageKeys.put("SignQuantityHandler.PercentColor.Between10And0", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&c"}));
-		languageKeys.put("SignHandler.PercentColor.0AndLess", 
+		languageKeys.put("SignQuantityHandler.PercentColor.0AndLess", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&4"}));
 		
 		languageKeys.put("GuiHandler.AccountNotExist", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer zugehörige Account des Shops des Spielers %player% existiert nicht mehr! Bitte wende dich an den Shopeigentümer oder falls nicht anders möglich an einen Admin.",
-						"&cThe associated account of the store of the player %player% no longer exists! Please contact the store owner or if not otherwise possible an admin."}));
+						"&cDer zugehörige Account des Schildlagers des Spielers %player% existiert nicht mehr! Bitte wende dich an den Lagereigentümer oder falls nicht anders möglich an einen Admin.",
+						"&cThe associated account of the storage of the player %player% no longer exists! Please contact the storage owner or if not otherwise possible an admin."}));
 		languageKeys.put("GuiHandler.InfoLore.Owner", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cEigentümer: &f",
@@ -1044,8 +1076,8 @@ public class YamlManager
 						"&bCategory: &f%category% &f| &bComment: &f%comment%"}));
 		languageKeys.put("AdminstrationFunctionHandler.SetAccount.Set"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eSignshop Account wurde gesetzt!",
-						"&eSignshop account was set!"}));
+						"&eSchildlager Account wurde gesetzt!",
+						"&eSignstorage account was set!"}));
 		languageKeys.put("AdminstrationFunctionHandler.Listed.Add"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast %amount% Spieler/Einträge zur Liste %list% &ehinzugefügt.",
@@ -1060,8 +1092,8 @@ public class YamlManager
 						"&eThe following players are on list %list%: %players%"}));
 		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.Delete"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu hast den Shop &f%id%-%signshop% &caufgelöst. Es befanden sich noch &f%amount% &r%displayname% &cItems im Shop, welche nun verloren sind.",
-						"&cYou have closed the store &f%id%-%signshop%&c. There were still &f%amount% &r%displayname% &citems in the store, which are now lost."}));
+						"&cDu hast das Schildlager &f%id%-%signstorage% &caufgelöst. Es befanden sich noch &f%amount% &r%displayname% &cItems im Lager, welche nun verloren sind.",
+						"&cYou have closed the signstorage &f%id%-%signstorage%&c. There were still &f%amount% &r%displayname% &citems in the storage, which are now lost."}));
 		
 		languageKeys.put("Economy.AddStorage.Category", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1069,18 +1101,14 @@ public class YamlManager
 						"Stockroomextension"}));
 		languageKeys.put("Economy.AddStorage.Comment", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eEine Lagerraumerweiterung von &f%past% &eauf &f%now% (+%amount%) &eItems des Shops &f%name%&e.",
-						"&eA stockroom extension from &f%past% &eto &f%now% (+%amount%) &eItems of the store &f%name%&e."}));
+						"&eEine Lagerraumerweiterung von &f%past% &eauf &f%now% (+%amount%) &eItems des Schildlagers &f%name%&e.",
+						"&eA stockroom extension from &f%past% &eto &f%now% (+%amount%) &eItems of the signstorage &f%name%&e."}));
 		
-		/*languageKeys.put("ShopOwnerNotEnought",
+		/* INFO Dinge, die von Sale höchstwahrscheinlich nicht übernommen werden.
+		languageKeys.put("ShopOwnerNotEnought",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer ShopEigentümer hat nicht genug Geld!",
 						"&cThe shopowner dont have enough money!"}));
-		
-		languageKeys.put("SignChangeListener.WorldGuardCreateDeny", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cIn dieser Region dürfen keine Shops erstellt werden!",
-						"&cNo shops may be created in this region!"}));
 		
 		languageKeys.put("Economy.Buy.Category", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1107,23 +1135,6 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDie SchilderShops Mechanik ist nicht aktiviert!",
 						"&cThe Sign Shops mechanics is not activated!"}));
-		
-		languageKeys.put("SignChangeListener.ShopCreated", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast den Shop &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Shops ein!",
-						"&eYou have created the store &f%name%! &bClick on the sign and set the item of the store there!"}));
-		languageKeys.put("SignChangeListener.ShopNotExists", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop %id% existiert nicht!",
-						"&cThe store %id% does not exist!"}));
-		languageKeys.put("SignChangeListener.ShopMoved", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde versetzt!",
-						"&eThe store %id%-%shopname% has been moved!"}));
-		languageKeys.put("SignChangeListener.ShopCopy", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde kopiert!",
-						"&eThe store %id%-%shopname% has been copied!"}));
 						
 		languageKeys.put("PlayerInteractListener.IsBlackList", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1143,15 +1154,10 @@ public class YamlManager
 						"&cYou must be a member of this store to access it."}));
 		
 		
-		languageKeys.put("SignHandler.AttachedNewItemStackToShop", 
+		languageKeys.put("SignQuantityHandler.AttachedNewItemStackToShop", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&aDu hast das Item &r%name% &azum Shop &f%signshop% &ahinzugefügt!",
 						"&aYou have added the item &r%name% &ato the store &f%signshop%&a!"}));
-		
-		languageKeys.put("SignHandler.ForbiddenWorld", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cIn dieser Welt darfst du keine Signshop erstellt.",
-						"&cIn this world you may not create a signshop."}));	
 						
 		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.NotOwner"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1416,11 +1422,11 @@ public class YamlManager
 						"&eAdministrative Rechte für Shops gibt.",
 						"&ePermission, which gives specific",
 						"&eadministrative rights for shops."}));
-		mvelanguageKeys.put(Bypass.Counter.SHOP_CREATION_AMOUNT_.toString()+".Displayname",
+		mvelanguageKeys.put(Bypass.Counter.STORAGE_CREATION_AMOUNT_.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eAnzahl zu erstellende Shops",
 						"&eNumber of stores to be created"}));
-		mvelanguageKeys.put(Bypass.Counter.SHOP_CREATION_AMOUNT_.toString()+".Explanation",
+		mvelanguageKeys.put(Bypass.Counter.STORAGE_CREATION_AMOUNT_.toString()+".Explanation",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eZählpermission, welche die Anzahl",
 						"&ezu erstellender definiert.",

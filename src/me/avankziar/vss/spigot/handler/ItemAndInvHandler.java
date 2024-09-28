@@ -1,4 +1,4 @@
-package me.avankziar.vss.spigot.handler.gui;
+package me.avankziar.vss.spigot.handler;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
@@ -9,50 +9,24 @@ import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
-import me.avankziar.vss.spigot.gui.objects.GuiType;
-import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
-import me.avankziar.vss.spigot.handler.SignHandler;
 
-public class _ShopFunctionHandler
+public class ItemAndInvHandler 
 {
-	private static VSS plugin = VSS.getPlugin();
 	private static List<Enchantment> enchs = Registry.ENCHANTMENT.stream().collect(Collectors.toList());
 	@SuppressWarnings("deprecation")
 	private static PotionEffectType[] poefty = PotionEffectType.values();
 	
-	public static void doClickFunktion(GuiType guiType, ClickFunctionType cft, Player player, SignStorage ssh,
-			Inventory openInv, SettingsLevel settingsLevel)
-	{
-		switch(cft)
-		{
-		default:
-			
-		}
-		new BukkitRunnable()
-		{
-			@Override
-			public void run()
-			{
-				SignHandler.updateSign(ssh);
-			}
-		}.runTask(plugin);
-	}
-	
-	private static int emtpySlots(Player player)
+	public static int emtpySlots(Player player)
 	{
 		int es = 0;
 		for(int i = 0; i < player.getInventory().getStorageContents().length; i++)

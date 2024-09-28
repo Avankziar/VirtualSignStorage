@@ -738,7 +738,7 @@ public class VSS extends JavaPlugin
 						ModificationType bmt = null;
 						switch(ept)
 						{
-						case SHOP_CREATION_AMOUNT_:
+						case STORAGE_CREATION_AMOUNT_:
 						case SHOP_ITEMSTORAGE_AMOUNT_:
 						case COST_ADDING_STORAGE:
 						case SHOP_SUBSCRIPTION_:

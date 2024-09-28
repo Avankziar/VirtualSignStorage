@@ -27,8 +27,9 @@ import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
 import me.avankziar.vss.general.objects.PlayerData;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.general.objects.StorageAccessType;
+import me.avankziar.vss.general.objects.StorageAccessType.StorageType;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.assistance.Utility;
@@ -37,16 +38,16 @@ import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-public class AdminstrationFunctionHandler
+public class AdminstrationFunctionQuantityHandler
 {
 	private static VSS plugin = VSS.getPlugin();
 	
-	public static void doClickFunktion(GuiType guiType, ClickFunctionType cft, Player player, SignStorage sst,
+	public static void doClickFunktion(GuiType guiType, ClickFunctionType cft, Player player, SignQStorage sst,
 			Inventory openInv, SettingsLevel settingsLevel, UUID otheruuid)
 	{
 		switch(cft)
@@ -61,6 +62,8 @@ public class AdminstrationFunctionHandler
 		case ADMINISTRATION_ADDSTORAGE_1728: addStorage(player, sst, 1728, openInv, settingsLevel); break;
 		case ADMINISTRATION_ADDSTORAGE_3456: addStorage(player, sst, 3456, openInv, settingsLevel); break;
 		case ADMINISTRATION_ADDSTORAGE_6912: addStorage(player, sst, 6912, openInv, settingsLevel); break;
+		case ADMINISTRATION_ADDSTORAGE_17280: addStorage(player, sst, 17280, openInv, settingsLevel); break;
+		case ADMINISTRATION_ADDSTORAGE_34560: addStorage(player, sst, 34560, openInv, settingsLevel); break;
 		case ADMINISTRATION_DELETE_ALL: deleteAll(player, sst); break;
 		case ADMINISTRATION_DELETE_WITHOUT_ITEMS_IN_STORAGE: deleteSoft(player, sst); break;
 		case ADMINISTRATION_ITEM_CLEAR: clearItem(player, sst); break;
@@ -178,23 +181,23 @@ public class AdminstrationFunctionHandler
 			@Override
 			public void run()
 			{
-				SignHandler.updateSign(sst);
+				SignQuantityHandler.updateSign(sst);
 			}
 		}.runTask(plugin);
 	}
 	
-	private static boolean isTooMuchShop(Player player, SignStorage sst)
+	private static boolean isTooMuchShop(Player player, SignQStorage sst)
 	{
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			return false;
 		}
-		int signShopAmount = plugin.getMysqlHandler().getCount(MysqlType.SIGNSTORAGE, "`player_uuid` = ?", player.getUniqueId().toString());
-		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_CREATION_AMOUNT_);
+		int signShopAmount = plugin.getMysqlHandler().getCount(MysqlType.SIGNQSTORAGE, "`player_uuid` = ?", player.getUniqueId().toString());
+		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.STORAGE_CREATION_AMOUNT_);
 		if(signShopAmount > maxSignShopAmount)
 		{
 			player.sendMessage(ChatApi.tl(
-					plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignShop")
+					plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignStorage")
 					.replace("%actual%", String.valueOf(signShopAmount))
 					.replace("%max%", String.valueOf(maxSignShopAmount))
 					));
@@ -203,7 +206,7 @@ public class AdminstrationFunctionHandler
 		return false;
 	}
 	
-	private static void addStorage(Player player, SignStorage sst, long amount, Inventory inv, SettingsLevel settingsLevel)
+	private static void addStorage(Player player, SignQStorage sst, long amount, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
@@ -236,11 +239,11 @@ public class AdminstrationFunctionHandler
 			return;
 		}
 		sst.setItemStorageTotal(sst.getItemStorageTotal()+ca);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static boolean addStorageIFH(Player player, SignStorage sst, List<String> costPerOne, long amount, long ca)
+	private static boolean addStorageIFH(Player player, SignQStorage sst, List<String> costPerOne, long amount, long ca)
 	{
 		LinkedHashMap<EconomyCurrency, Double> moneymap = new LinkedHashMap<>();
 		for(String t : costPerOne)
@@ -366,7 +369,7 @@ public class AdminstrationFunctionHandler
 		return true;
 	}
 	
-	private static boolean addStorageVault(Player player, SignStorage sst, List<String> costPerOne, long amount, long ca)
+	private static boolean addStorageVault(Player player, SignQStorage sst, List<String> costPerOne, long amount, long ca)
 	{
 		double d = 0.0;
 		for(String t : costPerOne)
@@ -408,13 +411,13 @@ public class AdminstrationFunctionHandler
 		return true;
 	}
 	
-	private static void clearItem(Player player, SignStorage sst)
+	private static void clearItem(Player player, SignQStorage sst)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -426,7 +429,7 @@ public class AdminstrationFunctionHandler
 		sst.setItemStack(null);
 		sst.setDisplayName(null);
 		sst.setMaterial(Material.AIR);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.ItemClear")));
 		new BukkitRunnable()
 		{
@@ -434,12 +437,12 @@ public class AdminstrationFunctionHandler
 			public void run()
 			{
 				player.closeInventory();
-				SignHandler.updateSign(sst);
+				SignQuantityHandler.updateSign(sst);
 			}
 		}.runTask(plugin);
 	}
 	
-	private static void deleteSoft(Player player, SignStorage sst)
+	private static void deleteSoft(Player player, SignQStorage sst)
 	{
 		if(sst.getItemStorageCurrent() > 0)
 		{
@@ -448,9 +451,9 @@ public class AdminstrationFunctionHandler
 		deleteAll(player, sst);
 	}
 	
-	private static void deleteAll(Player player, SignStorage sst)
+	private static void deleteAll(Player player, SignQStorage sst)
 	{
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -470,10 +473,10 @@ public class AdminstrationFunctionHandler
 			bl = new Location(Bukkit.getWorld(sst.getWorld()), sst.getX(), sst.getY(), sst.getZ()).getBlock();
 		}
 		final Block block = bl;
-		plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().deleteData(MysqlType.SIGNQSTORAGE, "`id` = ?", sst.getId());
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.DeleteAll.Delete")
 				.replace("%id%", String.valueOf(sstid))
-				.replace("%signshop%", sstname)
+				.replace("%signstorage%", sstname)
 				.replace("%displayname%", displayname)
 				.replace("%amount%", String.valueOf(amount))));
 		if(block != null)
@@ -484,14 +487,14 @@ public class AdminstrationFunctionHandler
 				public void run()
 				{
 					player.closeInventory();
-					SignHandler.clearSign(block);
+					SignQuantityHandler.clearSign(block);
 				}
 			}.runTask(plugin);
 		}
 		return;
 	}
 	
-	private static void setAccountDefault(Player player, SignStorage sst, Inventory inv, SettingsLevel settingsLevel)
+	private static void setAccountDefault(Player player, SignQStorage sst, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(plugin.getIFHEco() == null)
 		{
@@ -501,7 +504,7 @@ public class AdminstrationFunctionHandler
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -523,12 +526,12 @@ public class AdminstrationFunctionHandler
 			acid = ac.getID();
 		}
 		sst.setAccountId(acid);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.SetAccount.Set")));
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void switchSettingsLevel(Player player, SignStorage sst, String type, Inventory inv, SettingsLevel settingsLevel)
+	private static void switchSettingsLevel(Player player, SignQStorage sst, String type, Inventory inv, SettingsLevel settingsLevel)
 	{
 		PlayerData pd = (PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
 		pd.setLastSettingLevel(settingsLevel);
@@ -536,45 +539,45 @@ public class AdminstrationFunctionHandler
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void switchListType(Player player, SignStorage sst, String type, Inventory inv, SettingsLevel settingsLevel, ListedType listedType)
+	private static void switchListType(Player player, SignQStorage sst, String type, Inventory inv, SettingsLevel settingsLevel, ListedType listedType)
 	{
 		sst.setListedType(listedType);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void setToggle(Player player, SignStorage sst, String type, Inventory inv, SettingsLevel settingsLevel)
+	private static void setToggle(Player player, SignQStorage sst, String type, Inventory inv, SettingsLevel settingsLevel)
 	{
 		switch(type)
 		{
 		default: break;
 		case "U": sst.setUnlimited(!sst.isUnlimited()); break;
 		}
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void setGlowing(Player player, SignStorage sst, Inventory inv, SettingsLevel settingsLevel, boolean glow)
+	private static void setGlowing(Player player, SignQStorage sst, Inventory inv, SettingsLevel settingsLevel, boolean glow)
 	{
 		sst.setSignGlowing(glow);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void setItemHover(Player player, SignStorage sst, Inventory inv, SettingsLevel settingsLevel, boolean itemhover)
+	private static void setItemHover(Player player, SignQStorage sst, Inventory inv, SettingsLevel settingsLevel, boolean itemhover)
 	{
 		sst.setItemHologram(itemhover);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 	
-	private static void openNumpad(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void openNumpad(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -582,13 +585,13 @@ public class AdminstrationFunctionHandler
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Numpad", true);
 	}
 	
-	private static void takeOver(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void takeOver(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -639,33 +642,33 @@ public class AdminstrationFunctionHandler
 			break;
 		}
 		sst.setNumText("");
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, true);
 	}
 	
-	private static void setNumpadClear(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void setNumpadClear(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
 		}
 		sst.setNumText("");
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Numpad", false);
 	}
 	
-	private static void numpadRemoveOnce(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void numpadRemoveOnce(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -673,72 +676,72 @@ public class AdminstrationFunctionHandler
 		if(!sst.getNumText().isEmpty())
 		{
 			sst.setNumText(sst.getNumText().substring(0, sst.getNumText().length()-1));
-			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 			GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Numpad", false);
 		}
 	}
 	
-	private static void numpad(Player player, SignStorage sst, String num, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void numpad(Player player, SignQStorage sst, String num, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
 		}
 		sst.setNumText(sst.getNumText()+num);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Numpad", false);
 	}
 	
-	private static void cancelNumpad(Player player, SignStorage sst, Inventory inv, SettingsLevel settingsLevel)
+	private static void cancelNumpad(Player player, SignQStorage sst, Inventory inv, SettingsLevel settingsLevel)
 	{
 		sst.setNumText("");
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openAdministration(sst, player, settingsLevel, true);
 	}
 	
-	private static void setKeyboardClear(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void setKeyboardClear(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		setNumpadClear(player, sst, gt, inv, settingsLevel);
 	}
 	
-	private static void keyboardRemoveOnce(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void keyboardRemoveOnce(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		numpadRemoveOnce(player, sst, gt, inv, settingsLevel);
 	}
 	
-	private static void keyboard(Player player, SignStorage sst, String key, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void keyboard(Player player, SignQStorage sst, String key, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
 		}
 		sst.setNumText(sst.getNumText()+key);
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Keybord", false);
 	}
 	
-	private static void cancelKeyboard(Player player, SignStorage sst, Inventory inv, SettingsLevel settingsLevel)
+	private static void cancelKeyboard(Player player, SignQStorage sst, Inventory inv, SettingsLevel settingsLevel)
 	{
 		cancelNumpad(player, sst, inv, settingsLevel);
 	}
 	
-	private static void openKeyboard(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
+	private static void openKeyboard(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel)
 	{
 		if(isTooMuchShop(player, sst))
 		{
 			return;
 		}
-		if(!SignHandler.isOwner(sst, player.getUniqueId()) && !SignHandler.isBypassToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
 			return;
@@ -746,7 +749,7 @@ public class AdminstrationFunctionHandler
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Keyboard", true);
 	}
 	
-	private static void addPlayerToList(Player player, SignStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel,
+	private static void addPlayerToList(Player player, SignQStorage sst, GuiType gt, Inventory inv, SettingsLevel settingsLevel,
 			ListedType listType, UUID otheruuid, boolean remove, boolean world)
 	{
 		if(otheruuid == null)
@@ -756,24 +759,25 @@ public class AdminstrationFunctionHandler
 		int a = 0;
 		if(world)
 		{
-			ArrayList<SignStorage> sstAL = SignStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNSTORAGE,
+			ArrayList<SignQStorage> sstAL = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE,
 					"`id` ASC", "`player_uuid` = ? AND `server_name` = ? AND `world` = ?",
 					sst.getOwner().toString(), plugin.getServername(), player.getWorld().getName()));
-			for(SignStorage ss : sstAL)
+			for(SignQStorage ss : sstAL)
 			{
 				if(remove)
 				{
 					plugin.getMysqlHandler().deleteData(MysqlType.STORAGEACCESSTYPE,
-							"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
-							otheruuid.toString(), ss.getId(), listType.toString());
+							"`player_uuid` = ? AND `sign_storage_id` = ? AND `storage_type` = ? AND `listed_type` = ?",
+							otheruuid.toString(), ss.getId(), StorageType.QUANTITY.toString(), listType.toString());
 				} else
 				{
 					if(!plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-							"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
-							otheruuid.toString(), ss.getId(), listType.toString()))
+							"`player_uuid` = ? AND `sign_storage_id` = ? AND `storage_type` = ? AND `listed_type` = ?",
+							otheruuid.toString(), ss.getId(), StorageType.QUANTITY.toString(), listType.toString()))
 					{
 						plugin.getMysqlHandler().create(MysqlType.STORAGEACCESSTYPE,
-								new StorageAccessType(0, ss.getId(), otheruuid, listType));
+								new StorageAccessType(0, ss.getId(),
+										StorageType.QUANTITY, otheruuid, listType));
 					}
 				}
 				a++;
@@ -783,16 +787,17 @@ public class AdminstrationFunctionHandler
 			if(remove)
 			{
 				plugin.getMysqlHandler().deleteData(MysqlType.STORAGEACCESSTYPE,
-						"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
-						otheruuid.toString(), sst.getId(), listType.toString());
+						"`player_uuid` = ? AND `sign_storage_id` = ? AND `storage_type` = ? AND `listed_type` = ?",
+						otheruuid.toString(), sst.getId(), StorageType.QUANTITY.toString(), listType.toString());
 			} else
 			{
 				if(!plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-						"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
-						otheruuid.toString(), sst.getId(), listType.toString()))
+						"`player_uuid` = ? AND `sign_storage_id` = ? AND `storage_type` = ? AND `listed_type` = ?",
+						otheruuid.toString(), sst.getId(), StorageType.QUANTITY.toString(), listType.toString()))
 				{
 					plugin.getMysqlHandler().create(MysqlType.STORAGEACCESSTYPE,
-							new StorageAccessType(0, sst.getId(), otheruuid, listType));
+							new StorageAccessType(0, sst.getId(),
+									StorageType.QUANTITY, otheruuid, listType));
 				}
 			}
 			a++;
@@ -813,7 +818,7 @@ public class AdminstrationFunctionHandler
 		GuiHandler.openKeyOrNumInput(sst, player, gt, settingsLevel, " Keyboard", false);
 	}
 	
-	private static void sendPlayerOnList(Player player, SignStorage sst,
+	private static void sendPlayerOnList(Player player, SignQStorage sst,
 			ListedType listType)
 	{
 		List<String> players = StorageAccessType.convert(plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,

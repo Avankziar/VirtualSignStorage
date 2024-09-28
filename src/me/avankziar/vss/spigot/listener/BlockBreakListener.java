@@ -17,9 +17,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
 public class BlockBreakListener implements Listener
 {
@@ -39,9 +39,9 @@ public class BlockBreakListener implements Listener
 			return;
 		}
 		Player player = event.getPlayer();
-		if(!SignHandler.isBreakToggle(player.getUniqueId()))
+		if(!SignQuantityHandler.isBreakToggle(player.getUniqueId()))
 		{
-			if(plugin.getMysqlHandler().exist(MysqlType.SIGNSTORAGE,
+			if(plugin.getMysqlHandler().exist(MysqlType.SIGNQSTORAGE,
 					"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 					plugin.getServername(), player.getWorld().getName(),
 					event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ()))
@@ -56,7 +56,7 @@ public class BlockBreakListener implements Listener
 			@Override
 			public void run()
 			{
-				final SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
+				final SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE,
 						"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 						plugin.getServername(), player.getWorld().getName(),
 						block.getX(), block.getY(), block.getZ());
@@ -71,7 +71,7 @@ public class BlockBreakListener implements Listener
 								? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 								: is.getType().toString());
 					final long amount = ssh.getItemStorageCurrent();
-					plugin.getMysqlHandler().deleteData(MysqlType.SIGNSTORAGE,
+					plugin.getMysqlHandler().deleteData(MysqlType.SIGNQSTORAGE,
 							"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 							plugin.getServername(), player.getWorld().getName(),
 							event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ());
@@ -85,7 +85,7 @@ public class BlockBreakListener implements Listener
 						@Override
 						public void run()
 						{
-							SignHandler.clearSign(block);
+							SignQuantityHandler.clearSign(block);
 						}
 					}.runTask(plugin);
 				}
@@ -109,7 +109,7 @@ public class BlockBreakListener implements Listener
 			{
 				continue;
 			}
-			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
+			SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE,
 					"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 					plugin.getServername(), b.getWorld().getName(),	b.getX(), b.getY(), b.getZ());
 			if(ssh == null)
@@ -141,7 +141,7 @@ public class BlockBreakListener implements Listener
 			{
 				continue;
 			}
-			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE,
+			SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE,
 					"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 					plugin.getServername(), b.getWorld().getName(),	b.getX(), b.getY(), b.getZ());
 			if(ssh == null)

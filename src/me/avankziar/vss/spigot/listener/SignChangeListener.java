@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import me.avankziar.ifh.general.economy.account.AccountCategory;
 import me.avankziar.ifh.general.economy.currency.CurrencyType;
@@ -15,11 +16,13 @@ import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
+import me.avankziar.vss.general.objects.StorageAccessType.StorageType;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 import me.avankziar.vss.spigot.hook.WorldGuardHook;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
 import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
@@ -40,7 +43,7 @@ public class SignChangeListener implements Listener
 		{
 			return;
 		}
-		if(plugin.getMysqlHandler().exist(MysqlType.SIGNSTORAGE,
+		if(plugin.getMysqlHandler().exist(MysqlType.SIGNQSTORAGE,
 				"`server_name` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
 				plugin.getServername(), event.getBlock().getWorld().getName(),
 				event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ()))
@@ -48,17 +51,21 @@ public class SignChangeListener implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		if(!event.getLine(0).equalsIgnoreCase(new ConfigHandler().getSignShopInitLine()))
+		//ADDME Exist Check for SignVStorage
+		StorageType storageType = null;
+		if(event.getLine(0).equalsIgnoreCase(ConfigHandler.getSignQuantityStorageInitLine()))
+		{
+			storageType = StorageType.QUANTITY;
+		} else if(event.getLine(0).equalsIgnoreCase(ConfigHandler.getSignVariousStorageInitLine()))
+		{
+			storageType = StorageType.VARIOUS;
+		}
+		if(storageType == null)
 		{
 			return;
 		}
 		Player player = event.getPlayer();
-		if(!plugin.getYamlHandler().getConfig().getBoolean("Enable.SignShop", false))
-		{
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("Mechanic.SignShopIsntEnabled")));
-			return;
-		}
-		if(plugin.getYamlHandler().getConfig().getStringList("SignShop.ForbiddenWorld").contains(event.getBlock().getWorld().getName()))
+		if(ConfigHandler.getForbiddenWorld().contains(event.getBlock().getWorld().getName()))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignHandler.ForbiddenWorld")));
 			return;
@@ -70,126 +77,45 @@ public class SignChangeListener implements Listener
 		}
 		if(VSS.getWorldGuard())
 		{
-			if(!WorldGuardHook.canCreateShop(player, event.getBlock().getLocation()))
+			if(!WorldGuardHook.canCreateStorage(player, event.getBlock().getLocation()))
 			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.WorldGuardCreateDeny")));
+				player.sendMessage(ChatApi.tl(
+						plugin.getYamlHandler().getLang().getString("SignChangeListener.WorldGuardCreateDeny")));
 				return;
 			}
 		}
-		int signShopAmount = plugin.getMysqlHandler().getCount(MysqlType.SIGNSTORAGE, "`player_uuid` = ?", player.getUniqueId().toString());
-		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_CREATION_AMOUNT_);
+		int signShopAmount = SignHandler.getAmountOfStorage(player);
+		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.STORAGE_CREATION_AMOUNT_);
 		if(signShopAmount > maxSignShopAmount)
 		{
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignShop")
+			player.sendMessage(ChatApi.tl(
+					plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignStorage")
 					.replace("%actual%", String.valueOf(signShopAmount))
 					.replace("%max%", String.valueOf(maxSignShopAmount))
 					));
 			return;
 		}
-		if(event.getLine(1).equalsIgnoreCase(new ConfigHandler().getSignShopMoveLine()))
+		if(storageType == StorageType.QUANTITY)
 		{
-			//Move SignShop
-			String line2 = event.getLine(2);
-			if(!MatchApi.isInteger(line2))
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
-						.replace("%value%", line2)));
-				return;
-			}
-			int sshID = Integer.valueOf(line2);
-			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
-			if(ssh == null)
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopNotExists")
-						.replace("%id%", line2)));
-				return;
-			}
-			if(!ssh.getOwner().equals(player.getUniqueId()))
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
-				return;
-			}
-			ssh.setServer(plugin.getServername());
-			ssh.setWorld(event.getBlock().getWorld().getName());
-			ssh.setX(event.getBlock().getX());
-			ssh.setY(event.getBlock().getY());
-			ssh.setZ(event.getBlock().getZ());
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopMoved")
-					.replace("%id%", line2)
-					.replace("%shopname%", ssh.getSignStorageName())));
-			event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, ssh, event.getBlock())));
-			event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, ssh, event.getBlock())));
-			event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, ssh, event.getBlock())));
-			event.setLine(3, ChatApi.tl(SignHandler.getSignLine(3, ssh, event.getBlock())));
-			Block b = event.getBlock();
-			if(b == null)
-			{
-				return;
-			}
-			BlockState bs = b.getState();
-			if(!(bs instanceof Sign))
-			{
-				return;
-			}
-			Sign sign = (Sign) bs;
-			sign.setWaxed(true);
-			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
+			doQuantity(player, event);
+		} else
+		{
+			//ADDME
+		}
+	}
+	
+	private void doQuantity(Player player, SignChangeEvent event)
+	{
+		if(event.getLine(1).equalsIgnoreCase(ConfigHandler.getSignStorageMoveLine()))
+		{
+			doQuantityMoveOrCopy(player, event, true);
 			return;
-		} else if(event.getLine(1).equalsIgnoreCase(new ConfigHandler().getSignShopCopyLine()))
+		} else if(event.getLine(1) != null && event.getLine(1).equalsIgnoreCase(ConfigHandler.getSignStorageCopyLine()))
 		{
-			//Copy SignShop
-			String line2 = event.getLine(2);
-			if(!MatchApi.isInteger(line2))
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
-						.replace("%value%", line2)));
-				return;
-			}
-			int sshID = Integer.valueOf(line2);
-			SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
-			if(ssh == null)
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopNotExists")
-						.replace("%id%", line2)));
-				return;
-			}
-			if(!ssh.getOwner().equals(player.getUniqueId()))
-			{
-				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
-				return;
-			}
-			SignStorage copy = ssh;
-			copy.setServer(plugin.getServername());
-			copy.setWorld(event.getBlock().getWorld().getName());
-			copy.setX(event.getBlock().getX());
-			copy.setY(event.getBlock().getY());
-			copy.setZ(event.getBlock().getZ());
-			copy.setItemStorageCurrent(0);
-			copy.setItemStorageTotal(new ConfigHandler().getDefaulStartItemStorage());
-			copy.setSignStorageName("Copy: "+copy.getSignStorageName());
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopCopy")
-					.replace("%id%", line2)
-					.replace("%shopname%", ssh.getSignStorageName())));
-			plugin.getMysqlHandler().create(MysqlType.SIGNSTORAGE, copy);
-			event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, copy, event.getBlock())));
-			event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, copy, event.getBlock())));
-			event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, copy, event.getBlock())));
-			event.setLine(3, ChatApi.tl(SignHandler.getSignLine(3, copy, event.getBlock())));
-			Block b = event.getBlock();
-			if(b == null)
-			{
-				return;
-			}
-			BlockState bs = b.getState();
-			if(!(bs instanceof Sign))
-			{
-				return;
-			}
-			Sign sign = (Sign) bs;
-			sign.setWaxed(true);
+			doQuantityMoveOrCopy(player, event, false);
 			return;
 		}
-		int lastnumber = plugin.getMysqlHandler().lastID(MysqlType.SIGNSTORAGE)+1;
+		int lastnumber = plugin.getMysqlHandler().lastID(MysqlType.SIGNQSTORAGE)+1;
 		int acid = 0;
 		if(plugin.getIFHEco() != null)
 		{
@@ -197,21 +123,120 @@ public class SignChangeListener implements Listener
 					AccountCategory.MAIN, plugin.getIFHEco().getDefaultCurrency(CurrencyType.DIGITAL));
 			acid = ac.getID();
 		}
-		ConfigHandler cfh = new ConfigHandler();
-		SignStorage ssh = new SignStorage(
-				0, player.getUniqueId(),
-				"Storage_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
-				cfh.getDefaulStartItemStorage(), 0,
-				plugin.getServername(), player.getWorld().getName(),
-				event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
-				false, "", false, ListedType.MEMBER, false,
-				cfh.getDefaultItemOutput(), cfh.getDefaultItemShiftOutput(),
-				cfh.getDefaultItemInput(), cfh.getDefaultItemShiftInput());
-		plugin.getMysqlHandler().create(MysqlType.SIGNSTORAGE, ssh);
-		event.setLine(0, ChatApi.tl(SignHandler.getSignLine(0, ssh, event.getBlock())));
-		event.setLine(1, ChatApi.tl(SignHandler.getSignLine(1, ssh, event.getBlock())));
-		event.setLine(2, ChatApi.tl(SignHandler.getSignLine(2, ssh, event.getBlock())));
-		event.setLine(3, ChatApi.tl(SignHandler.getSignLine(3, ssh, event.getBlock())));
+		SignQStorage sst = null;
+		if(event.getLine(1) != null && !event.getLine(1).isEmpty())
+		{
+			//If Material was written in Line 1, 2 or 3
+			String material = event.getLine(1);
+			if(event.getLine(2) != null && !event.getLine(2).isEmpty())
+			{
+				material += event.getLine(2);
+				if(event.getLine(3) != null && !event.getLine(3).isEmpty())
+				{
+					material += event.getLine(3);
+				}
+			}
+			Material mat = null;
+			try
+			{
+				mat = Material.valueOf(material);
+			} catch(Exception e) {}
+			if(mat != null)
+			{
+				sst = new SignQStorage(
+						0, player.getUniqueId(),
+						"Storage_"+lastnumber, acid, System.currentTimeMillis(),
+						new ItemStack(mat), VSS.getPlugin().getEnumTl() != null
+								  ? VSS.getPlugin().getEnumTl().getLocalization(mat)
+								  : mat.toString(), mat,
+						ConfigHandler.getDefaulStartItemStorageQuantity(), 0,
+						plugin.getServername(), player.getWorld().getName(),
+						event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
+						false, "", false, ListedType.MEMBER, false,
+						ConfigHandler.getDefaultItemOutput(), ConfigHandler.getDefaultItemShiftOutput(),
+						ConfigHandler.getDefaultItemInput(), ConfigHandler.getDefaultItemShiftInput());
+			}
+		}
+		if(sst == null)
+		{
+			//If no material can be determined.
+			sst = new SignQStorage(
+					0, player.getUniqueId(),
+					"Storage_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
+					ConfigHandler.getDefaulStartItemStorageQuantity(), 0,
+					plugin.getServername(), player.getWorld().getName(),
+					event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
+					false, "", false, ListedType.MEMBER, false,
+					ConfigHandler.getDefaultItemOutput(), ConfigHandler.getDefaultItemShiftOutput(),
+					ConfigHandler.getDefaultItemInput(), ConfigHandler.getDefaultItemShiftInput());
+		}
+		plugin.getMysqlHandler().create(MysqlType.SIGNQSTORAGE, sst);
+		signQUpdate(sst, event);
+		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageCreated")
+				.replace("%name%", sst.getSignStorageName())
+				));
+		return;
+	}
+	
+	private void doQuantityMoveOrCopy(Player player, SignChangeEvent event, boolean moveOrCopy)
+	{
+		//Move SignShop
+		String line2 = event.getLine(2);
+		if(!MatchApi.isInteger(line2))
+		{
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
+					.replace("%value%", line2)));
+			return;
+		}
+		int sstID = Integer.valueOf(line2);
+		SignQStorage sst = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", sstID);
+		if(sst == null)
+		{
+			player.sendMessage(ChatApi.tl(
+					plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageNotExists")
+					.replace("%id%", line2)));
+			return;
+		}
+		if(!sst.getOwner().equals(player.getUniqueId()))
+		{
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
+			return;
+		}
+		SignQStorage morc = sst;
+		morc.setServer(plugin.getServername());
+		morc.setWorld(event.getBlock().getWorld().getName());
+		morc.setX(event.getBlock().getX());
+		morc.setY(event.getBlock().getY());
+		morc.setZ(event.getBlock().getZ());
+		if(moveOrCopy)
+		{
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageMoved")
+					.replace("%id%", line2)
+					.replace("%shopname%", morc.getSignStorageName())));
+		} else
+		{
+			morc.setItemStorageCurrent(0);
+			morc.setItemStorageTotal(ConfigHandler.getDefaulStartItemStorageQuantity());
+			morc.setSignStorageName("Copy: "+morc.getSignStorageName());
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageCopy")
+					.replace("%id%", line2)
+					.replace("%shopname%", morc.getSignStorageName())));
+			plugin.getMysqlHandler().create(MysqlType.SIGNQSTORAGE, morc);
+		}
+		signQUpdate(morc, event);
+		if(moveOrCopy)
+		{
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, morc, "`id` = ?", morc.getId());
+		}
+		return;
+	}
+	
+	private void signQUpdate(final SignQStorage sst, final SignChangeEvent event)
+	{
+		event.setLine(0, ChatApi.tl(SignQuantityHandler.getSignLine(0, sst, event.getBlock())));
+		event.setLine(1, ChatApi.tl(SignQuantityHandler.getSignLine(1, sst, event.getBlock())));
+		event.setLine(2, ChatApi.tl(SignQuantityHandler.getSignLine(2, sst, event.getBlock())));
+		event.setLine(3, ChatApi.tl(SignQuantityHandler.getSignLine(3, sst, event.getBlock())));
 		Block b = event.getBlock();
 		if(b == null)
 		{
@@ -224,9 +249,5 @@ public class SignChangeListener implements Listener
 		}
 		Sign sign = (Sign) bs;
 		sign.setWaxed(true);
-		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.ShopCreated")
-				.replace("%name%", ssh.getSignStorageName())
-				));
-		return;
 	}
 }

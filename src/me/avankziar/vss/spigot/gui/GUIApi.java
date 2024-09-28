@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.gui.events.ClickFunction;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
@@ -374,10 +374,10 @@ public class GUIApi
 		return playerInGuiType.get(uuid);
 	}
 	
-	public static SignStorage getGuiSST(UUID uuid)
+	public static SignQStorage getGuiSST(UUID uuid)
 	{
 		int sshID = playerInGuiSSHID.get(uuid);
-		return (SignStorage) VSS.getPlugin().getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
+		return (SignQStorage) VSS.getPlugin().getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", sshID);
 	}
 	
 	public static SettingsLevel getSettingsLevel(UUID uuid)

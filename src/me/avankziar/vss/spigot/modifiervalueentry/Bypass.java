@@ -31,7 +31,7 @@ public class Bypass
 	
 	public enum Counter
 	{
-		SHOP_CREATION_AMOUNT_,
+		STORAGE_CREATION_AMOUNT_,
 		SHOP_ITEMSTORAGE_AMOUNT_,
 		COST_ADDING_STORAGE(false),
 		SHOP_BUYING_TAX(false),

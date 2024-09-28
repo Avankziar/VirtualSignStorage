@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.assistance.MatchApi;
 import me.avankziar.vss.spigot.gui.GUIApi;
@@ -20,7 +20,7 @@ import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
-import me.avankziar.vss.spigot.handler.SignHandler;
+import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
 public class BottomListener implements Listener
 {
@@ -56,7 +56,7 @@ public class BottomListener implements Listener
 		GuiType gt = GUIApi.getGuiType(player.getUniqueId());
 		if(gt == GuiType.ADMINISTRATION)
 		{
-			SignStorage sst = GUIApi.getGuiSST(player.getUniqueId());
+			SignQStorage sst = GUIApi.getGuiSST(player.getUniqueId());
 			if(sst == null)
 			{
 				return;
@@ -80,14 +80,14 @@ public class BottomListener implements Listener
 				event.getEvent().getCurrentItem().setAmount(0);
 			}
 			sst.setItemStorageCurrent(sst.getItemStorageCurrent()+((long) amount));
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignHandler.ItemsAddedToShop")
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignQuantityHandler.ItemsAddedToStorage")
 					.replace("%amount%", String.valueOf(amount))
 					.replace("%now%", String.valueOf(sst.getItemStorageCurrent())+" / "+String.valueOf(sst.getItemStorageTotal()))));
-			plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, sst, "`id` = ?", sst.getId());
-			SignHandler.updateSign(sst);
+			plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
+			SignQuantityHandler.updateSign(sst);
 		} else if(gt == GuiType.ITEM_INPUT)
 		{
-			if(event.getEvent().getView().getTitle().startsWith("Shop:"))
+			if(event.getEvent().getView().getTitle().startsWith("ID:"))
 			{
 				input(event, player, is);
 				return;
@@ -108,7 +108,7 @@ public class BottomListener implements Listener
 			return;
 		}
 		int sshID = Integer.parseInt(i);
-		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", sshID);
+		SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", sshID);
 		if(ssh == null)
 		{
 			return;
@@ -142,8 +142,8 @@ public class BottomListener implements Listener
 					  ? VSS.getPlugin().getEnumTl().getLocalization(is.getType())
 					  : is.getType().toString());
 		}
-		plugin.getMysqlHandler().updateData(MysqlType.SIGNSTORAGE, ssh, "`id` = ?", ssh.getId());
-		SignHandler.updateSign(ssh);
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, ssh, "`id` = ?", ssh.getId());
+		SignQuantityHandler.updateSign(ssh);
 		player.closeInventory();
 		GuiHandler.openAdministration(ssh, player, SettingsLevel.BASE, false);
 	}

@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
-import me.avankziar.vss.general.objects.SignStorage;
+import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.general.objects.StorageAccessType;
 import me.avankziar.vss.spigot.VSS;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,7 +39,7 @@ public class MessageHandler
 	
 	public void sendMessageToOwnerAndMember(int shopid, String msg)
 	{
-		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
+		SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", shopid);
 		ArrayList<StorageAccessType> member = StorageAccessType.convert(
 				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
 				"`id` ASC", "`sign_storage_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
@@ -50,7 +50,7 @@ public class MessageHandler
 		}
 	}
 	
-	public void sendMessageToOwnerAndMember(SignStorage ssh, String msg)
+	public void sendMessageToOwnerAndMember(SignQStorage ssh, String msg)
 	{
 		sendMessageToOwnerAndMember(ssh.getId(), msg);
 	}
@@ -77,7 +77,7 @@ public class MessageHandler
 	
 	public void sendMessageToOwnerAndMember(int shopid, ArrayList<ArrayList<BaseComponent>> listInList)
 	{
-		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
+		SignQStorage ssh = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", shopid);
 		ArrayList<StorageAccessType> member = StorageAccessType.convert(
 				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
 				"`id` ASC", "`sign_storage_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
@@ -88,7 +88,7 @@ public class MessageHandler
 		}
 	}
 	
-	public void sendMessageToOwnerAndMember(SignStorage ssh, ArrayList<ArrayList<BaseComponent>> listInList)
+	public void sendMessageToOwnerAndMember(SignQStorage ssh, ArrayList<ArrayList<BaseComponent>> listInList)
 	{
 		sendMessageToOwnerAndMember(ssh.getId(), listInList);
 	}
