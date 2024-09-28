@@ -15,7 +15,7 @@ import me.avankziar.vss.spigot.cmd.vss._ARGSubscribed;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 
-public class SubscribedFunctionHandler
+public class _SubscribedFunctionHandler
 {
 	public static void doClickFunktion(ClickFunctionType cft, Player player, SignStorage ssh,
 			Inventory openInv, int page, String where)

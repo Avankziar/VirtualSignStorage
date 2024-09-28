@@ -63,7 +63,7 @@ public class SignChangeListener implements Listener
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignHandler.ForbiddenWorld")));
 			return;
 		}
-		if(!ModifierValueEntry.hasPermission(player, Bypass.Permission.SHOP_CREATION))
+		if(!ModifierValueEntry.hasPermission(player, Bypass.Permission.STORAGE_CREATION))
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoPermission")));
 			return;

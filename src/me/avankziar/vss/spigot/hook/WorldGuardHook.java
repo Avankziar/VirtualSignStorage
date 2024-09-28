@@ -16,16 +16,16 @@ import me.avankziar.vss.spigot.modifiervalueentry.ModifierValueEntry;
 
 public class WorldGuardHook
 {
-	public static StateFlag SHOP_CREATE;
+	public static StateFlag STORAGE_CREATE;
 	
 	public static boolean init()
 	{
 		FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
 		try 
 		{
-			StateFlag sc = new StateFlag("sale-shop-create", true);
+			StateFlag sc = new StateFlag("vss-storage-create", true);
 	        registry.register(sc);
-	        SHOP_CREATE = sc;
+	        STORAGE_CREATE = sc;
 	    } catch (FlagConflictException e) 
 		{
 	        return false;
@@ -37,7 +37,7 @@ public class WorldGuardHook
 	{
 		RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
         com.sk89q.worldedit.util.Location loc1 = BukkitAdapter.adapt(pointOne);
-        return ModifierValueEntry.hasPermission(player, Bypass.Permission.SHOP_CREATION_WORLDGUARD)
-        		? true : query.testState(loc1, WorldGuardPlugin.inst().wrapPlayer(player), SHOP_CREATE);
+        return ModifierValueEntry.hasPermission(player, Bypass.Permission.STORAGE_CREATION_WORLDGUARD)
+        		? true : query.testState(loc1, WorldGuardPlugin.inst().wrapPlayer(player), STORAGE_CREATE);
 	}
 }

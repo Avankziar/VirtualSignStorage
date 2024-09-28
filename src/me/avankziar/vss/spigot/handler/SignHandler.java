@@ -49,7 +49,7 @@ public class SignHandler
 		case 3:
 			StringBuilder sb = new StringBuilder();
 			String color = "";
-			boolean calInStack = plugin.getYamlHandler().getConfig().getBoolean("SignShop.Sign.Line4CalculateInStack", false);
+			boolean calInStack = ConfigHandler.isLine4CalculateInStack();
 			long has = ssh.getItemStorageCurrent();
 			long can = ssh.getItemStorageTotal()-ssh.getItemStorageCurrent();
 			if(calInStack)
@@ -108,7 +108,7 @@ public class SignHandler
 	public static boolean isListed(ListedType listedType, SignStorage ssh, UUID uuid)
 	{
 		return plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE, 
-				"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+				"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 				uuid.toString(), ssh.getId(), listedType.toString());
 	}
 	
@@ -331,13 +331,6 @@ public class SignHandler
 		back.setLine(3, "");
 		back.setGlowingText(false);
 		sign.update();
-	}
-	
-	public static Locale locale = null;
-	
-	static
-	{
-		
 	}
 	
 	public static String formatDouble(double d)

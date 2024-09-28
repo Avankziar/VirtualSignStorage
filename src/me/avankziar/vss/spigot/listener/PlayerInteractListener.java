@@ -22,7 +22,7 @@ import me.avankziar.vss.general.objects.ListedType;
 import me.avankziar.vss.general.objects.PlayerData;
 import me.avankziar.vss.general.objects.SignStorage;
 import me.avankziar.vss.spigot.VSS;
-import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
+import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
@@ -99,9 +99,11 @@ public class PlayerInteractListener implements Listener
 		}
 		if(action == Action.LEFT_CLICK_BLOCK)
 		{
-			if(SignHandler.isOwner(sst, player.getUniqueId()) || SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
+			if(SignHandler.isOwner(sst, player.getUniqueId()) 
+					|| SignHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
 			{
-				if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+				if(player.getInventory().getItemInMainHand() == null 
+						|| player.getInventory().getItemInMainHand().getType() == Material.AIR)
 				{
 					SignHandler.takeOutItemFromShop(sst, player);
 					return;
@@ -120,11 +122,13 @@ public class PlayerInteractListener implements Listener
 			{
 				if(sst.getItemStack() != null)
 				{
-					if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+					if(player.getInventory().getItemInMainHand() == null 
+							|| player.getInventory().getItemInMainHand().getType() == Material.AIR)
 					{
 						if(sst.getItemStack() == null || sst.getItemStack().getType() == Material.AIR)
 						{
-							player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("PlayerInteractListener.ShopItemIsNull")
+							player.sendMessage(ChatApi.tl(
+									plugin.getYamlHandler().getLang().getString("PlayerInteractListener.ShopItemIsNull")
 									.replace("%name%", sst.getDisplayName())));
 							return;
 						}
@@ -133,9 +137,8 @@ public class PlayerInteractListener implements Listener
 							@Override
 							public void run()
 							{
-								GuiHandler.openAdministration(sst, player,
-										plugin.getYamlHandler().getConfig().getBoolean("SignShop.Gui.ForceSettingsLevel", false)
-										? SettingsLevel.valueOf(plugin.getYamlHandler().getConfig().getString("SignShop.Gui.ToBeForcedSettingsLevel", "BASE"))
+								GuiHandler.openAdministration(sst, player, ConfigHandler.isForceSettingsLevel()
+										? ConfigHandler.getForcedSettingsLevel()
 										: pd.getLastSettingLevel(), true);
 							}
 						}.runTaskAsynchronously(plugin);

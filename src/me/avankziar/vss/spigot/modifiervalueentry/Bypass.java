@@ -8,11 +8,9 @@ public class Bypass
 {
 	public enum Permission
 	{
-		SHOP_CREATION,
-		SHOP_CREATION_WORLDGUARD,
-		SHOP_GUI_BYPASS,
-		SHOP_LOG_OTHERPLAYER,
-		CLIENT_LOG_OTHERPLAYER;
+		STORAGE_CREATION,
+		STORAGE_CREATION_WORLDGUARD,
+		STORAGE_GUI_BYPASS;
 		
 		public String getValueLable()
 		{

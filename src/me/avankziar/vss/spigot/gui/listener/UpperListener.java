@@ -20,7 +20,7 @@ import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.gui.AdminstrationFunctionHandler;
-import me.avankziar.vss.spigot.handler.gui.SubscribedFunctionHandler;
+import me.avankziar.vss.spigot.handler.gui._SubscribedFunctionHandler;
 import me.avankziar.vss.spigot.handler.gui._SearchFunctionHandler;
 
 public class UpperListener implements Listener
@@ -163,7 +163,7 @@ public class UpperListener implements Listener
 				@Override
 				public void run()
 				{
-					SubscribedFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), page, where);
+					_SubscribedFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), page, where);
 				}
 			}.runTaskAsynchronously(plugin);
 			break;

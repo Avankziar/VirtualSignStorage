@@ -791,11 +791,46 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer Befehl ist in Cooldown!",
 						"&cThe command is in cooldown!"}));
-		
-		languageKeys.put("SignHandler.ItemsAddedToShop", 
+		languageKeys.put("GeneralHover",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast &f%amount% &eItems dem Lager hinzugefügt. Zz.: &r%now%",
-						"&eYou have added &f%amount% &eitems to the storage. Attn: &r%now%"}));
+						"&eKlick mich!",
+						"&eClick me!"}));
+		languageKeys.put("Headline", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&e=====&7[&6VSS&7]&e=====",
+						"&e=====&7[&6VSS&7]&e====="}));
+		languageKeys.put("Next", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&e&nnächste Seite &e==>",
+						"&e&nnext page &e==>"}));
+		languageKeys.put("Past", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&e<== &nvorherige Seite",
+						"&e<== &nprevious page"}));
+		languageKeys.put("IsTrue", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&a✔",
+						"&a✔"}));
+		languageKeys.put("IsFalse", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&c✖",
+						"&c✖"}));
+		languageKeys.put("FileError"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cEs existiert ein Fehler in der Datei: &f%file%",
+						"&cThere is an error in the file: &f%file%"}));
+		languageKeys.put("NotOwner"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu kannst diesen Wert nicht ändern, da dir der Shop nicht gehört.",
+						"&cYou can't change this value because you don't own the store."}));
+		languageKeys.put("AccountNotExist"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDer Account %value% existiert nicht!",
+						"&cThe account %value% doesnt exist!"}));
+		languageKeys.put("NoWithdrawRights",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu hast für das angegeben Konto keine Abheberechte!",
+						"&cYou have no withdrawal rights for the specified account!"}));
 		
 		languageKeys.put("Cmd.OtherCmd",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -825,86 +860,7 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast %storageamount% Lager gelöscht! &rVerlorene Items: %itemlost%",
 						"&eYou have deleted %storageamount% storage! &rLost Items: %itemlost%"}));
-		/*languageKeys.put("ShopOwnerNotEnought",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer ShopEigentümer hat nicht genug Geld!",
-						"&cThe shopowner dont have enough money!"}));
-		languageKeys.put("NoWithdrawRights",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu hast für das angegeben Konto keine Abheberechte!",
-						"&cYou have no withdrawal rights for the specified account!"}));
-		languageKeys.put("GeneralHover",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eKlick mich!",
-						"&eClick me!"}));
-		languageKeys.put("Headline", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e=====&7[&6VSS&7]&e=====",
-						"&e=====&7[&6VSS&7]&e====="}));
-		languageKeys.put("Next", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e&nnächste Seite &e==>",
-						"&e&nnext page &e==>"}));
-		languageKeys.put("Past", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&e<== &nvorherige Seite",
-						"&e<== &nprevious page"}));
-		languageKeys.put("IsTrue", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&a✔",
-						"&a✔"}));
-		languageKeys.put("IsFalse", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&c✖",
-						"&c✖"}));
-		languageKeys.put("NotOwner"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu kannst diesen Wert nicht ändern, da dir der Shop nicht gehört.",
-						"&cYou can't change this value because you don't own the store."}));
-		languageKeys.put("SignChangeListener.WorldGuardCreateDeny", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cIn dieser Region dürfen keine Shops erstellt werden!",
-						"&cNo shops may be created in this region!"}));
-		languageKeys.put("Economy.AddStorage.Category", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"Lagerraumerweiterung",
-						"Stockroomextension"}));
-		languageKeys.put("Economy.AddStorage.Comment", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eEine Lagerraumerweiterung von &f%past% &eauf &f%now% (+%amount%) &eItems des Shops &f%name%&e.",
-						"&eA stockroom extension from &f%past% &eto &f%now% (+%amount%) &eItems of the store &f%name%&e."}));
-		languageKeys.put("Economy.Buy.Category", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"Shopkauf",
-						"Shopsale"}));
-		languageKeys.put("Economy.Buy.Comment", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&bBeim Shop &f%shop% &bwurden &r%item% &rx &e%amount% &bgekauft.",
-						"&bAt the shop &f%shop% &bwere &r%item% &rx &e%amount% &bpurchased."}));
-		languageKeys.put("Economy.Sell.Category", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"Shopverkauf",
-						"Shoppurchase"}));
-		languageKeys.put("Economy.Sell.Comment", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&bDer Shop &f%shop% &bhat &r%item% &rx &e%amount% &bankauft.",
-						"&bThe shop &f%shop% &bhad &r%item% &rx &e%amount% &bpurchased."}));
-		languageKeys.put("Economy.CommentAddition", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						" &bGesamtpreis: %format%",
-						" &bTotalprice: %format%"}));
-		languageKeys.put("FileError"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cEs existiert ein Fehler in der Datei: &f%file%",
-						"&cThere is an error in the file: &f%file%"}));
-		languageKeys.put("Mechanic.SignShopIsntEnabled", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDie SchilderShops Mechanik ist nicht aktiviert!",
-						"&cThe Sign Shops mechanics is not activated!"}));
-		languageKeys.put("PlayerInteractListener.ShopItemIsNull", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu kannst das Administrationsgui nicht aufrufen, da der Shop noch kein Item gesetzt hat!",
-						"&cYou can not call the administration gui, because the store has not set an item yet!"}));
+		
 		languageKeys.put("SignChangeListener.MaterialIsAir", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&4Leer",
@@ -913,54 +869,24 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu hast schon die maximale Anzahl von SignShops erstellt. Lösche zuerst SignShops bevor neue erstellt werden! Aktuelle &f%actual% &cvon %max%",
 						"&cYou have already created the maximum number of SignShops. First delete SignShops before creating new ones! Current &f%actual% &cof %max%"}));
-		languageKeys.put("SignChangeListener.ShopCreated", 
+		
+		languageKeys.put("PlayerInteractListener.ShopItemIsNull", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast den Shop &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Shops ein!",
-						"&eYou have created the store &f%name%! &bClick on the sign and set the item of the store there!"}));
-		languageKeys.put("SignChangeListener.ShopNotExists", 
+						"&cDu kannst das Administrationsgui nicht aufrufen, da der Shop noch kein Item gesetzt hat!",
+						"&cYou can not call the administration gui, because the store has not set an item yet!"}));
+		
+		languageKeys.put("SignHandler.ItemsAddedToShop", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop %id% existiert nicht!",
-						"&cThe store %id% does not exist!"}));
-		languageKeys.put("SignChangeListener.ShopMoved", 
+						"&eDu hast &f%amount% &eItems dem Lager hinzugefügt. Zz.: &r%now%",
+						"&eYou have added &f%amount% &eitems to the storage. Attn: &r%now%"}));
+		languageKeys.put("SignHandler.NoItemsIsSetUp", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde versetzt!",
-						"&eThe store %id%-%shopname% has been moved!"}));
-		languageKeys.put("SignChangeListener.ShopCopy", 
+						"&cDer Shop hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
+						"&cThe store has not yet deployed an item, so no item can be spent on the hand!"}));
+		languageKeys.put("SignHandler.ItemsRemovedToShop", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde kopiert!",
-						"&eThe store %id%-%shopname% has been copied!"}));
-		languageKeys.put("PlayerInteractListener.IsBlackList", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu steht für diesen Shop auf der schwarzen Liste.",
-						"&cYou are blacklisted for this store."}));
-		languageKeys.put("PlayerInteractListener.IsNotWhiteList", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu steht für diesen Shop nicht auf der weißen Liste.",
-						"&cYou are not on the white list for this store."}));
-		languageKeys.put("PlayerInteractListener.IsNotCustomList", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu steht für diesen Shop nicht auf der benutzerdefinierten Liste.",
-						"&cYou are not on the custom list for this store."}));
-		languageKeys.put("PlayerInteractListener.IsNotMember", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu musst Mitglied dieses Shops sein um darauf zugreifen zu können.",
-						"&cYou must be a member of this store to access it."}));
-		languageKeys.put("SignHandler.Line1Discount", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&#FF8800K: &#ff00ff%amount%",
-						"&#FF8800B: &#ff00ff%amount%"}));
-		languageKeys.put("SignHandler.Line2Discount", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&#00f07eV: &#ff00ff%amount%",
-						"&#00f07eS: &#ff00ff%amount%"}));
-		languageKeys.put("SignHandler.Line1", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&#FF8800K: &r%amount%",
-						"&#FF8800B: &r%amount%"}));
-		languageKeys.put("SignHandler.Line2", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&#00f07eV: &r%amount%",
-						"&#00f07eS: &r%amount%"}));
+						"&eDu hast &f%amount% &eItems aus dem Shop entfernt. Zz.: &r%now%",
+						"&eYou have removed &f%amount% &eItems from the store. Attn: &r%now%"}));
 		languageKeys.put("SignHandler.PercentColor.100AndAbove", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&9"}));
@@ -982,23 +908,7 @@ public class YamlManager
 		languageKeys.put("SignHandler.PercentColor.0AndLess", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
 						"&4"}));
-		languageKeys.put("SignHandler.AttachedNewItemStackToShop", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&aDu hast das Item &r%name% &azum Shop &f%signshop% &ahinzugefügt!",
-						"&aYou have added the item &r%name% &ato the store &f%signshop%&a!"}));
 		
-		languageKeys.put("SignHandler.NoItemsIsSetUp", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
-						"&cThe store has not yet deployed an item, so no item can be spent on the hand!"}));
-		languageKeys.put("SignHandler.ItemsRemovedToShop", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast &f%amount% &eItems aus dem Shop entfernt. Zz.: &r%now%",
-						"&eYou have removed &f%amount% &eItems from the store. Attn: &r%now%"}));
-		languageKeys.put("SignHandler.ForbiddenWorld", 
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cIn dieser Welt darfst du keine Signshop erstellt.",
-						"&cIn this world you may not create a signshop."}));
 		languageKeys.put("GuiHandler.AccountNotExist", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer zugehörige Account des Shops des Spielers %player% existiert nicht mehr! Bitte wende dich an den Shopeigentümer oder falls nicht anders möglich an einen Admin.",
@@ -1095,6 +1005,19 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&7Axolotl: &f",
 						"&7Axolotl: &f"}));
+		
+		languageKeys.put("AdminstrationFunctionHandler.ListedType."+ListedType.WHITELIST.toString(),
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&#FF8800Whitelist",
+						"&#FF8800Whitelist"}));
+		languageKeys.put("AdminstrationFunctionHandler.ListedType."+ListedType.MEMBER.toString(),
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&bMitglieder",
+						"&bMember"}));
+		languageKeys.put("AdminstrationFunctionHandler.AddStorage.TooManyAlreadyAsStorage"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDer Shop hat schon zu viel Lagerraum, als es ihm bzw. dir möglich ist!",
+						"&cThe store already has too much storage space than it is possible for him or you!"}));
 		languageKeys.put("AdminstrationFunctionHandler.AddStorage.YouDontHaveAccountToWithdraw"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu hast keinen Account um die Kosten abziehen zu können.",
@@ -1107,10 +1030,6 @@ public class YamlManager
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDer angestrebte Account hat nicht genug Geld!",
 						"&cThe targeted account does not have enough money!"}));
-		languageKeys.put("AdminstrationFunctionHandler.AddStorage.TooManyAlreadyAsStorage"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop hat schon zu viel Lagerraum, als es ihm bzw. dir möglich ist!",
-						"&cThe store already has too much storage space than it is possible for him or you!"}));
 		languageKeys.put("AdminstrationFunctionHandler.AddStorage.Transaction"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&6Es wurden von dem Konto &e%fromaccount% &f%formatwithdraw% &6abgezogen und an &e%toaccount% &6überwiesen.",
@@ -1123,42 +1042,10 @@ public class YamlManager
 						"&bKategorie: &f%category% &f| &bNotiz: &f%comment%",
 						"&6It was deducted from the account &e%fromaccount% &f%formatwithdraw%&6.",
 						"&bCategory: &f%category% &f| &bComment: &f%comment%"}));
-		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.NotOwner"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu kannst den Shop nicht auflösen, da er dir nicht gehört!",
-						"&cYou can not dissolve the store, because it is not yours!"}));
-		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.Delete"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu hast den Shop &f%id%-%signshop% &caufgelöst. Es befanden sich noch &f%amount% &r%displayname% &cItems im Shop, welche nun verloren sind.",
-						"&cYou have closed the store &f%id%-%signshop%&c. There were still &f%amount% &r%displayname% &citems in the store, which are now lost."}));
 		languageKeys.put("AdminstrationFunctionHandler.SetAccount.Set"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eSignshop Account wurde gesetzt!",
 						"&eSignshop account was set!"}));
-		languageKeys.put("AdminstrationFunctionHandler.SetStorage.NotOwner"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDu bist nicht der Eigentümer des Lagersystem!",
-						"&cYou are not the owner of the storage system!"}));
-		languageKeys.put("AdminstrationFunctionHandler.SetStorage.Set"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eSignshop ASH-Lager ID wurde gesetzt!",
-						"&eSignshop ASH-storage ID was set!"}));
-		languageKeys.put("AdminstrationFunctionHandler.ItemClear"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast das Item des Shop zurückgesetzt. Nun kann ein neues Item in den Shop eingetragen werden.",
-						"&eYou have reset the item of the store. Now you can add a new item to the store."}));
-		languageKeys.put("AdminstrationFunctionHandler.DiscountTimeNotFit"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDas eingestellte Datum/Uhrzeit &f%value% &cpasst nicht mit dem Muster &f%pattern% &czusammen!",
-						"&cThe set date/time &f%value% &cdoes not match the pattern &f%pattern% &c!"}));
-		languageKeys.put("AdminstrationFunctionHandler.ListedType."+ListedType.WHITELIST.toString()
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&#FF8800Whitelist",
-						"&#FF8800Whitelist"}));
-		languageKeys.put("AdminstrationFunctionHandler.ListedType."+ListedType.MEMBER.toString()
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&bMitglieder",
-						"&bMember"}));
 		languageKeys.put("AdminstrationFunctionHandler.Listed.Add"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast %amount% Spieler/Einträge zur Liste %list% &ehinzugefügt.",
@@ -1171,6 +1058,117 @@ public class YamlManager
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eFolgende Spieler stehen auf Liste %list%: %players%",
 						"&eThe following players are on list %list%: %players%"}));
+		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.Delete"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu hast den Shop &f%id%-%signshop% &caufgelöst. Es befanden sich noch &f%amount% &r%displayname% &cItems im Shop, welche nun verloren sind.",
+						"&cYou have closed the store &f%id%-%signshop%&c. There were still &f%amount% &r%displayname% &citems in the store, which are now lost."}));
+		
+		languageKeys.put("Economy.AddStorage.Category", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Lagerraumerweiterung",
+						"Stockroomextension"}));
+		languageKeys.put("Economy.AddStorage.Comment", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eEine Lagerraumerweiterung von &f%past% &eauf &f%now% (+%amount%) &eItems des Shops &f%name%&e.",
+						"&eA stockroom extension from &f%past% &eto &f%now% (+%amount%) &eItems of the store &f%name%&e."}));
+		
+		/*languageKeys.put("ShopOwnerNotEnought",
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDer ShopEigentümer hat nicht genug Geld!",
+						"&cThe shopowner dont have enough money!"}));
+		
+		languageKeys.put("SignChangeListener.WorldGuardCreateDeny", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cIn dieser Region dürfen keine Shops erstellt werden!",
+						"&cNo shops may be created in this region!"}));
+		
+		languageKeys.put("Economy.Buy.Category", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Shopkauf",
+						"Shopsale"}));
+		languageKeys.put("Economy.Buy.Comment", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&bBeim Shop &f%shop% &bwurden &r%item% &rx &e%amount% &bgekauft.",
+						"&bAt the shop &f%shop% &bwere &r%item% &rx &e%amount% &bpurchased."}));
+		languageKeys.put("Economy.Sell.Category", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Shopverkauf",
+						"Shoppurchase"}));
+		languageKeys.put("Economy.Sell.Comment", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&bDer Shop &f%shop% &bhat &r%item% &rx &e%amount% &bankauft.",
+						"&bThe shop &f%shop% &bhad &r%item% &rx &e%amount% &bpurchased."}));
+		languageKeys.put("Economy.CommentAddition", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						" &bGesamtpreis: %format%",
+						" &bTotalprice: %format%"}));
+		
+		languageKeys.put("Mechanic.SignShopIsntEnabled", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDie SchilderShops Mechanik ist nicht aktiviert!",
+						"&cThe Sign Shops mechanics is not activated!"}));
+		
+		languageKeys.put("SignChangeListener.ShopCreated", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast den Shop &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Shops ein!",
+						"&eYou have created the store &f%name%! &bClick on the sign and set the item of the store there!"}));
+		languageKeys.put("SignChangeListener.ShopNotExists", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDer Shop %id% existiert nicht!",
+						"&cThe store %id% does not exist!"}));
+		languageKeys.put("SignChangeListener.ShopMoved", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDer Shops %id%-%shopname% wurde versetzt!",
+						"&eThe store %id%-%shopname% has been moved!"}));
+		languageKeys.put("SignChangeListener.ShopCopy", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDer Shops %id%-%shopname% wurde kopiert!",
+						"&eThe store %id%-%shopname% has been copied!"}));
+						
+		languageKeys.put("PlayerInteractListener.IsBlackList", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu steht für diesen Shop auf der schwarzen Liste.",
+						"&cYou are blacklisted for this store."}));
+		languageKeys.put("PlayerInteractListener.IsNotWhiteList", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu steht für diesen Shop nicht auf der weißen Liste.",
+						"&cYou are not on the white list for this store."}));
+		languageKeys.put("PlayerInteractListener.IsNotCustomList", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu steht für diesen Shop nicht auf der benutzerdefinierten Liste.",
+						"&cYou are not on the custom list for this store."}));
+		languageKeys.put("PlayerInteractListener.IsNotMember", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu musst Mitglied dieses Shops sein um darauf zugreifen zu können.",
+						"&cYou must be a member of this store to access it."}));
+		
+		
+		languageKeys.put("SignHandler.AttachedNewItemStackToShop", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&aDu hast das Item &r%name% &azum Shop &f%signshop% &ahinzugefügt!",
+						"&aYou have added the item &r%name% &ato the store &f%signshop%&a!"}));
+		
+		languageKeys.put("SignHandler.ForbiddenWorld", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cIn dieser Welt darfst du keine Signshop erstellt.",
+						"&cIn this world you may not create a signshop."}));	
+						
+		languageKeys.put("AdminstrationFunctionHandler.DeleteAll.NotOwner"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu kannst den Shop nicht auflösen, da er dir nicht gehört!",
+						"&cYou can not dissolve the store, because it is not yours!"}));
+		languageKeys.put("AdminstrationFunctionHandler.SetStorage.NotOwner"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDu bist nicht der Eigentümer des Lagersystem!",
+						"&cYou are not the owner of the storage system!"}));
+		languageKeys.put("AdminstrationFunctionHandler.ItemClear"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast das Item des Shop zurückgesetzt. Nun kann ein neues Item in den Shop eingetragen werden.",
+						"&eYou have reset the item of the store. Now you can add a new item to the store."}));
+		languageKeys.put("AdminstrationFunctionHandler.DiscountTimeNotFit"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&cDas eingestellte Datum/Uhrzeit &f%value% &cpasst nicht mit dem Muster &f%pattern% &czusammen!",
+						"&cThe set date/time &f%value% &cdoes not match the pattern &f%pattern% &c!"}));
 		languageKeys.put("AdminstrationFunctionHandler.DiscountStartWorld"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast von %amount% Shops die Rabattstartzeit gesetzt.",
@@ -1398,46 +1396,26 @@ public class YamlManager
 	
 	public void initModifierValueEntryLanguage() //INFO:ModifierValueEntryLanguages
 	{
-		mvelanguageKeys.put(Bypass.Permission.SHOP_CREATION.toString()+".Displayname",
+		mvelanguageKeys.put(Bypass.Permission.STORAGE_CREATION.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eShop-Erstellungsrecht",
 						"&eShop creation right"}));
-		mvelanguageKeys.put(Bypass.Permission.SHOP_CREATION.toString()+".Explanation",
+		mvelanguageKeys.put(Bypass.Permission.STORAGE_CREATION.toString()+".Explanation",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&ePermission, welche erlaubt SchilderShop",
 						"&eerstellen zu können.",
 						"&ePermission, which allows",
 						"&eto create SchilderShop."}));
-		mvelanguageKeys.put(Bypass.Permission.SHOP_GUI_BYPASS.toString()+".Displayname",
+		mvelanguageKeys.put(Bypass.Permission.STORAGE_GUI_BYPASS.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eShop-Adminstrationbypass",
 						"&eShop administration bypass"}));
-		mvelanguageKeys.put(Bypass.Permission.SHOP_GUI_BYPASS.toString()+".Explanation",
+		mvelanguageKeys.put(Bypass.Permission.STORAGE_GUI_BYPASS.toString()+".Explanation",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&ePermission, welche spezifische",
 						"&eAdministrative Rechte für Shops gibt.",
 						"&ePermission, which gives specific",
 						"&eadministrative rights for shops."}));
-		mvelanguageKeys.put(Bypass.Permission.SHOP_LOG_OTHERPLAYER.toString()+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eShoplog andere Spieler Einsichtrecht",
-						"&eShop log other players right of inspection"}));
-		mvelanguageKeys.put(Bypass.Permission.SHOP_LOG_OTHERPLAYER.toString()+".Explanation",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&ePermission, welche erlaubt von anderen",
-						"&eSpieler die Shoplog einzusehen.",
-						"&ePermission, which allows other",
-						"&eplayers to view the shoplog."}));
-		mvelanguageKeys.put(Bypass.Permission.CLIENT_LOG_OTHERPLAYER.toString()+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eKundenlog andere Spieler Einsichtrecht",
-						"&eClient log other players right of inspection"}));
-		mvelanguageKeys.put(Bypass.Permission.CLIENT_LOG_OTHERPLAYER.toString()+".Explanation",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&ePermission, welche erlaubt von anderen",
-						"&eSpieler die clientlog einzusehen.",
-						"&ePermission, which allows other",
-						"&eplayers to view the clientlog."}));
 		mvelanguageKeys.put(Bypass.Counter.SHOP_CREATION_AMOUNT_.toString()+".Displayname",
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eAnzahl zu erstellende Shops",
@@ -1743,67 +1721,7 @@ public class YamlManager
 		path = "36"; //Toggle Buy
 		path = "37"; //Toggle Sell
 		path = "45"; //SetBuy
-		admin.put(path+".CanBuy",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						true}));
-		admin.put(path+".SettingLevel",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						SettingsLevel.NOLEVEL.toString()}));
-		admin.put(path+".Material",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						Material.GOLD_INGOT.toString()}));
-		admin.put(path+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&dEingabe des Kaufswertes für 1 Item",
-						"&dEnter the buy value for 1 item"}));
-		admin.put(path+".Lore",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&bZz.: &f%buyraw1%",
-						"&cQ &bfür das Entfernen des Preises.",
-						"&cLinks-/Rechtsklick &bzum öffnen des Numpad Gui.",
-						"&bAtm.: &f%buyraw1%",
-						"&cQ &bfor removing the price.",
-						"&cLinks-/Rechtsklick &bto open the numpad gui."}));
-		admin.put(path+".ClickFunction."+ClickType.DROP.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETBUY_CLEAR.toString()}));
-		admin.put(path+".ClickFunction."+ClickType.LEFT.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETBUY_OPEN_NUMPAD.toString()}));
-		admin.put(path+".ClickFunction."+ClickType.RIGHT.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETBUY_OPEN_NUMPAD.toString()}));
 		path = "46"; //SetSell
-		admin.put(path+".CanSell",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						true}));
-		admin.put(path+".SettingLevel",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						SettingsLevel.NOLEVEL.toString()}));
-		admin.put(path+".Material",
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						Material.IRON_INGOT.toString()}));
-		admin.put(path+".Displayname",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&dEingabe des Verkaufswertes für 1 Item",
-						"&dEnter the sell value for 1 item"}));
-		admin.put(path+".Lore",
-				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&bZz.: &f%sellraw1%",
-						"&cQ &bzum entfernen des Preises.",
-						"&cLinks-/Rechtsklick &bzum öffnen des Numpad Gui.",
-						"&bAtm.: &f%sell1%",
-						"&cQ &bfor removing the price.",
-						"&cLinks-/Rechtsklick &bto open the numpad gui."}));
-		admin.put(path+".ClickFunction."+ClickType.DROP.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETSELL_CLEAR.toString()}));
-		admin.put(path+".ClickFunction."+ClickType.LEFT.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETSELL_OPEN_NUMPAD.toString()}));
-		admin.put(path+".ClickFunction."+ClickType.RIGHT.toString(),
-				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {
-						ClickFunctionType.ADMINISTRATION_SETSELL_OPEN_NUMPAD.toString()}));
 		path = "0"; //SettingsLevelToggle
 		admin.put(path+".SettingLevel",
 				new Language(new ISO639_2B[] {ISO639_2B.GER}, new Object[] {

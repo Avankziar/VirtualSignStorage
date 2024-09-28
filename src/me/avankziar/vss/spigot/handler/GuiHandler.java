@@ -1,6 +1,6 @@
 package me.avankziar.vss.spigot.handler;
 
-import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -38,9 +38,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
@@ -72,7 +70,7 @@ public class GuiHandler
 	public static void openAdministration(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ADMINISTRATION;
-		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "Shop: "+ssh.getSignStorageName(), 
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, ssh.getSignStorageName(), 
 				settingsLevel == null ? SettingsLevel.BASE : settingsLevel);
 		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
@@ -90,7 +88,7 @@ public class GuiHandler
 	public static void openInputInfo(SignStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ITEM_INPUT;
-		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "Shop:"+String.valueOf(ssh.getId()), settingsLevel);
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "ID: "+String.valueOf(ssh.getId()), settingsLevel);
 		SignStorage ssh2 = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
@@ -102,6 +100,7 @@ public class GuiHandler
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
+	@ScheduledForRemoval
 	public static void openSearch(ArrayList<SignStorage> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
@@ -111,6 +110,7 @@ public class GuiHandler
 		openSearchGui(list, player, gt, gui, settingsLevel, closeInv, searchMat, teleport_OR_Location);
 	}
 	
+	@ScheduledForRemoval
 	public static void openSubscribed(ArrayList<SignStorage> list, Player player, int page, String where, boolean closeInv, Inventory inv)
 	{
 		GuiType gt = GuiType.SUBSCIBED;
@@ -147,8 +147,8 @@ public class GuiHandler
 						.replace("%player%", Utility.convertUUIDToName(sst.getOwner().toString()))));
 			}
 		}
-		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
-		Material filler = Material.valueOf(plugin.getConfig().getString("SignShop.Gui.FillerItemMaterial", "LIGHT_GRAY_STAINED_GLASS_PANE"));
+		boolean fillNotDefineGuiSlots = ConfigHandler.fillNotDefineGuiSlots();
+		Material filler = ConfigHandler.fillerMaterial();
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		for(int i = 0; i < 54; i++)
 		{
@@ -183,7 +183,7 @@ public class GuiHandler
 			}
 			if(y.get(i+".Permission") != null)
 			{
-				if(!ModifierValueEntry.hasPermission(player, Bypass.Permission.SHOP_GUI_BYPASS, y.getString(i+".Permission")))
+				if(!ModifierValueEntry.hasPermission(player, Bypass.Permission.STORAGE_GUI_BYPASS, y.getString(i+".Permission")))
 				{
 					if(fillNotDefineGuiSlots)
 					{
@@ -275,7 +275,7 @@ public class GuiHandler
 					sm.setOwningPlayer(Bukkit.getOfflinePlayer(pd.getUUID()));
 				} catch(Exception e)
 				{
-					PlayerProfile profile = Bukkit.createPlayerProfile(pd.getUUID(), "");
+					PlayerProfile profile = Bukkit.createPlayerProfile(pd.getUUID(), "null");
 					sm.setOwnerProfile(profile);
 				}
 				
@@ -361,8 +361,8 @@ public class GuiHandler
 	private static void openSearchGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
-		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
-		Material filler = Material.valueOf(plugin.getConfig().getString("SignShop.Gui.FillerItemMaterial", "LIGHT_GRAY_STAINED_GLASS_PANE"));
+		boolean fillNotDefineGuiSlots = ConfigHandler.fillNotDefineGuiSlots();
+		Material filler = ConfigHandler.fillerMaterial();
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
 		for(SignStorage ssh : list)
@@ -434,8 +434,8 @@ public class GuiHandler
 	
 	private static void openListGui(ArrayList<SignStorage> list, Player player, GuiType gt, GUIApi gui, boolean closeInv, int page, String whereQuery)
 	{
-		boolean fillNotDefineGuiSlots = new ConfigHandler().fillNotDefineGuiSlots();
-		Material filler = Material.valueOf(plugin.getConfig().getString("SignShop.Gui.FillerItemMaterial", "LIGHT_GRAY_STAINED_GLASS_PANE"));
+		boolean fillNotDefineGuiSlots = ConfigHandler.fillNotDefineGuiSlots();
+		Material filler = ConfigHandler.fillerMaterial();
 		YamlConfiguration y = plugin.getYamlHandler().getGui(gt);
 		int i = 0;
 		for(SignStorage ssh : list)
@@ -570,7 +570,7 @@ public class GuiHandler
 		gui.add(i, is, SettingsLevel.NOLEVEL, true, map, new ClickFunction[0]);
 	}
 	
-	/*@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	public static ItemStack getSkull(String paramString) 
 	{
 		ItemStack is = new ItemStack(Material.PLAYER_HEAD);
@@ -578,7 +578,7 @@ public class GuiHandler
 	    try 
 	    {
 	    	UUID uuid = UUID.randomUUID();
-	        PlayerProfile playerProfile = Bukkit.createPlayerProfile(uuid, uuid.toString());
+	        PlayerProfile playerProfile = Bukkit.createPlayerProfile(uuid, "null");
 	        playerProfile.getTextures().setSkin(new URL(paramString));
 	        paramSkullMeta.setOwnerProfile(playerProfile);
 	    } catch (IllegalArgumentException|SecurityException|java.net.MalformedURLException illegalArgumentException) {
@@ -586,9 +586,9 @@ public class GuiHandler
 	    }
 	    is.setItemMeta(paramSkullMeta);
 	    return is;
-	}*/
+	}
 	
-	public static ItemStack getSkull(String url) 
+	/*public static ItemStack getSkull(String url) 
 	{
 		return getSkull(url, 1);
 	}
@@ -617,7 +617,7 @@ public class GuiHandler
         }
         skull.setItemMeta(skullMeta);
         return skull;
-    }
+    }*/
 	
 	public static List<String> getLorePlaceHolder(SignStorage ssh, Player player, List<String> lore, String playername)
 	{

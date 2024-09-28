@@ -42,7 +42,7 @@ public class MessageHandler
 		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
 		ArrayList<StorageAccessType> member = StorageAccessType.convert(
 				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
-				"`id` ASC", "`sign_shop_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
+				"`id` ASC", "`sign_storage_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
 		sendMessage(ssh.getOwner(), msg);
 		for(StorageAccessType sat : member)
 		{
@@ -80,7 +80,7 @@ public class MessageHandler
 		SignStorage ssh = (SignStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNSTORAGE, "`id` = ?", shopid);
 		ArrayList<StorageAccessType> member = StorageAccessType.convert(
 				plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
-				"`id` ASC", "`sign_shop_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
+				"`id` ASC", "`sign_storage_id` = ? AND `listed_type` = ?", ssh.getId(), ListedType.MEMBER.toString()));
 		sendMessage(ssh.getOwner(), listInList);
 		for(StorageAccessType sat : member)
 		{

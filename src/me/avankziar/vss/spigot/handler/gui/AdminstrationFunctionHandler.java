@@ -35,6 +35,7 @@ import me.avankziar.vss.spigot.assistance.Utility;
 import me.avankziar.vss.spigot.gui.objects.ClickFunctionType;
 import me.avankziar.vss.spigot.gui.objects.GuiType;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
+import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
 import me.avankziar.vss.spigot.handler.SignHandler;
 import me.avankziar.vss.spigot.modifiervalueentry.Bypass;
@@ -192,7 +193,8 @@ public class AdminstrationFunctionHandler
 		int maxSignShopAmount = ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_CREATION_AMOUNT_);
 		if(signShopAmount > maxSignShopAmount)
 		{
-			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignShop")
+			player.sendMessage(ChatApi.tl(
+					plugin.getYamlHandler().getLang().getString("SignChangeListener.AlreadyHaveMaximalSignShop")
 					.replace("%actual%", String.valueOf(signShopAmount))
 					.replace("%max%", String.valueOf(maxSignShopAmount))
 					));
@@ -207,7 +209,7 @@ public class AdminstrationFunctionHandler
 		{
 			return;
 		}
-		List<String> costPerOne = plugin.getYamlHandler().getConfig().getStringList("SignShop.CostToAdd1Storage");
+		List<String> costPerOne = ConfigHandler.getCostToAdd1Storage();
 		long maxStorage = sst.getItemStorageTotal();
 		long maxPossibleStorage = (long) ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_ITEMSTORAGE_AMOUNT_);
 		if(maxStorage >= maxPossibleStorage)
@@ -762,12 +764,12 @@ public class AdminstrationFunctionHandler
 				if(remove)
 				{
 					plugin.getMysqlHandler().deleteData(MysqlType.STORAGEACCESSTYPE,
-							"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+							"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 							otheruuid.toString(), ss.getId(), listType.toString());
 				} else
 				{
 					if(!plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-							"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+							"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 							otheruuid.toString(), ss.getId(), listType.toString()))
 					{
 						plugin.getMysqlHandler().create(MysqlType.STORAGEACCESSTYPE,
@@ -781,12 +783,12 @@ public class AdminstrationFunctionHandler
 			if(remove)
 			{
 				plugin.getMysqlHandler().deleteData(MysqlType.STORAGEACCESSTYPE,
-						"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+						"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 						otheruuid.toString(), sst.getId(), listType.toString());
 			} else
 			{
 				if(!plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-						"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+						"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 						otheruuid.toString(), sst.getId(), listType.toString()))
 				{
 					plugin.getMysqlHandler().create(MysqlType.STORAGEACCESSTYPE,
@@ -815,7 +817,7 @@ public class AdminstrationFunctionHandler
 			ListedType listType)
 	{
 		List<String> players = StorageAccessType.convert(plugin.getMysqlHandler().getFullList(MysqlType.STORAGEACCESSTYPE,
-				"`id` ASC", "`sign_shop_id` = ? AND `listed_type` = ?",	sst.getId(), listType.toString()))
+				"`id` ASC", "`sign_storage_id` = ? AND `listed_type` = ?",	sst.getId(), listType.toString()))
 				.stream()
 				.map(x -> x.getUUID())
 				.map(x -> Utility.convertUUIDToName(x.toString()))
