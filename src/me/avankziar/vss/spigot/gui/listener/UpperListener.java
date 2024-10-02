@@ -86,7 +86,7 @@ public class UpperListener implements Listener
 		{
 			ou = UUID.fromString(event.getValuesString().get(GuiHandler.PLAYER_UUID));
 		}
-		boolean teleport_OR_location = event.getValuesString().containsKey(GuiHandler.SEARCH_TELEPORT_OR_LOCATION)
+		/*boolean teleport_OR_location = event.getValuesString().containsKey(GuiHandler.SEARCH_TELEPORT_OR_LOCATION)
 				? Boolean.valueOf(event.getValuesString().get(GuiHandler.SEARCH_TELEPORT_OR_LOCATION))
 				: false;
 		int page = event.getValuesInteger().containsKey(GuiHandler.PAGE)
@@ -94,7 +94,7 @@ public class UpperListener implements Listener
 				: -1;
 		String where = event.getValuesString().containsKey(GuiHandler.SEARCH_TELEPORT_OR_LOCATION)
 				? event.getValuesString().get(GuiHandler.SEARCH_TELEPORT_OR_LOCATION)
-				: "";
+				: "";*/
 		ClickType ct = getClickFunctionType(event.getEvent().getClick(), event.getEvent().getHotbarButton());
 		if(ct == null)
 		{
@@ -124,6 +124,10 @@ public class UpperListener implements Listener
 		case KEYBOARD_MEMBER:
 		case KEYBOARD_SIGNSTORAGENAME:
 		case KEYBOARD_WHITELIST:
+		case NUMPAD_ITEMINPUT:
+		case NUMPAD_ITEMOUTPUT:
+		case NUMPAD_ITEMSHIFTINPUT:
+		case NUMPAD_ITEMSHIFTOUTPUT:
 			new BukkitRunnable()
 			{
 				@Override
@@ -134,37 +138,6 @@ public class UpperListener implements Listener
 				}
 			}.runTaskAsynchronously(plugin);
 			break;
-		/*case SHOP:
-			new BukkitRunnable()
-			{
-				@Override
-				public void run()
-				{
-					_ShopFunctionHandler.doClickFunktion(gt, cft, player, ssh, event.getEvent().getClickedInventory(), event.getSettingsLevel());
-				}
-			}.runTaskAsynchronously(plugin);
-			break;
-		case SEARCH_BUY:
-		case SEARCH_SELL:
-			new BukkitRunnable()
-			{
-				@Override
-				public void run()
-				{
-					_SearchFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), teleport_OR_location);
-				}
-			}.runTaskAsynchronously(plugin);
-			break;
-		case SUBSCIBED:
-			new BukkitRunnable()
-			{
-				@Override
-				public void run()
-				{
-					_SubscribedFunctionHandler.doClickFunktion(cft, player, ssh, event.getEvent().getClickedInventory(), page, where);
-				}
-			}.runTaskAsynchronously(plugin);
-			break;*/
 		}
 	}
 	

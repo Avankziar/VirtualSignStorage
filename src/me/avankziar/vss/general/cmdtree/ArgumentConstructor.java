@@ -47,6 +47,7 @@ public class ArgumentConstructor extends BaseConstructor
         for(ArgumentConstructor ac : argumentConstructors)
         {
         	CommandSuggest.set(ac.suggestType, ac);
+        	getHelpList().add(ac);
         	subargument.add(ac);
         	tl.add(ac.getName());
         }

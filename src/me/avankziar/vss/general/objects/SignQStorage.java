@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import me.avankziar.vss.general.database.MysqlHandable;
 import me.avankziar.vss.general.database.QueryType;
-import me.avankziar.vss.spigot.database.MysqlHandable;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.handler.Base64Handler;
 
@@ -323,27 +323,33 @@ public class SignQStorage implements MysqlHandable
 		return itemOutput;
 	}
 
-	public void setItemOutput(long itemOutput) {
+	public void setItemOutput(long itemOutput) 
+	{
 		this.itemOutput = itemOutput;
 	}
 
-	public long getItemShiftOutput() {
+	public long getItemShiftOutput() 
+	{
 		return itemShiftOutput;
 	}
 
-	public void setItemShiftOutput(long itemShiftOutput) {
+	public void setItemShiftOutput(long itemShiftOutput) 
+	{
 		this.itemShiftOutput = itemShiftOutput;
 	}
 
-	public long getItemInput() {
+	public long getItemInput() 
+	{
 		return itemInput;
 	}
 
-	public void setItemInput(long itemInput) {
+	public void setItemInput(long itemInput) 
+	{
 		this.itemInput = itemInput;
 	}
 
-	public long getItemShiftInput() {
+	public long getItemShiftInput() 
+	{
 		return itemShiftInput;
 	}
 
@@ -360,10 +366,9 @@ public class SignQStorage implements MysqlHandable
 					+ "`(`player_uuid`, `sign_storage_name`, `account_id`, `creation_date_time`, "
 					+ "`itemstack_base64`, `display_name`, `material`, "
 					+ "`item_storage_total`, `item_storage_current`, "
-					+ "`server_name`, `world`, `x`, `y`, `z`,"
-					+ "`unlimited`"
-					+ "`can_buy`, `can_sell`,"
-					+ "`num_text`, `sign_glowing`, `listed_type`, `item_hologram`,"
+					+ "`server_name`, `world`, `x`, `y`, `z`, "
+					+ "`unlimited`, "
+					+ "`num_text`, `sign_glowing`, `listed_type`, `item_hologram`, "
 					+ "`item_output`, `item_shiftoutput`, `item_input`, `item_shiftinput`) " 
 					+ "VALUES("
 					+ "?, ?, ?, ?, "
@@ -371,7 +376,6 @@ public class SignQStorage implements MysqlHandable
 					+ "?, ?, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, "
-					+ "?, ?, "
 					+ "?, ?, ?, ?,"
 					+ "?, ?, ?, ?"
 					+ ")";
@@ -380,21 +384,27 @@ public class SignQStorage implements MysqlHandable
 	        ps.setString(2, getSignStorageName());
 	        ps.setInt(3, getAccountId());
 	        ps.setLong(4, getCreationDateTime());
+	        
 	        ps.setString(5, new Base64Handler(getItemStack()).toBase64());
 	        ps.setString(6, getDisplayName());
 	        ps.setString(7, getMaterial().toString());
+	        
 	        ps.setLong(8, getItemStorageTotal());
 	        ps.setLong(9, getItemStorageCurrent());
+	        
 	        ps.setString(10, getServer());
 	        ps.setString(11, getWorld());
 	        ps.setInt(12, getX());
 	        ps.setInt(13, getY());
 	        ps.setInt(14, getZ());
+	        
 	        ps.setBoolean(15, isUnlimited());
+	        
 	        ps.setString(16, getNumText());
 	        ps.setBoolean(17, isSignGlowing());
 	        ps.setString(18, getListedType().toString());
 	        ps.setBoolean(19, isItemHologram());
+	        
 	        ps.setLong(20, getItemOutput());
 	        ps.setLong(21, getItemShiftOutput());
 	        ps.setLong(22, getItemInput());
@@ -419,9 +429,8 @@ public class SignQStorage implements MysqlHandable
 				+ "`itemstack_base64` = ?, `display_name` = ?, `material` = ?, "
 				+ "`item_storage_total` = ?, `item_storage_current` = ?, "
 				+ "`server_name` = ?, `world` = ?, `x` = ?, `y` = ?, `z` = ?, "
-				+ "`unlimited` = ? "
-				+ "`num_text` = ?, `sign_glowing` = ?, `listed_type` = ?, "
-				+ "`item_hologram` = ?,"
+				+ "`unlimited` = ?, "
+				+ "`num_text` = ?, `sign_glowing` = ?, `listed_type` = ?, `item_hologram` = ?,"
 				+ "`item_output` = ?, `item_shiftoutput` = ?, `item_input` = ?, `item_shiftinput` = ?" 
 				+ " WHERE "+whereColumn;
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -429,21 +438,27 @@ public class SignQStorage implements MysqlHandable
 	        ps.setString(2, getSignStorageName());
 	        ps.setInt(3, getAccountId());
 	        ps.setLong(4, getCreationDateTime());
+	        
 	        ps.setString(5, new Base64Handler(getItemStack()).toBase64());
 	        ps.setString(6, getDisplayName());
 	        ps.setString(7, getMaterial().toString());
+	        
 	        ps.setLong(8, getItemStorageTotal());
 	        ps.setLong(9, getItemStorageCurrent());
+	        
 	        ps.setString(10, getServer());
 	        ps.setString(11, getWorld());
 	        ps.setInt(12, getX());
 	        ps.setInt(13, getY());
 	        ps.setInt(14, getZ());
+	        
 	        ps.setBoolean(15, isUnlimited());
+	        
 	        ps.setString(16, getNumText());
 	        ps.setBoolean(17, isSignGlowing());
 	        ps.setString(18, getListedType().toString());
 	        ps.setBoolean(19, isItemHologram());
+	        
 	        ps.setLong(20, getItemOutput());
 	        ps.setLong(21, getItemShiftOutput());
 	        ps.setLong(22, getItemInput());
@@ -507,7 +522,7 @@ public class SignQStorage implements MysqlHandable
 						rs.getLong("item_output"),
 						rs.getLong("item_shiftoutput"),
 						rs.getLong("item_input"),
-						rs.getLong("item_shiftoutput")));
+						rs.getLong("item_shiftinput")));
 			}
 			return al;
 		} catch (SQLException e)
@@ -558,7 +573,7 @@ public class SignQStorage implements MysqlHandable
 						rs.getLong("item_output"),
 						rs.getLong("item_shiftoutput"),
 						rs.getLong("item_input"),
-						rs.getLong("item_shiftoutput")));
+						rs.getLong("item_shiftinput")));
 			}
 			return al;
 		} catch (SQLException e)

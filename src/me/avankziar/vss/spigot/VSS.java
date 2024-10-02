@@ -6,6 +6,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,8 +47,6 @@ import me.avankziar.vss.spigot.assistance.Utility;
 import me.avankziar.vss.spigot.cmd.TabCompletion;
 import me.avankziar.vss.spigot.cmd.VSSCommandExecutor;
 import me.avankziar.vss.spigot.cmd.storage.ARG_BreakToggle;
-import me.avankziar.vss.spigot.cmd.storage._ARG_SearchBuy;
-import me.avankziar.vss.spigot.cmd.storage._ARG_SearchSell;
 import me.avankziar.vss.spigot.cmd.storage.ARG_Toggle;
 import me.avankziar.vss.spigot.cmd.vss.ARGDebug;
 import me.avankziar.vss.spigot.cmd.vss.ARGDelete;
@@ -136,7 +136,7 @@ public class VSS extends JavaPlugin
 		}
 		
 		ConfigHandler.config = getYamlHandler().getConfig();
-		
+		BaseConstructor.init(yamlHandler);
 		setupIFHItemStackComparison();
 		
 		utility = new Utility(plugin);
@@ -226,13 +226,9 @@ public class VSS extends JavaPlugin
 		new ARG_BreakToggle(plugin, breaktoggle);
 		ArgumentConstructor toggle = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_TOGGLE, "vss_storage_toggle", 1, 1, 1, false, false, null);
 		new ARG_Toggle(plugin, toggle);
-		ArgumentConstructor searchbuy = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_SEARCHBUY, "vss_storage_searchbuy", 1, 1, 999, false, false, null);
-		new _ARG_SearchBuy(plugin, searchbuy);
-		ArgumentConstructor searchsell = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE_SEARCHBUY, "vss_storage_searchsell", 1, 1, 999, false, false, null);
-		new _ARG_SearchSell(plugin, searchsell);
-		ArgumentConstructor shop = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE, "vss_storage", 0, 0, 0, false, false, null,
-				breaktoggle, delete, toggle, searchbuy, searchsell);
-		new ARGStorage(plugin, shop);	
+		ArgumentConstructor storage = new ArgumentConstructor(CommandSuggest.Type.VSS_STORAGE, "vss_storage", 0, 0, 0, false, false, null,
+				breaktoggle, delete, toggle);
+		new ARGStorage(plugin, storage);	
 		
 		/*ArrayList<String> subsType = new ArrayList<>();
 		subsType.addAll(Arrays.asList(
@@ -248,12 +244,18 @@ public class VSS extends JavaPlugin
 		ArgumentConstructor subscribed = new ArgumentConstructor(CommandSuggest.Type.SALE_SUBSCRIBED, "vss_subscribed", 0, 0, 10, false, false, subs);
 		new ARGSubscribed(plugin, subscribed);*/
 		
-		CommandConstructor sale = new CommandConstructor(CommandSuggest.Type.VSS, "vss", false, false,
-				debug, shop//, subscribed
-				);
-		registerCommand(sale.getPath(), sale.getName());
-		getCommand(sale.getName()).setExecutor(new VSSCommandExecutor(plugin, sale));
-		getCommand(sale.getName()).setTabCompleter(tab);
+		CommandConstructor vss = new CommandConstructor(CommandSuggest.Type.VSS, "vss", false, false,
+				debug, storage);
+		registerCommand(vss.getPath(), vss.getName());
+		getCommand(vss.getName()).setExecutor(new VSSCommandExecutor(plugin, vss));
+		getCommand(vss.getName()).setTabCompleter(tab);
+		Collections.sort(BaseConstructor.getHelpList(), new Comparator<BaseConstructor>()
+		{
+		    public int compare(BaseConstructor s1, BaseConstructor s2) 
+		    {
+		        return s1.getPath().compareToIgnoreCase(s2.getPath());
+		    }
+		});
 	}
 	
 	private void setupBypassPerm()
@@ -739,15 +741,9 @@ public class VSS extends JavaPlugin
 						switch(ept)
 						{
 						case STORAGE_CREATION_AMOUNT_:
-						case SHOP_ITEMSTORAGE_AMOUNT_:
 						case COST_ADDING_STORAGE:
-						case SHOP_SUBSCRIPTION_:
 							bmt = ModificationType.UP;
-							break;
-						case SHOP_BUYING_TAX:
-						case SHOP_SELLING_TAX:
-							bmt = ModificationType.DOWN;
-							break;							
+							break;					
 						}
 						List<String> lar = plugin.getYamlHandler().getMVELang().getStringList(ept.toString()+".Explanation");
 						getModifier().register(

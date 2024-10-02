@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.inventory.ItemStack;
 
 import me.avankziar.ifh.general.economy.account.AccountCategory;
 import me.avankziar.ifh.general.economy.currency.CurrencyType;
@@ -106,7 +105,7 @@ public class SignChangeListener implements Listener
 	
 	private void doQuantity(Player player, SignChangeEvent event)
 	{
-		if(event.getLine(1).equalsIgnoreCase(ConfigHandler.getSignStorageMoveLine()))
+		if(event.getLine(1) != null && event.getLine(1).equalsIgnoreCase(ConfigHandler.getSignStorageMoveLine()))
 		{
 			doQuantityMoveOrCopy(player, event, true);
 			return;
@@ -123,53 +122,15 @@ public class SignChangeListener implements Listener
 					AccountCategory.MAIN, plugin.getIFHEco().getDefaultCurrency(CurrencyType.DIGITAL));
 			acid = ac.getID();
 		}
-		SignQStorage sst = null;
-		if(event.getLine(1) != null && !event.getLine(1).isEmpty())
-		{
-			//If Material was written in Line 1, 2 or 3
-			String material = event.getLine(1);
-			if(event.getLine(2) != null && !event.getLine(2).isEmpty())
-			{
-				material += event.getLine(2);
-				if(event.getLine(3) != null && !event.getLine(3).isEmpty())
-				{
-					material += event.getLine(3);
-				}
-			}
-			Material mat = null;
-			try
-			{
-				mat = Material.valueOf(material);
-			} catch(Exception e) {}
-			if(mat != null)
-			{
-				sst = new SignQStorage(
-						0, player.getUniqueId(),
-						"Storage_"+lastnumber, acid, System.currentTimeMillis(),
-						new ItemStack(mat), VSS.getPlugin().getEnumTl() != null
-								  ? VSS.getPlugin().getEnumTl().getLocalization(mat)
-								  : mat.toString(), mat,
-						ConfigHandler.getDefaulStartItemStorageQuantity(), 0,
-						plugin.getServername(), player.getWorld().getName(),
-						event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
-						false, "", false, ListedType.MEMBER, false,
-						ConfigHandler.getDefaultItemOutput(), ConfigHandler.getDefaultItemShiftOutput(),
-						ConfigHandler.getDefaultItemInput(), ConfigHandler.getDefaultItemShiftInput());
-			}
-		}
-		if(sst == null)
-		{
-			//If no material can be determined.
-			sst = new SignQStorage(
-					0, player.getUniqueId(),
-					"Storage_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
-					ConfigHandler.getDefaulStartItemStorageQuantity(), 0,
-					plugin.getServername(), player.getWorld().getName(),
-					event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
-					false, "", false, ListedType.MEMBER, false,
-					ConfigHandler.getDefaultItemOutput(), ConfigHandler.getDefaultItemShiftOutput(),
-					ConfigHandler.getDefaultItemInput(), ConfigHandler.getDefaultItemShiftInput());
-		}
+		SignQStorage sst = new SignQStorage(
+				0, player.getUniqueId(),
+				"Storage_"+lastnumber, acid, System.currentTimeMillis(), null, null, Material.AIR,
+				ConfigHandler.getDefaulStartItemStorageQuantity(), 0,
+				plugin.getServername(), player.getWorld().getName(),
+				event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), 
+				false, "", false, ListedType.MEMBER, false,
+				ConfigHandler.getDefaultItemOutput(), ConfigHandler.getDefaultItemShiftOutput(),
+				ConfigHandler.getDefaultItemInput(), ConfigHandler.getDefaultItemShiftInput());
 		plugin.getMysqlHandler().create(MysqlType.SIGNQSTORAGE, sst);
 		signQUpdate(sst, event);
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageCreated")

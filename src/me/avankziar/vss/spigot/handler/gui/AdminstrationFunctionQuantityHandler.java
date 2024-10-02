@@ -1,5 +1,6 @@
 package me.avankziar.vss.spigot.handler.gui;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,6 +97,20 @@ public class AdminstrationFunctionQuantityHandler
 		case ADMINISTRATION_SETITEMHOLOGRAM_DEACTIVE: setItemHover(player, sst, openInv, settingsLevel, false); break;
 		case ADMINISTRATION_SETLISTEDTYPE_WHITELIST: switchListType(player, sst, null, openInv, settingsLevel, ListedType.WHITELIST); break;
 		case ADMINISTRATION_SETLISTEDTYPE_MEMBER: switchListType(player, sst, null, openInv, settingsLevel, ListedType.MEMBER); break;
+		case ADMINISTRATION_SETSIGNSHOPNAME_OPENKEYBOARD: openKeyboard(player, sst, GuiType.KEYBOARD_SIGNSTORAGENAME, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSIGNSHOPNAME_TAKEOVER: takeOver(player, sst, GuiType.KEYBOARD_SIGNSTORAGENAME, openInv, settingsLevel); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_OPENKEYBOARD_WHITELIST: openKeyboard(player, sst, GuiType.KEYBOARD_WHITELIST, openInv, settingsLevel); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_OPENKEYBOARD_MEMBER: openKeyboard(player, sst, GuiType.KEYBOARD_MEMBER, openInv, settingsLevel); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, false, false); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, false, true); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_REMOVE: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, true, false); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_REMOVE_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, true, true); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, false, false); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, false, true); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_REMOVE: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, true, false); break;
+		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_REMOVE_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, true, true); break;
+		case ADMINISTRATION_LISTEDTYPE_PLAYER_OPENLIST_WHITELIST: sendPlayerOnList(player, sst, ListedType.WHITELIST); break;
+		case ADMINISTRATION_LISTEDTYPE_PLAYER_OPENLIST_MEMBER: sendPlayerOnList(player, sst, ListedType.MEMBER); break;
 		case ADMINISTRATION_KEYBOARD_0: keyboard(player, sst, "0", guiType, openInv, settingsLevel); break;
 		case ADMINISTRATION_KEYBOARD_1: keyboard(player, sst, "1", guiType, openInv, settingsLevel); break;
 		case ADMINISTRATION_KEYBOARD_2: keyboard(player, sst, "2", guiType, openInv, settingsLevel); break;
@@ -162,19 +177,18 @@ public class AdminstrationFunctionQuantityHandler
 		case ADMINISTRATION_KEYBOARD_REMOVEONCE: keyboardRemoveOnce(player, sst, guiType, openInv, settingsLevel); break;
 		case ADMINISTRATION_KEYBOARD_CLEAR: setKeyboardClear(player, sst, guiType, openInv, settingsLevel); break;
 		case ADMINISTRATION_KEYBOARD_CANCEL: cancelKeyboard(player, sst, openInv, settingsLevel); break;
-		case ADMINISTRATION_SETSIGNSHOPNAME_OPENKEYBOARD: openKeyboard(player, sst, GuiType.KEYBOARD_SIGNSTORAGENAME, openInv, settingsLevel); break;
-		case ADMINISTRATION_SETSIGNSHOPNAME_TAKEOVER: takeOver(player, sst, GuiType.KEYBOARD_SIGNSTORAGENAME, openInv, settingsLevel); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_OPENKEYBOARD_WHITELIST: openKeyboard(player, sst, GuiType.KEYBOARD_WHITELIST, openInv, settingsLevel); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_OPENKEYBOARD_MEMBER: openKeyboard(player, sst, GuiType.KEYBOARD_MEMBER, openInv, settingsLevel); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, false, true); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_REMOVE: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, true, false); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_WHITELIST_REMOVE_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.WHITELIST, otheruuid, true, true); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, false, false); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, false, true); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_REMOVE: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, true, false); break;
-		case ADMINISTRATION_ADDLISTEDTYPE_PLAYER_MEMBER_REMOVE_WORLD: addPlayerToList(player, sst, guiType, openInv, settingsLevel, ListedType.MEMBER, otheruuid, true, true); break;
-		case ADMINISTRATION_LISTEDTYPE_PLAYER_OPENLIST_WHITELIST: sendPlayerOnList(player, sst, ListedType.WHITELIST); break;
-		case ADMINISTRATION_LISTEDTYPE_PLAYER_OPENLIST_MEMBER: sendPlayerOnList(player, sst, ListedType.MEMBER); break;
+		case ADMINISTRATION_SETINPUT_DEFAULT: setInputOutputDefault(player, sst, GuiType.NUMPAD_ITEMINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETINPUT_OPEN_NUMPAD: openNumpad(player, sst, GuiType.NUMPAD_ITEMINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETINPUT_TAKEOVER: takeOver(player, sst, GuiType.NUMPAD_ITEMINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTINPUT_DEFAULT: setInputOutputDefault(player, sst, GuiType.NUMPAD_ITEMSHIFTINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTINPUT_OPEN_NUMPAD: openNumpad(player, sst, GuiType.NUMPAD_ITEMSHIFTINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTINPUT_TAKEOVER: takeOver(player, sst, GuiType.NUMPAD_ITEMSHIFTINPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETOUTPUT_DEFAULT: setInputOutputDefault(player, sst, GuiType.NUMPAD_ITEMOUTPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETOUTPUT_OPEN_NUMPAD: openNumpad(player, sst, GuiType.NUMPAD_ITEMOUTPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETOUTPUT_TAKEOVER: takeOver(player, sst, GuiType.NUMPAD_ITEMOUTPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTOUTPUT_DEFAULT: setInputOutputDefault(player, sst, GuiType.NUMPAD_ITEMSHIFTOUTPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTOUTPUT_OPEN_NUMPAD: openNumpad(player, sst, GuiType.NUMPAD_ITEMSHIFTOUTPUT, openInv, settingsLevel); break;
+		case ADMINISTRATION_SETSHIFTOUTPUT_TAKEOVER: takeOver(player, sst, GuiType.NUMPAD_ITEMSHIFTOUTPUT, openInv, settingsLevel); break;
 		}
 		new BukkitRunnable()
 		{
@@ -214,17 +228,15 @@ public class AdminstrationFunctionQuantityHandler
 		}
 		List<String> costPerOne = ConfigHandler.getCostToAdd1Storage();
 		long maxStorage = sst.getItemStorageTotal();
-		long maxPossibleStorage = (long) ModifierValueEntry.getResult(player, Bypass.Counter.SHOP_ITEMSTORAGE_AMOUNT_);
-		if(maxStorage >= maxPossibleStorage)
-		{
-			player.sendMessage(ChatApi.tl(
-					plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.AddStorage.TooManyAlreadyAsStorage")));
-			return;
-		}
 		long ca = amount;
-		if(maxPossibleStorage-maxStorage < amount)
+		BigInteger l = BigInteger.valueOf(ca).add(BigInteger.valueOf(maxStorage));
+		if(l.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) == 1)
 		{
-			ca = maxPossibleStorage - maxStorage;
+			ca = Long.MAX_VALUE-maxStorage;
+		}
+		if(Long.MAX_VALUE < amount)
+		{
+			ca = Long.MAX_VALUE;
 		}
 		boolean boo = false;
 		if(plugin.getIFHEco() != null)
@@ -640,9 +652,103 @@ public class AdminstrationFunctionQuantityHandler
 			}
 			sst.setSignStorageName(sst.getNumText());
 			break;
+		case NUMPAD_ITEMINPUT:
+			if(sst.getNumText().isBlank() || sst.getNumText().isEmpty())
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("InputIsEmpty")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isInteger(sst.getNumText()))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isPositivNumber(Integer.parseInt(sst.getNumText())))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("IsNegativ")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			sst.setItemInput(Long.parseLong(sst.getNumText()));
+			break;
+		case NUMPAD_ITEMSHIFTINPUT:
+			if(sst.getNumText().isBlank() || sst.getNumText().isEmpty())
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("InputIsEmpty")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isInteger(sst.getNumText()))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isPositivNumber(Integer.parseInt(sst.getNumText())))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("IsNegativ")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			sst.setItemShiftInput(Long.parseLong(sst.getNumText()));
+			break;
+		case NUMPAD_ITEMOUTPUT:
+			if(sst.getNumText().isBlank() || sst.getNumText().isEmpty())
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("InputIsEmpty")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isInteger(sst.getNumText()))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isPositivNumber(Integer.parseInt(sst.getNumText())))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("IsNegativ")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			sst.setItemOutput(Long.parseLong(sst.getNumText()));
+			break;
+		case NUMPAD_ITEMSHIFTOUTPUT:
+			if(sst.getNumText().isBlank() || sst.getNumText().isEmpty())
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("InputIsEmpty")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isInteger(sst.getNumText()))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NoNumber")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			if(!MatchApi.isPositivNumber(Integer.parseInt(sst.getNumText())))
+			{
+				player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("IsNegativ")
+						.replace("%value%", sst.getNumText())));
+				break;
+			}
+			sst.setItemShiftOutput(Long.parseLong(sst.getNumText()));
+			break;
 		}
 		sst.setNumText("");
+		SignQStorage c = sst;
 		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				SignQuantityHandler.updateSign(c);
+				
+			}
+		}.runTaskLater(plugin, 20L);
 		GuiHandler.openAdministration(sst, player, settingsLevel, inv, true);
 	}
 	
@@ -841,5 +947,52 @@ public class AdminstrationFunctionQuantityHandler
 			}
 		}.runTask(plugin);
 		return;
+	}
+	
+	private static void setInputOutputDefault(Player player, SignQStorage sst, GuiType guiType, Inventory inv, SettingsLevel settingsLevel)
+	{
+		if(plugin.getIFHEco() == null)
+		{
+			return;
+		}
+		if(isTooMuchShop(player, sst))
+		{
+			return;
+		}
+		if(!SignQuantityHandler.isOwner(sst, player.getUniqueId()) && !SignQuantityHandler.isBypassToggle(player.getUniqueId()))
+		{
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("NotOwner")));
+			return;
+		}
+		switch(guiType)
+		{
+		default: break;
+		case NUMPAD_ITEMINPUT:
+			sst.setItemInput(ConfigHandler.getDefaultItemInput());
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.SetInput.DefaultInput")));
+			break;
+		case NUMPAD_ITEMSHIFTINPUT:
+			sst.setItemShiftInput(ConfigHandler.getDefaultItemShiftInput());
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.SetInput.DefaultShiftInput")));
+			break;
+		case NUMPAD_ITEMOUTPUT:
+			sst.setItemOutput(ConfigHandler.getDefaultItemOutput());
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.SetOutput.DefaultOutput")));
+			break;
+		case NUMPAD_ITEMSHIFTOUTPUT:
+			sst.setItemShiftOutput(ConfigHandler.getDefaultItemShiftOutput());
+			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.SetOutput.DefaultShiftOutput")));
+			break;
+		}
+		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				SignQuantityHandler.updateSign(sst);
+			}
+		}.runTask(plugin);
+		GuiHandler.openAdministration(sst, player, settingsLevel, inv, false);
 	}
 }

@@ -19,4 +19,9 @@ public interface MysqlHandable
 	{
 		logger.log(level, log, e);
 	}
+	
+	default void log(Level level, String log, Exception e)
+	{
+		MysqlBaseHandler.getLogger().log(level, log, e);
+	}
 }

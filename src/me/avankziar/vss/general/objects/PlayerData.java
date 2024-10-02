@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import me.avankziar.vss.general.database.MysqlHandable;
 import me.avankziar.vss.general.database.QueryType;
-import me.avankziar.vss.spigot.database.MysqlHandable;
 import me.avankziar.vss.spigot.database.MysqlHandler;
 import me.avankziar.vss.spigot.gui.objects.SettingsLevel;
 

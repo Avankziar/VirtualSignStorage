@@ -32,11 +32,7 @@ public class Bypass
 	public enum Counter
 	{
 		STORAGE_CREATION_AMOUNT_,
-		SHOP_ITEMSTORAGE_AMOUNT_,
-		COST_ADDING_STORAGE(false),
-		SHOP_BUYING_TAX(false),
-		SHOP_SELLING_TAX(false),
-		SHOP_SUBSCRIPTION_;
+		COST_ADDING_STORAGE(false);
 		
 		private boolean forPermission;
 		

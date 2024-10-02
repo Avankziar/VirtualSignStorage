@@ -88,7 +88,7 @@ public class GuiHandler
 	public static void openInputInfo(SignQStorage ssh, Player player, SettingsLevel settingsLevel, boolean closeInv)
 	{
 		GuiType gt = GuiType.ITEM_INPUT;
-		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "ID: "+String.valueOf(ssh.getId()), settingsLevel);
+		GUIApi gui = new GUIApi(plugin.pluginname, gt.toString(), null, 6, "VSSID:"+String.valueOf(ssh.getId()), settingsLevel);
 		SignQStorage ssh2 = (SignQStorage) plugin.getMysqlHandler().getData(MysqlType.SIGNQSTORAGE, "`id` = ?", ssh.getId());
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
@@ -100,7 +100,7 @@ public class GuiHandler
 		openGui(ssh2, player, gt, gui, settingsLevel, closeInv);
 	}
 	
-	@ScheduledForRemoval
+	/*@ScheduledForRemoval
 	public static void openSearch(ArrayList<SignQStorage> list, Player player, GuiType gt, SettingsLevel settingsLevel, boolean closeInv,
 			Material searchMat, boolean teleport_OR_Location)
 	{
@@ -127,7 +127,7 @@ public class GuiHandler
 			gui = new GUIApi(plugin.pluginname, inv, gt.toString(), SettingsLevel.BASE);
 		}
 		openListGui(list, player, gt, gui, closeInv, page, where);
-	}
+	}*/
 	
 	private static void openGui(SignQStorage sst, Player player, GuiType gt, GUIApi gui, SettingsLevel settingsLevel, boolean closeInv)
 	{
@@ -1446,9 +1446,33 @@ public class GuiHandler
 		{
 			s = s.replace("%itemstoragetotal%", String.valueOf(ssh.getItemStorageTotal()));
 		}
+		if(text.contains("%itemstoragetotalstack%"))
+		{
+			s = s.replace("%itemstoragetotalstack%", SignQuantityHandler.formatDouble((double) ssh.getItemStorageTotal()/64.0));
+		}
+		if(text.contains("%itemstoragetotaldoublechest%"))
+		{
+			s = s.replace("%itemstoragetotaldoublechest%", SignQuantityHandler.formatDouble((double) ssh.getItemStorageTotal()/3456.0));
+		}
+		if(text.contains("%iteminput%"))
+		{
+			s = s.replace("%iteminput%", String.valueOf(ssh.getItemInput()));
+		}
+		if(text.contains("%itemshiftinput%"))
+		{
+			s = s.replace("%itemshiftinput%", String.valueOf(ssh.getItemShiftInput()));
+		}
+		if(text.contains("%itemoutput%"))
+		{
+			s = s.replace("%itemoutput%", String.valueOf(ssh.getItemOutput()));
+		}
+		if(text.contains("%itemshiftoutput%"))
+		{
+			s = s.replace("%itemshiftoutput%", String.valueOf(ssh.getItemShiftOutput()));
+		}
 		if(text.contains("%unlimited%"))
 		{
-			s = s.replace("%unlimitedbuy%", getBoolean(ssh.isUnlimited()));
+			s = s.replace("%unlimited%", getBoolean(ssh.isUnlimited()));
 		}
 		if(text.contains("%glow%"))
 		{

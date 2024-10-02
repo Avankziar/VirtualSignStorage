@@ -105,7 +105,7 @@ public class PlayerInteractListener implements Listener
 				if(player.getInventory().getItemInMainHand() == null 
 						|| player.getInventory().getItemInMainHand().getType() == Material.AIR)
 				{
-					SignQuantityHandler.takeOutItemFromShop(sst, player);
+					SignQuantityHandler.takeOutItemFromStorage(sst, player);
 					return;
 				}
 			}
@@ -146,7 +146,7 @@ public class PlayerInteractListener implements Listener
 						return;
 					} else
 					{
-						if(SignQuantityHandler.putInItemIntoShop(sst, player, player.getInventory().getItemInMainHand()))
+						if(SignQuantityHandler.putInItemIntoStorage(sst, player, player.getInventory().getItemInMainHand()))
 						{
 							return;
 						}

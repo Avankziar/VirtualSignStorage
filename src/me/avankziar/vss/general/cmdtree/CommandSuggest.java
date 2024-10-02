@@ -15,14 +15,14 @@ public class CommandSuggest
 		VSS_STORAGE_DELETE, //Admincmd zum delete
 		VSS_STORAGE_TOGGLE, //Toggle um in AdminGui
 		VSS_STORAGE_BREAKTOGGLE, //Breaktoggle um schilder schnell abzubauen.
-		VSS_STORAGE_SEARCHBUY,
-		VSS_STORAGE_SEARCHSELL,
+		//VSS_STORAGE_SEARCHBUY,
+		//VSS_STORAGE_SEARCHSELL,
 		/*
 		 * Aufrufen des globalen GUI, das es ermöglich alle Shops aller Spieler aus der Ferne zu erreichen.
 		 * Auch soll man hier nach allen Shops filtern können, welches x material anbieten. (Tastaturpad a la NumPad gui?)
 		 * Dazu soll das auktionsystem erreichbar sein.
 		 */
-		SALE_SUBSCRIBED, //REMOVEME
+		//SALE_SUBSCRIBED, //REMOVEME
 		;
 	}
 	

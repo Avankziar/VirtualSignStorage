@@ -20,9 +20,10 @@ public class MaterialHandler
 	
 	public static String getMaterial(Material mat, Material sign)
 	{
-		String s = (VSS.getPlugin().getEnumTl() != null 
+		String s = mat != null ? (VSS.getPlugin().getEnumTl() != null 
 				? VSS.getPlugin().getEnumTl().getLocalization(mat)
-				: mat.toString());
+				: mat.toString())
+				: "";
 		switch(sign)
 		{
 		default: return s != null ? s : mat.toString();

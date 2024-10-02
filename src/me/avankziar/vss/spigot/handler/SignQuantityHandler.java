@@ -43,13 +43,15 @@ public class SignQuantityHandler
 			}
 			return MaterialHandler.getMaterial(sst.getMaterial(), b != null ? b.getType() : Material.ACACIA_BOAT);
 		case 1:
-			String a = MaterialHandler.getMaterial(sst.getMaterial(), b != null ? b.getType() : Material.ACACIA_BOAT);
-			a = a + String.valueOf(sst.getItemOutput()) + " / " + String.valueOf(sst.getItemShiftOutput());
-			return a;
-		case 2:
-			String c = MaterialHandler.getMaterial(sst.getMaterial(), b != null ? b.getType() : Material.ACACIA_BOAT);
-			c = c + String.valueOf(sst.getItemInput()) + " / " + String.valueOf(sst.getItemShiftInput());
+			String c = MaterialHandler.getSignColor( b != null ? b.getType() : Material.ACACIA_BOAT);
+			c = plugin.getYamlHandler().getLang().getString("SignChangeListener.Input") 
+					+ c + String.valueOf(sst.getItemInput()) + " / " + String.valueOf(sst.getItemShiftInput());
 			return c;
+		case 2:
+			String a = MaterialHandler.getSignColor( b != null ? b.getType() : Material.ACACIA_BOAT);
+			a = plugin.getYamlHandler().getLang().getString("SignChangeListener.Output") 
+					+ a + String.valueOf(sst.getItemOutput()) + " / " + String.valueOf(sst.getItemShiftOutput());
+			return a;
 		case 3:
 			StringBuilder sb = new StringBuilder();
 			String color = "";
@@ -113,7 +115,7 @@ public class SignQuantityHandler
 				uuid.toString(), sst.getId(), StorageType.QUANTITY.toString(), listedType.toString());
 	}
 	
-	public static boolean putInItemIntoShop(SignQStorage sst, Player player, ItemStack toPutIn)
+	public static boolean putInItemIntoStorage(SignQStorage sst, Player player, ItemStack toPutIn)
 	{
 		if(sst.getItemStorageCurrent() >= sst.getItemStorageTotal())
 		{
@@ -125,61 +127,48 @@ public class SignQuantityHandler
 		int amount = 0;
 		if(isShift)
 		{
-			if(!sst.getItemStack().toString().equals(c.toString()))
-			{
-				return false;
-			}
-			for(int i = 0; i < player.getInventory().getStorageContents().length; i++)
-			{
-				ItemStack is = player.getInventory().getStorageContents()[i];
-				if(is == null || is.getType() == Material.AIR)
-				{
-					continue;
-				}
-				ItemStack cc = is.clone();
-				cc.setAmount(1);
-				if(!ItemAndInvHandler.isSimilar(sst.getItemStack(), cc))
-				{
-					continue;
-				}
-				if(sst.getItemStorageTotal() <= sst.getItemStorageCurrent() + amount + is.getAmount())
-				{
-					long v = sst.getItemStorageTotal() - sst.getItemStorageCurrent() - amount;
-					amount += v;
-					is.setAmount(is.getAmount() - (int) v);
-					break;
-				}
-				amount += is.getAmount();
-				is.setAmount(0);
-			}
-			putInItemIntoShopMsg(sst, amount, player);
+			amount = (int) sst.getItemShiftInput();
 		} else
 		{
-			if(toPutIn == null || toPutIn.getType() == Material.AIR)
+			amount = (int) sst.getItemInput();
+		}
+		int amo = 0;
+		for(int i = 0; i < player.getInventory().getStorageContents().length; i++)
+		{
+			ItemStack is = player.getInventory().getStorageContents()[i];
+			if(is == null || is.getType() == Material.AIR)
 			{
-				return false;
+				continue;
 			}
-			if(!ItemAndInvHandler.isSimilar(toPutIn, sst.getItemStack()))
+			ItemStack cc = is.clone();
+			cc.setAmount(1);
+			if(!ItemAndInvHandler.isSimilar(cc, sst.getItemStack()))
 			{
-				return false;
+				continue;
 			}
-			if(sst.getItemStorageTotal() < sst.getItemStorageCurrent())
+			if(amo < amount)
 			{
-				return false;
-			} else if(sst.getItemStorageTotal() < sst.getItemStorageCurrent() + toPutIn.getAmount())
-			{
-				long v = sst.getItemStorageTotal() - sst.getItemStorageCurrent();
-				amount += v;
-				toPutIn.setAmount(toPutIn.getAmount()-(int) v);
-				putInItemIntoShopMsg(sst, amount, player);
-				
-			} else
-			{
-				amount = toPutIn.getAmount();
-				toPutIn.setAmount(0);
-				putInItemIntoShopMsg(sst, amount, player);
+				int a = amount - amo;
+				if(a >= is.getAmount())
+				{
+					a = is.getAmount();
+				}
+				if(sst.getItemStorageTotal() <= sst.getItemStorageCurrent() + a)
+				{
+					int diff = (int) (sst.getItemStorageTotal() - sst.getItemStorageTotal());
+					sst.setItemStorageCurrent(sst.getItemStorageTotal());
+					is.setAmount(is.getAmount() - diff);
+					amo += diff;
+					break;
+				} else
+				{
+					sst.setItemStorageCurrent(sst.getItemStorageCurrent() + a);
+					is.setAmount(is.getAmount()-a);
+					amo += a;
+				}
 			}
 		}
+		putInItemIntoStorageMsg(sst, amo, player);
 		new BukkitRunnable()
 		{
 			@Override
@@ -191,16 +180,15 @@ public class SignQuantityHandler
 		return true;
 	}
 	
-	private static void putInItemIntoShopMsg(SignQStorage sst, long amount, Player player)
+	private static void putInItemIntoStorageMsg(SignQStorage sst, long amount, Player player)
 	{
-		sst.setItemStorageCurrent(sst.getItemStorageCurrent()+((long) amount));
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignQuantityHandler.ItemsAddedToStorage")
 				.replace("%amount%", String.valueOf(amount))
 				.replace("%now%", String.valueOf(sst.getItemStorageCurrent())+" / "+String.valueOf(sst.getItemStorageTotal()))));
 		plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sst, "`id` = ?", sst.getId());
 	}
 	
-	public static void takeOutItemFromShop(SignQStorage sst, Player player)
+	public static void takeOutItemFromStorage(SignQStorage sst, Player player)
 	{
 		final boolean isShift = player.isSneaking();
 		if(sst.getItemStack() == null || sst.getItemStack().getType() == Material.AIR)
@@ -211,54 +199,51 @@ public class SignQuantityHandler
 		int amount = 0;
 		if(isShift)
 		{
-			ArrayList<ItemStack> list = new ArrayList<>();
-			for(int i = 0; i < player.getInventory().getStorageContents().length; i++)
+			amount = (int)sst.getItemShiftOutput();
+		} else
+		{
+			amount = (int)sst.getItemOutput();
+		}
+		ArrayList<ItemStack> list = new ArrayList<>();
+		int amo = 0;
+		for(int i = 0; i < player.getInventory().getStorageContents().length; i++)
+		{
+			ItemStack is = player.getInventory().getStorageContents()[i];
+			if(is != null)
 			{
-				ItemStack is = player.getInventory().getStorageContents()[i];
-				if(is != null)
-				{
-					continue;
-				}
+				continue;
+			}			
+			if(amo < amount)
+			{
 				ItemStack out = sst.getItemStack().clone();
-				int amo = out.getMaxStackSize();
-				if(out.getMaxStackSize() > sst.getItemStorageCurrent())
+				int a = amount - amo;
+				if(a > out.getMaxStackSize())
 				{
-					amo = (int) sst.getItemStorageCurrent();
-					out.setAmount(amo);
-					amount += amo;
-					sst.setItemStorageCurrent(sst.getItemStorageCurrent()-amo);
+					a = out.getMaxStackSize();
+				}
+				if(a >= sst.getItemStorageCurrent())
+				{
+					out.setAmount((int) sst.getItemStorageCurrent());
+					amo += (int) sst.getItemStorageCurrent();
+					sst.setItemStorageCurrent(0);
 					list.add(out);
 					break;
 				} else
 				{
-					out.setAmount(amo);
-					amount += amo;
-					sst.setItemStorageCurrent(sst.getItemStorageCurrent()-amo);
+					out.setAmount(a);
+					amo += a;
+					sst.setItemStorageCurrent(sst.getItemStorageCurrent()-a);
 					list.add(out);
 				}
+				continue;
 			}
-			for(ItemStack is : list)
-			{
-				player.getInventory().addItem(is);
-			}
-			takeOutItemFromShopMsg(sst, amount, player);
-		} else
-		{
-			ItemStack out = sst.getItemStack().clone();
-			amount = out.getMaxStackSize();
-			if(amount > sst.getItemStorageCurrent())
-			{
-				amount = (int) sst.getItemStorageCurrent();
-				out.setAmount(amount);
-				sst.setItemStorageCurrent(0);
-			} else
-			{
-				out.setAmount(amount);
-				sst.setItemStorageCurrent(sst.getItemStorageCurrent()-amount);
-			}
-			player.getInventory().setItemInMainHand(out);
-			takeOutItemFromShopMsg(sst, amount, player);		
+			break;
 		}
+		for(ItemStack is : list)
+		{
+			player.getInventory().addItem(is);
+		}
+		takeOutItemFromStorageMsg(sst, amo, player);
 		new BukkitRunnable()
 		{
 			@Override
@@ -269,7 +254,7 @@ public class SignQuantityHandler
 		}.runTask(plugin);
 	}
 	
-	private static void takeOutItemFromShopMsg(SignQStorage sst, long amount, Player player)
+	private static void takeOutItemFromStorageMsg(SignQStorage sst, long amount, Player player)
 	{
 		player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignQuantityHandler.ItemsRemovedToStorage")
 				.replace("%amount%", String.valueOf(amount))

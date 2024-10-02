@@ -87,7 +87,7 @@ public class BottomListener implements Listener
 			SignQuantityHandler.updateSign(sst);
 		} else if(gt == GuiType.ITEM_INPUT)
 		{
-			if(event.getEvent().getView().getTitle().startsWith("ID:"))
+			if(event.getEvent().getView().getTitle().startsWith("VSSID:"))
 			{
 				input(event, player, is);
 				return;
