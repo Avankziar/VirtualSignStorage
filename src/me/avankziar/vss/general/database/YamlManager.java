@@ -413,8 +413,8 @@ public class YamlManager
 				"The number of standard storage spaces for a new storage."});
 		addConfig("SignStorage.CostToAdd1Storage",
 				new Object[] {
-				"dollar;1000.0",
-				"token;99.0",
+				"dollar;100.0",
+				"token;9.0",
 				"vault;100.0"},
 				new Object[] {
 				"",
@@ -439,7 +439,7 @@ public class YamlManager
 				"If 'true' then the 4 line of the storages sign is calculated in stacks instead of individual items."});
 		addConfig("SignStorage.Sign.DefaultOutput",
 				new Object[] {
-				1},
+				64},
 				new Object[] {
 				"",
 				"Die Standartanzahl an Items, welche durch einen Linksklick aus einem Lager herausgenommen werden kann.",
@@ -447,7 +447,7 @@ public class YamlManager
 				"The standard number of items that can be removed from a storage by left-clicking."});
 		addConfig("SignStorage.Sign.DefaultShiftOutput",
 				new Object[] {
-				64},
+				576},
 				new Object[] {
 				"",
 				"Die Standartanzahl an Items, welche durch einen Shift-Linksklick aus einem Lager herausgenommen werden kann.",
@@ -455,7 +455,7 @@ public class YamlManager
 				"The standard number of items that can be removed from a storagee with a shift-left click."});
 		addConfig("SignStorage.Sign.DefaultInput",
 				new Object[] {
-				1},
+				64},
 				new Object[] {
 				"",
 				"Die Standartanzahl an Items, welche durch einen Rechtsklick ins Lager deponiert werden können.",
@@ -463,7 +463,7 @@ public class YamlManager
 				"The standard number of items that can be deposited in the storage by right-clicking."});
 		addConfig("SignStorage.Sign.DefaultShiftInput",
 				new Object[] {
-				64},
+				576},
 				new Object[] {
 				"",
 				"Die Standartanzahl an Items, welche durch einen Shift-Rechtsklick ins Lager deponiert werden können.",
@@ -859,11 +859,11 @@ public class YamlManager
 						"&4Empty"}));
 		languageKeys.put("SignChangeListener.Input", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&aEIN ",
+						"&aREIN ",
 						"&aIN "}));
 		languageKeys.put("SignChangeListener.Output", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cAUS ",
+						"&cRAUS ",
 						"&cOUT "}));
 		languageKeys.put("SignChangeListener.AlreadyHaveMaximalSignStorage", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
