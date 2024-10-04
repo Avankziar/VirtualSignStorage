@@ -173,7 +173,7 @@ public class SignChangeListener implements Listener
 		{
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageMoved")
 					.replace("%id%", line2)
-					.replace("%shopname%", morc.getSignStorageName())));
+					.replace("%storagename%", morc.getSignStorageName())));
 		} else
 		{
 			morc.setItemStorageCurrent(0);
@@ -181,7 +181,7 @@ public class SignChangeListener implements Listener
 			morc.setSignStorageName("Copy: "+morc.getSignStorageName());
 			player.sendMessage(ChatApi.tl(plugin.getYamlHandler().getLang().getString("SignChangeListener.StorageCopy")
 					.replace("%id%", line2)
-					.replace("%shopname%", morc.getSignStorageName())));
+					.replace("%storagename%", morc.getSignStorageName())));
 			plugin.getMysqlHandler().create(MysqlType.SIGNQSTORAGE, morc);
 		}
 		signQUpdate(morc, event);

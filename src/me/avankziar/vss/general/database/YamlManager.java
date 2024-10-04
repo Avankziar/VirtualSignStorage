@@ -875,20 +875,20 @@ public class YamlManager
 						"&cNo signstorage may be created in this region!"}));
 		languageKeys.put("SignChangeListener.StorageCreated", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast den Shop &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Shops ein!",
-						"&eYou have created the store &f%name%! &bClick on the sign and set the item of the store there!"}));
+						"&eDu hast das Lager &f%name% &eerstellt! &bKlicke auf das Schild und stelle dort das Item des Lagers ein!",
+						"&eYou have created the storage &f%name%! &bClick on the sign and set the item of the storage there!"}));
 		languageKeys.put("SignChangeListener.StorageNotExists", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop %id% existiert nicht!",
-						"&cThe store %id% does not exist!"}));
+						"&cDas Lager %id% existiert nicht!",
+						"&cThe storage %id% does not exist!"}));
 		languageKeys.put("SignChangeListener.StorageMoved", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde versetzt!",
-						"&eThe store %id%-%shopname% has been moved!"}));
+						"&eDas Lager %id%-%storagename% wurde versetzt!",
+						"&eThe storage %id%-%storagename% has been moved!"}));
 		languageKeys.put("SignChangeListener.StorageCopy", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDer Shops %id%-%shopname% wurde kopiert!",
-						"&eThe store %id%-%shopname% has been copied!"}));
+						"&eDas Lager %id%-%storagename% wurde kopiert!",
+						"&eThe storage %id%-%storagename% has been copied!"}));
 		
 		languageKeys.put("PlayerInteractListener.StorageItemIsNull", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -905,8 +905,8 @@ public class YamlManager
 						"&eYou have added &f%amount% &eitems to the storage. Attn: &r%now%"}));
 		languageKeys.put("SignQuantityHandler.NoItemsIsSetUp", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer Shop hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
-						"&cThe store has not yet deployed an item, so no item can be spent on the hand!"}));
+						"&cDas Lager hat noch kein Items eingesetzt, somit kann kein Item auf die Hand ausgegeben werden!",
+						"&cThe storage has not yet deployed an item, so no item can be spent on the hand!"}));
 		languageKeys.put("SignQuantityHandler.ItemsRemovedToStorage", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast &f%amount% &eItems aus dem Lager entfernt. Zz.: &r%now%",
@@ -1052,8 +1052,8 @@ public class YamlManager
 						"&cYou do not have the right to withdraw from the targeted account!"}));
 		languageKeys.put("AdminstrationFunctionHandler.AddStorage.NoEnoughMoney"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&cDer angestrebte Account hat nicht genug Geld!",
-						"&cThe targeted account does not have enough money!"}));
+						"&cDer angestrebte Account hat nicht genug Geld! Kosten: %cost%",
+						"&cThe targeted account does not have enough money! Kosten: %cost%"}));
 		languageKeys.put("AdminstrationFunctionHandler.AddStorage.Transaction"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&6Es wurden von dem Konto &e%fromaccount% &f%formatwithdraw% &6abgezogen und an &e%toaccount% &6überwiesen.",
@@ -1102,6 +1102,10 @@ public class YamlManager
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eDu hast den Standartwert für das ausgeben mit Shift-Rechtsklick eingesetzt.",
 						"&eYou have used the default value for output with shift-right-click."}));
+		languageKeys.put("AdminstrationFunctionHandler.ItemClear"
+				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"&eDu hast das Item des Lagers zurückgesetzt. Nun kann ein neues Item in das Lager eingetragen werden.",
+						"&eYou have reset the item of the storage. Now you can add a new item to the storage."}));
 		
 		languageKeys.put("Economy.AddStorage.Category", 
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
@@ -1175,10 +1179,6 @@ public class YamlManager
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDu bist nicht der Eigentümer des Lagersystem!",
 						"&cYou are not the owner of the storage system!"}));
-		languageKeys.put("AdminstrationFunctionHandler.ItemClear"
-				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
-						"&eDu hast das Item des Shop zurückgesetzt. Nun kann ein neues Item in den Shop eingetragen werden.",
-						"&eYou have reset the item of the store. Now you can add a new item to the store."}));
 		languageKeys.put("AdminstrationFunctionHandler.DiscountTimeNotFit"
 				, new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cDas eingestellte Datum/Uhrzeit &f%value% &cpasst nicht mit dem Muster &f%pattern% &czusammen!",
@@ -2166,7 +2166,7 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&cShift Links/Rechtsklick &blöscht das Lager.",
 						"&cAchtung!",
-						"&bDurch das Klicken wird unverzüglich der gesamte Shop",
+						"&bDurch das Klicken wird unverzüglich das gesamte Lager",
 						"&bmit allen noch verbliebenen Items gelöscht!",
 						"&cAchtung!",
 						"&cShift Left/rightclick &bopen the storage.",

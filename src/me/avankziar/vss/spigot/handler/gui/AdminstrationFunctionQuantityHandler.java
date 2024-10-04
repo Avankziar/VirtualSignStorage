@@ -313,7 +313,8 @@ public class AdminstrationFunctionQuantityHandler
 			if(from.getBalance() < dd)
 			{
 				player.sendMessage(ChatApi.tl(
-						plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.AddStorage.NoEnoughMoney")));
+						plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.AddStorage.NoEnoughMoney")
+						.replace("%cost%", plugin.getIFHEco().format(dd, from.getCurrency()))));
 				return false;
 			}
 			moneymap.put(ec, d);
@@ -410,7 +411,8 @@ public class AdminstrationFunctionQuantityHandler
 		if(plugin.getVaultEco().getBalance(player) < dd)
 		{
 			player.sendMessage(ChatApi.tl(
-					plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.AddStorage.NoEnoughMoney")));
+					plugin.getYamlHandler().getLang().getString("AdminstrationFunctionHandler.AddStorage.NoEnoughMoney")
+					.replace("%cost%", String.valueOf(dd)+plugin.getVaultEco().currencyNamePlural())));
 			return false;
 		}
 		EconomyResponse er = plugin.getVaultEco().withdrawPlayer(player, dd);

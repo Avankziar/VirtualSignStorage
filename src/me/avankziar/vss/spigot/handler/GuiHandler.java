@@ -1366,7 +1366,7 @@ public class GuiHandler
 				s = s.replace("%isonwhitelist%", 
 						uuid == null ? "/" :
 							getBoolean(plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+								"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 								uuid.toString(), ssh.getId(), ListedType.WHITELIST.toString()))
 						);
 			} else
@@ -1382,7 +1382,7 @@ public class GuiHandler
 				s = s.replace("%ismember%", 
 						uuid == null ? "/" :
 							getBoolean(plugin.getMysqlHandler().exist(MysqlType.STORAGEACCESSTYPE,
-								"`player_uuid` = ? AND `sign_shop_id` = ? AND `listed_type` = ?",
+								"`player_uuid` = ? AND `sign_storage_id` = ? AND `listed_type` = ?",
 								uuid.toString(), ssh.getId(), ListedType.MEMBER.toString()))
 						);
 			} else

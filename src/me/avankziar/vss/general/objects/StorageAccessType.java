@@ -92,7 +92,7 @@ public class StorageAccessType implements MysqlHandable
 			String sql = "INSERT INTO `" + tablename
 					+ "`(`player_uuid`, `sign_storage_id`,  `storage_type`, `listed_type`) " 
 					+ "VALUES("
-					+ "?, ?, ? ?"
+					+ "?, ?, ?, ?"
 					+ ")";
 			PreparedStatement ps = conn.prepareStatement(sql);
 	        ps.setString(1, getUUID().toString());
@@ -116,7 +116,7 @@ public class StorageAccessType implements MysqlHandable
 		try
 		{
 			String sql = "UPDATE `" + tablename
-				+ "` SET `player_uuid` = ?, `sign_storage_id` = ?, `storage_type` = ?,`listed_type` = ?"
+				+ "` SET `player_uuid` = ?, `sign_storage_id` = ?, `storage_type` = ?, `listed_type` = ?"
 				+ " WHERE "+whereColumn;
 			PreparedStatement ps = conn.prepareStatement(sql);
 		    ps.setString(1, getUUID().toString());
