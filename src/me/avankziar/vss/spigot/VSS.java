@@ -906,7 +906,7 @@ public class VSS extends JavaPlugin
 	
 	public void setupBstats()
 	{
-		int pluginId = 17588;
+		int pluginId = 23537;
         new Metrics(this, pluginId);
 	}
 }
