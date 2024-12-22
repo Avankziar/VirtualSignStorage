@@ -38,7 +38,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import me.avankziar.ifh.spigot.economy.account.Account;
 import me.avankziar.vss.general.ChatApi;
