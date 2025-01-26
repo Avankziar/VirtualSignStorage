@@ -3,10 +3,14 @@ package me.avankziar.vss.spigot.handler;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -21,6 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.avankziar.vss.general.ChatApi;
 import me.avankziar.vss.general.database.MysqlType;
 import me.avankziar.vss.general.objects.ListedType;
+import me.avankziar.vss.general.objects.PlayerData;
 import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.general.objects.StorageAccessType.StorageType;
 import me.avankziar.vss.spigot.VSS;
@@ -326,5 +331,150 @@ public class SignQuantityHandler
 		formatter.setMaximumFractionDigits(3);
 		formatter.setMinimumFractionDigits(0);
 		return formatter.format(d);
+	}
+	
+	/**
+	 * Only call async!
+	 * @param player
+	 * @param other
+	 * @param isa
+	 * @param loc
+	 */
+	public static void distribute(Player player, String other, ArrayList<ItemStack> isa, Location loc)
+	{
+		PlayerData pd = null;
+		if(player.getName().equals(other))
+		{
+			pd = (PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
+		} else if(!other.isEmpty())
+		{
+			pd = (PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_name` = ?", other);
+			if(pd == null)
+			{
+				isa.forEach(x ->
+				{
+					if(x != null && x.getType() != Material.AIR)
+					{
+						loc.getWorld().dropItem(loc, x);
+					}
+				});
+			}
+		} else
+		{
+			pd = (PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_uuid` = ?", player.getUniqueId().toString());
+		}
+		final ArrayList<ItemStack> toDrop = distributeToStorage(player, pd, isa);
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				toDrop.forEach(x ->
+				{
+					if(x != null && x.getType() != Material.AIR)
+					{
+						loc.getWorld().dropItem(loc, x);
+					}
+				});
+			}
+		}.runTask(VSS.getPlugin());
+		return;
+	}
+	
+	private static ArrayList<ItemStack> distributeToStorage(Player player, PlayerData pd, ArrayList<ItemStack> isa)
+	{
+		LinkedHashMap<Integer, ArrayList<ItemStack>> hm = new LinkedHashMap<>();
+		for(ItemStack is : isa)
+		{
+			if(is == null || is.getType() == Material.AIR)
+			{
+				continue;
+			}
+			int i = 0;
+			ArrayList<ItemStack> ali = new ArrayList<>();
+			if(hm.isEmpty())
+			{
+				ali.add(is);
+				hm.put(0, ali);
+				continue;
+			}
+			for(Entry<Integer, ArrayList<ItemStack>> e : hm.entrySet())
+			{
+				ItemStack filter = e.getValue().size() >= 1 ? e.getValue().get(0) : null;
+				if(filter != null)
+				{
+					if(ItemAndInvHandler.isSimilar(is, filter))
+					{
+						break;
+					}
+				}
+				i++;
+			}
+			if(hm.size() >= i+1)
+			{
+				ali = hm.get(i);
+				ali.add(is);
+				hm.put(i, ali);
+			} else
+			{
+				ali.add(is);
+				hm.put(0, ali);
+			}
+		}
+		ArrayList<ItemStack> returnee = new ArrayList<>();
+		for(Entry<Integer, ArrayList<ItemStack>> e : hm.entrySet())
+		{
+			ItemStack is = e.getValue().size() >= 1 ? e.getValue().get(0) : null;
+			if(is == null)
+			{
+				returnee.addAll(e.getValue());
+				continue;
+			}
+			ArrayList<SignQStorage> sqsa = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE, "`id` ASC", 
+					"`player_uuid` = ? AND `itemstack_base64` = ?", pd.getUUID().toString(), new Base64Handler(is).toBase64()));
+			if(sqsa.isEmpty())
+			{
+				returnee.addAll(e.getValue());
+				continue;
+			}
+			ArrayList<SignQStorage> sqsac = new ArrayList<>();
+			for(SignQStorage sst : sqsa)
+			{
+				if(!player.getUniqueId().equals(pd.getUUID()))
+				{
+					if(!SignQuantityHandler.isListed(ListedType.MEMBER, sst, player.getUniqueId()))
+					{
+						continue;
+					}
+				}
+				sqsac.add(sst);
+			}
+			Iterator<ItemStack> iter = e.getValue().iterator();
+			for(Iterator<SignQStorage> sqsiter = sqsac.iterator(); sqsiter.hasNext();)
+			{
+				SignQStorage sqs = sqsiter.next();
+				long last = sqs.getItemStorageCurrent();
+				long added = sqs.getItemStorageCurrent();
+				while(iter.hasNext())
+				{
+					ItemStack v = iter.next();
+					if(added + v.getAmount() <= sqs.getItemStorageTotal())
+					{
+						added += v.getAmount();
+					} else
+					{
+						break;
+					}
+					iter.remove();
+				}
+				if(last != added)
+				{
+					sqs.setItemStorageCurrent(added);
+					plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sqs, "`id` = ?", sqs.getId());
+				}
+			}
+			iter.forEachRemaining(x -> returnee.add(x));
+		}
+		return returnee;
 	}
 }

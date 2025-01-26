@@ -1,19 +1,28 @@
 package me.avankziar.vss.spigot.listener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.avankziar.vss.general.ChatApi;
@@ -24,6 +33,7 @@ import me.avankziar.vss.general.objects.SignQStorage;
 import me.avankziar.vss.spigot.VSS;
 import me.avankziar.vss.spigot.handler.ConfigHandler;
 import me.avankziar.vss.spigot.handler.GuiHandler;
+import me.avankziar.vss.spigot.handler.ItemAndInvHandler;
 import me.avankziar.vss.spigot.handler.ItemHologramHandler;
 import me.avankziar.vss.spigot.handler.SignQuantityHandler;
 
@@ -65,6 +75,7 @@ public class PlayerInteractListener implements Listener
 			event.setCancelled(true);
 		} else
 		{
+			checkIfDistributenSign(player, action, (Sign) bs);
 			return;
 		}
 		dodo(player, ssh, b, bs, action);
@@ -162,6 +173,107 @@ public class PlayerInteractListener implements Listener
 				SignQuantityHandler.updateSign(sst);
 			}
 		}.runTask(plugin);
+	}
+	
+	private void checkIfDistributenSign(Player player, Action action, Sign sign)
+	{
+		if(action != Action.RIGHT_CLICK_BLOCK)
+		{
+			return;
+		}
+		if(!sign.getSide(Side.FRONT).getLine(0).equals(plugin.getYamlHandler().getConfig().getString("DistributionSign.Line0")))
+		{
+			return;
+		}
+		String other = sign.getSide(Side.FRONT).getLine(1);
+		if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+		{
+			addRemoveGui(player.getUniqueId(), sign.getLocation());
+			Inventory inv = Bukkit.createInventory(null, 6*9, plugin.getYamlHandler().getLang().getString("DistributenSign.InventoryTitle")+":"+other);
+			player.openInventory(inv);
+			return;
+		} else
+		{
+			ItemStack c = player.getInventory().getItemInMainHand().clone();
+			ArrayList<ItemStack> isa = new ArrayList<>();
+			if(player.isSneaking())
+			{
+				c.setAmount(1);
+				for(int i = 0; i < player.getInventory().getStorageContents().length; i++)
+				{
+					ItemStack is = player.getInventory().getStorageContents()[i];
+					if(is == null || is.getType() == Material.AIR)
+					{
+						continue;
+					}
+					ItemStack cc = is.clone();
+					cc.setAmount(1);
+					if(!ItemAndInvHandler.isSimilar(cc, c))
+					{
+						continue;
+					}
+					isa.add(is);
+					player.getInventory().clear(i);
+				}
+			} else
+			{
+				isa.add(c);
+				player.getInventory().setItem(player.getInventory().getHeldItemSlot(), null);
+			}
+			new BukkitRunnable()
+			{
+				@Override
+				public void run()
+				{
+					SignQuantityHandler.distribute(player, other, isa, sign.getLocation());
+				}
+			}.runTaskAsynchronously(VSS.getPlugin());
+		}
+	}
+	
+	private HashMap<UUID, Location> inDistributionGui = new HashMap<UUID, Location>();
+	
+	private boolean inGui(UUID uuid)
+	{
+		return inDistributionGui.containsKey(uuid);
+	}
+	
+	private void addRemoveGui(UUID uuid, Location loc)
+	{
+		if(inDistributionGui.containsKey(uuid))
+		{
+			inDistributionGui.remove(uuid);
+		} else
+		{
+			inDistributionGui.put(uuid, loc);
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryCloseEvent(InventoryCloseEvent event)
+	{
+		if(!inGui(event.getPlayer().getUniqueId()))
+		{
+			return;
+		}
+		Location loc = inDistributionGui.get(event.getPlayer().getUniqueId());
+		final ItemStack[] is = event.getView().getTopInventory().getStorageContents();
+		ArrayList<ItemStack> isa = new ArrayList<>();
+		for(ItemStack i : is)
+		{
+			isa.add(i);
+		}
+		final String[] invtitle = event.getView().getTitle().split(":");
+		String other = invtitle[invtitle.length == 0 ? 0 : invtitle.length-1];
+		addRemoveGui(event.getPlayer().getUniqueId(), null);
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				SignQuantityHandler.distribute((Player) event.getPlayer(), other, isa, loc);
+			}
+		}.runTaskAsynchronously(VSS.getPlugin());
 	}
 	
 	@EventHandler

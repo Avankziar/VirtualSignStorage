@@ -549,6 +549,20 @@ public class YamlManager
 				"Füllmaterial für die Guis",
 				"",
 				"Filling material for the guis"});
+		addConfig("DistributionSign.Line0",
+				new Object[] {
+				"[VSSDistr]"},
+				new Object[] {
+				"",
+				"Passphrase um ein Verteilerschild für VSS aufzusetzten.",
+				"In der zweiten Zeile (Line1) kann optional ein Spieler genannt werden.",
+				"So lange man bei diesem Spieler Lagerkisten Mitglied ist, werden die eingefügten Items in sein Lager verteilt.",
+				"Es werden nur Lagerschilder angesteuert, welche auf dem gleichen Server sind.",
+				"",
+				"Passphrase to set up a distribution plate for VSS.",
+				"In the second line (Line1), a player can optionally be named.",
+				"As long as you are a member of this player's storage crate, the added items will be distributed to their storage.",
+				"Only warehouse labels that are on the same server are controlled."});
 		/*addConfig("SignShop.Search.Radius",
 				new Object[] {
 				"PROXY"},
@@ -1115,6 +1129,11 @@ public class YamlManager
 				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
 						"&eEine Lagerraumerweiterung von &f%past% &eauf &f%now% (+%amount%) &eItems des Schildlagers &f%name%&e.",
 						"&eA stockroom extension from &f%past% &eto &f%now% (+%amount%) &eItems of the signstorage &f%name%&e."}));
+		
+		languageKeys.put("DistributenSign.InventoryTitle", 
+				new Language(new ISO639_2B[] {ISO639_2B.GER, ISO639_2B.ENG}, new Object[] {
+						"Verteiler Gui",
+						"Distribution Gui"}));
 		
 		/* INFO Dinge, die von Sale höchstwahrscheinlich nicht übernommen werden.
 		languageKeys.put("ShopOwnerNotEnought",

@@ -1,3 +1,12 @@
+1-2-0
+- Verteilerschild hinzugefügt.
+  - 1 Zeile ist gleich eine Passphrase.
+  - 2 Zeile kann einen Spieler definieren um in sein Lager die Items zu verschieben. Sofern man Mitglied ist.
+  - Mit Rechtsklick auf dieses Schild und keinem Item in der Hand, öffnet sich eine Gui, welche alle dort platzierten Items versucht auf dem Server
+  befindlichen Lagerschilder zu verteilen.
+  - Mit Rechtsklick auf dieses Schild und einem item in der Hand wird dieses Item verteilt. Mit Shift dazu, werden alle Items im Inventar verteilt.
+  - Sollten Items nicht verteilt werden können, droppen sie beim Schild auf dem Boden.
+
 1-1-0
 - Spigot 1.21.4 support
 - Api muss nun mindestens 1.21.3 oder höher sein!
