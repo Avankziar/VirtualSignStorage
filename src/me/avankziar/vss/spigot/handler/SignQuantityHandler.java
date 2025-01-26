@@ -431,7 +431,8 @@ public class SignQuantityHandler
 				continue;
 			}
 			ArrayList<SignQStorage> sqsa = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE, "`id` ASC", 
-					"`player_uuid` = ? AND `itemstack_base64` = ?", pd.getUUID().toString(), new Base64Handler(is).toBase64()));
+					"`player_uuid` = ? AND `itemstack_base64` = ? AND `server_name` = ?",
+					pd.getUUID().toString(), new Base64Handler(is).toBase64(), plugin.getServername()));
 			if(sqsa.isEmpty())
 			{
 				returnee.addAll(e.getValue());
