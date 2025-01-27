@@ -351,13 +351,20 @@ public class SignQuantityHandler
 			pd = (PlayerData) plugin.getMysqlHandler().getData(MysqlType.PLAYERDATA, "`player_name` = ?", other);
 			if(pd == null)
 			{
-				isa.forEach(x ->
+				new BukkitRunnable()
 				{
-					if(x != null && x.getType() != Material.AIR)
+					@Override
+					public void run()
 					{
-						loc.getWorld().dropItem(loc, x);
+						isa.forEach(x ->
+						{
+							if(x != null && x.getType() != Material.AIR)
+							{
+								loc.getWorld().dropItem(loc, x);
+							}
+						});
 					}
-				});
+				}.runTask(plugin);
 			}
 		} else
 		{
@@ -418,7 +425,7 @@ public class SignQuantityHandler
 			} else
 			{
 				ali.add(is);
-				hm.put(0, ali);
+				hm.put(i, ali);
 			}
 		}
 		ArrayList<ItemStack> returnee = new ArrayList<>();
@@ -431,8 +438,8 @@ public class SignQuantityHandler
 				continue;
 			}
 			ArrayList<SignQStorage> sqsa = SignQStorage.convert(plugin.getMysqlHandler().getFullList(MysqlType.SIGNQSTORAGE, "`id` ASC", 
-					"`player_uuid` = ? AND `itemstack_base64` = ? AND `server_name` = ?",
-					pd.getUUID().toString(), new Base64Handler(is).toBase64(), plugin.getServername()));
+					"`player_uuid` = ? AND `material` = ? AND `server_name` = ?",
+					pd.getUUID().toString(), is.getType().toString(), plugin.getServername()));
 			if(sqsa.isEmpty())
 			{
 				returnee.addAll(e.getValue());
@@ -447,6 +454,10 @@ public class SignQuantityHandler
 					{
 						continue;
 					}
+				}
+				if(!ItemAndInvHandler.isSimilar(is, sst.getItemStack()))
+				{
+					continue;
 				}
 				sqsac.add(sst);
 			}
@@ -473,6 +484,14 @@ public class SignQuantityHandler
 					sqs.setItemStorageCurrent(added);
 					plugin.getMysqlHandler().updateData(MysqlType.SIGNQSTORAGE, sqs, "`id` = ?", sqs.getId());
 				}
+				new BukkitRunnable()
+				{
+					@Override
+					public void run()
+					{
+						updateSign(sqs);
+					}
+				}.runTask(plugin);
 			}
 			iter.forEachRemaining(x -> returnee.add(x));
 		}

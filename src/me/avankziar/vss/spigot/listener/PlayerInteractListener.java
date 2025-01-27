@@ -185,11 +185,12 @@ public class PlayerInteractListener implements Listener
 		{
 			return;
 		}
-		String other = sign.getSide(Side.FRONT).getLine(1);
+		String other = sign.getSide(Side.FRONT).getLine(1) != null ? sign.getSide(Side.FRONT).getLine(1) : "";
 		if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
 		{
 			addRemoveGui(player.getUniqueId(), sign.getLocation());
-			Inventory inv = Bukkit.createInventory(null, 6*9, plugin.getYamlHandler().getLang().getString("DistributenSign.InventoryTitle")+":"+other);
+			Inventory inv = Bukkit.createInventory(null, 6*9,
+					plugin.getYamlHandler().getLang().getString("DistributenSign.InventoryTitle")+":"+(other.isEmpty() ? player.getName() : other));
 			player.openInventory(inv);
 			return;
 		} else
